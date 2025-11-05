@@ -1,0 +1,83 @@
+@use 'variables' as *;
+
+// Flexbox mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin flex-end {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+// Input styles
+@mixin input-base {
+  width: 100%;
+  padding: 0.75rem $spacing-md;
+  font-size: $font-base;
+  color: $text-primary;
+  background-color: $input-bg;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  transition: all 0.2s;
+  font-family: inherit;
+
+  &::placeholder {
+    color: $text-muted;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $input-focus-border;
+    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+  }
+}
+
+// Button styles
+@mixin button-base {
+  padding: 0.875rem $spacing-lg;
+  font-size: $font-base;
+  font-weight: $font-semibold;
+  border: none;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+// Responsive breakpoints
+@mixin mobile {
+  @media (max-width: 480px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: 1024px) {
+    @content;
+  }
+}
