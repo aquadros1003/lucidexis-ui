@@ -1,4 +1,7 @@
 import React from 'react';
+import { useAuthContext } from '../../contexts';
+import { Dropdown, type DropdownItem } from '../Dropdown';
+import { downloadFile } from '../../utils/downloadFile';
 import './DocumentCard.scss';
 
 export type DocumentStatus = 'active' | 'draft' | 'archived';
@@ -12,6 +15,7 @@ export interface DocumentTag {
 export interface DocumentCardProps {
   id: string;
   title: string;
+  downloadUrl: string;
   description: string;
   status: DocumentStatus;
   type: DocumentType;
@@ -35,24 +39,82 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
   id,
   title,
   description,
+  downloadUrl,
   type,
   tags,
   date,
   onCardClick,
   onMenuClick,
 }) => {
+  const { token } = useAuthContext();
+
   const handleCardClick = () => {
     if (onCardClick) {
       onCardClick(id);
     }
   };
 
-  const handleMenuClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (onMenuClick) {
-      onMenuClick(id);
+  const handleDownload = async () => {
+    try {
+      await downloadFile(downloadUrl, title, token);
+    } catch (error) {
+      console.error('Failed to download file:', error);
     }
   };
+
+  const dropdownItems: DropdownItem[] = [
+    {
+      id: 'download',
+      label: 'Download',
+      icon: (
+        <svg
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8 10.5V2M8 10.5L5.5 8M8 10.5L10.5 8"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M2 11v2a1 1 0 001 1h10a1 1 0 001-1v-2"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+        </svg>
+      ),
+      onClick: handleDownload,
+    },
+  ];
+
+  const menuTrigger = (
+    <button
+      className="document-card__menu"
+      onClick={(e) => {
+        e.stopPropagation();
+        if (onMenuClick) {
+          onMenuClick(id);
+        }
+      }}
+      aria-label="Document menu"
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 20 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="10" cy="4" r="1.5" fill="currentColor" />
+        <circle cx="10" cy="10" r="1.5" fill="currentColor" />
+        <circle cx="10" cy="16" r="1.5" fill="currentColor" />
+      </svg>
+    </button>
+  );
 
   return (
     <div className="document-card" onClick={handleCardClick}>
@@ -60,23 +122,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
         <div className={`document-card__icon document-card__icon--${type}`}>
           <span className="document-card__icon-emoji">{getFileIcon(type)}</span>
         </div>
-        <button
-          className="document-card__menu"
-          onClick={handleMenuClick}
-          aria-label="Więcej opcji"
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle cx="10" cy="4" r="1.5" fill="currentColor" />
-            <circle cx="10" cy="10" r="1.5" fill="currentColor" />
-            <circle cx="10" cy="16" r="1.5" fill="currentColor" />
-          </svg>
-        </button>
+        <Dropdown trigger={menuTrigger} items={dropdownItems} position="bottom-right" />
       </div>
 
       <div className="document-card__content">

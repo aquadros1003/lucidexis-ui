@@ -18,17 +18,11 @@ function Dashboard() {
   const documents: DocumentCardProps[] = data || [];
 
   const handleCardClick = (id: string) => {
-    console.log('Document clicked:', id);
     const doc = documents.find(d => d.id === id);
     if (doc) {
       // TODO: Navigate to document detail page or open download
       console.log('Document data:', doc);
     }
-  };
-
-  const handleMenuClick = (id: string) => {
-    console.log('Menu clicked for document:', id);
-    // TODO: Show context menu with options (download, delete, etc.)
   };
 
   if (isLoading) {
@@ -73,7 +67,6 @@ function Dashboard() {
                   key={doc.id}
                   {...doc}
                   onCardClick={handleCardClick}
-                  onMenuClick={handleMenuClick}
                 />
               ))}
             </div>

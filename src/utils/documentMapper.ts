@@ -62,6 +62,7 @@ export const mapDocumentToCard = (doc: DocumentPublic): DocumentCardProps => {
   return {
     id: doc.id,
     title: doc.filename,
+    downloadUrl: doc.download_url,
     description: generateMockDescription(doc.filename),
     status: getDocumentStatus(doc.is_processed),
     type: mapContentTypeToDocType(doc.content_type),

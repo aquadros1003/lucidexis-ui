@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { useLogin } from '../../hooks/useLogin'
+import { useNavigate } from 'react-router-dom'
 import './Login.scss'
 
 function Login() {
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [rememberMe, setRememberMe] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const { loginAsync, isLoading, isError, error } = useLogin()
 
@@ -20,11 +21,15 @@ function Login() {
       // Error handling is managed by useLogin hook
     }
   }
-
-  const handleDemoLogin = () => {
-    setEmail('demo@lucidexis.com')
-    setPassword('demo123')
+  const handleSignUp = () => {
+    navigate('/signup')
   }
+
+  const handleForgotPassword = (e: React.MouseEvent) => {
+    e.preventDefault()
+    navigate('/forgot-password')
+  }
+
   return (
     <div className="login-container">
       <div className="login-card">
@@ -55,7 +60,9 @@ function Login() {
             <div className="form-group">
               <div className="password-label-row">
                 <label htmlFor="password" className="form-label">Password</label>
-                <a href="#" className="forgot-password">Forgot password?</a>
+                <a href="#" className="forgot-password" onClick={handleForgotPassword}>
+                  Forgot password?
+                </a>
               </div>
               <div className="input-wrapper">
                 <svg className="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -89,19 +96,6 @@ function Login() {
                 </button>
               </div>
             </div>
-
-            <div className="form-group-checkbox">
-              <label className="checkbox-label">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="checkbox-input"
-                />
-                <span className="checkbox-text">Remember me for 30 days</span>
-              </label>
-            </div>
-
             {isError && error && (
               <div className="error-message" style={{
                 color: '#dc2626',
@@ -114,30 +108,23 @@ function Login() {
                 {error.message}
               </div>
             )}
-
             <button type="submit" className="btn-primary" disabled={isLoading}>
               {isLoading ? 'Signing In...' : 'Sign In'}
             </button>
-
             <div className="divider">
               <span>OR</span>
             </div>
-
+              <button type="button" className="btn-secondary" onClick={handleSignUp}>
+                Sign Up
+              </button>
             <div className="demo-credentials">
               <div className="demo-header">Demo Credentials:</div>
               <div className="demo-info">
                 <div>Email: demo@lucidexis.com</div>
-                <div>Password: demo123</div>
+                <div>Password: demo12345</div>
               </div>
-              <button type="button" className="btn-demo" onClick={handleDemoLogin}>
-                Fill Demo Credentials
-              </button>
             </div>
           </form>
-        </div>
-
-        <div className="login-footer">
-          <p>Don't have an account? <a href="#" className="link-primary">Contact your administrator</a></p>
         </div>
       </div>
     </div>
