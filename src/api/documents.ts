@@ -45,13 +45,18 @@ const getAuthToken = (): string => {
 export const uploadDocument = async (
   file: File,
   chunkSize: number = 1024,
-  onProgress?: (progress: number) => void
+  onProgress?: (progress: number) => void,
+  description?: string
 ): Promise<DocumentUploadResponse> => {
   const token = getAuthToken();
 
   const formData = new FormData();
   formData.append('file', file);
   formData.append('chunk_size', chunkSize.toString());
+  
+  if (description && description.trim()) {
+    formData.append('description', description.trim());
+  }
 
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();

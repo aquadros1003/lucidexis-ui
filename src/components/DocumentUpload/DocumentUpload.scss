@@ -1,4 +1,5 @@
 @use '../../styles/variables' as *;
+@use 'sass:color';
 
 .document-upload-overlay {
   position: fixed;
@@ -153,7 +154,8 @@
 
   &__file-size {
     margin: 0;
-    font-size: $font-xs;
+    font-size: $font-sm;
+    font-weight: $font-medium;
     color: $text-secondary;
   }
 
@@ -184,6 +186,10 @@
     text-align: center;
   }
 
+  &__description {
+    margin-top: $spacing-lg;
+  }
+
   &__settings {
     margin-top: $spacing-lg;
   }
@@ -192,12 +198,25 @@
     display: flex;
     flex-direction: column;
     gap: $spacing-sm;
+    text-align: left;
 
     span {
       font-size: $font-sm;
       font-weight: $font-medium;
       color: $text-primary;
     }
+  }
+
+  &__label-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__value {
+    font-size: $font-sm;
+    font-weight: $font-semibold;
+    color: $link-color;
   }
 
   &__input {
@@ -208,6 +227,95 @@
     color: $text-primary;
     background-color: $input-bg;
     transition: all 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: $input-focus-border;
+      box-shadow: 0 0 0 3px rgba($input-focus-border, 0.1);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background-color: $bg-color;
+    }
+  }
+
+  &__slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: $bg-color;
+    border-radius: $radius-xl;
+    outline: none;
+    transition: all 0.2s;
+
+    &:hover:not(:disabled) {
+      background: color.adjust($bg-color, $lightness: -5%);
+    }
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      background: $link-color;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: $shadow-sm;
+
+      &:hover {
+        transform: scale(1.1);
+        box-shadow: $shadow-md;
+      }
+    }
+
+    &::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      background: $link-color;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: $shadow-sm;
+
+      &:hover {
+        transform: scale(1.1);
+        box-shadow: $shadow-md;
+      }
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+
+      &::-webkit-slider-thumb {
+        cursor: not-allowed;
+      }
+
+      &::-moz-range-thumb {
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  &__textarea {
+    padding: $spacing-sm $spacing-md;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    font-size: $font-sm;
+    color: $text-primary;
+    background-color: $input-bg;
+    transition: all 0.2s;
+
+
+    &::placeholder {
+      color: $text-secondary;
+      opacity: 0.7;
+    }
 
     &:focus {
       outline: none;

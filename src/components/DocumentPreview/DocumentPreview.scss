@@ -1,0 +1,360 @@
+@use '../../styles/variables' as *;
+@use 'sass:color';
+
+.document-preview {
+  text-align: left;
+  position: fixed;
+  top: 64px;
+  right: 0;
+  bottom: 0;
+  width: 480px;
+  display: flex;
+  flex-direction: column;
+  background-color: $card-bg;
+  border-left: 1px solid $border-color;
+  animation: slideInRight 0.3s ease-out;
+  overflow-y: auto;
+  z-index: 50;
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid $border-color;
+    background-color: $card-bg;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  &__header-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    flex: 1;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $bg-color;
+    border-radius: $radius-md;
+    color: $text-secondary;
+  }
+
+  &__header-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+  }
+
+  &__title {
+    font-size: $font-lg;
+    font-weight: $font-semibold;
+    color: $text-primary;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  &__close {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $text-secondary;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $radius-sm;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: $bg-color;
+      color: $text-primary;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+    padding: 20px 24px;
+    border-bottom: 1px solid $border-color;
+  }
+
+  &__action-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 12px;
+    font-size: $font-sm;
+    font-weight: $font-medium;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    background-color: $card-bg;
+    color: $text-primary;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover {
+      background-color: $bg-color;
+      border-color: color.adjust($border-color, $lightness: -10%);
+    }
+
+    &--danger {
+      color: #dc2626;
+
+      &:hover {
+        background-color: rgba(220, 38, 38, 0.05);
+        border-color: #dc2626;
+      }
+    }
+  }
+
+  &__tabs {
+    display: flex;
+    gap: 0;
+    padding: 0;
+    background-color: $bg-color;
+    margin-bottom: 16px;
+    border-radius: 24px;
+  }
+
+  &__tab {
+    flex: 1;
+    // padding: 12px 0;
+    font-size: $font-sm;
+    font-weight: $font-medium;
+    color: $text-secondary;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    border: 5px solid $bg-color;
+    border-radius: 24px;
+
+    &:hover {
+      color: $text-primary;
+      background-color: color.adjust($bg-color, $lightness: -3%);
+      border-radius: 24px;
+    }
+
+    &--active {
+      color: $text-primary;
+      background-color: $card-bg;
+
+      &:hover {
+        background-color: $card-bg;
+      }
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  &__content {
+    padding: 24px;
+    flex: 1;
+  }
+
+  &__section {
+    margin-bottom: 32px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__section-title {
+    font-size: $font-lg;
+    font-weight: $font-semibold;
+    color: $text-primary;
+    margin: 0 0 16px;
+  }
+
+  &__description {
+    font-size: $font-sm;
+    line-height: 1.6;
+    color: $text-secondary;
+    margin: 0;
+  }
+
+  &__info-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  &__info-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+
+    svg {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+      color: $text-muted;
+    }
+  }
+
+  &__info-label {
+    font-size: $font-xs;
+    color: $text-muted;
+    margin-bottom: 4px;
+  }
+
+  &__info-value {
+    font-size: $font-sm;
+    font-weight: $font-normal;
+    color: $text-primary;
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  &__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: $font-sm;
+    color: $text-secondary;
+    background-color: $bg-color;
+    border: 1px solid $border-color;
+    border-radius: $radius-sm;
+    transition: all 0.2s ease;
+
+    svg {
+      width: 14px;
+      height: 14px;
+      color: $text-muted;
+    }
+  }
+
+  &__permissions {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__permission {
+    padding: 10px 0;
+    font-size: $font-sm;
+    line-height: 1.5;
+    color: $text-secondary;
+    border-bottom: 1px solid $border-color;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: $font-xs;
+  font-weight: $font-medium;
+  border-radius: 4px;
+  text-transform: lowercase;
+
+  &--draft {
+    background-color: #FEF3C7;
+    color: #92400E;
+  }
+
+  &--active {
+    background-color: #D1FAE5;
+    color: #065F46;
+  }
+
+  &--archived {
+    background-color: #E5E7EB;
+    color: #374151;
+  }
+}
+
+.category-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: $font-xs;
+  font-weight: $font-medium;
+  background-color: $bg-color;
+  color: $text-primary;
+  border-radius: 4px;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  .document-preview {
+    top: 64px;
+    left: 0;
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid $border-color;
+
+    &__info-row {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    &__actions {
+      flex-direction: column;
+    }
+
+    &__action-btn {
+      width: 100%;
+    }
+  }
+
+  .dashboard--with-preview {
+    .dashboard-content {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+}
+
+
+
+
+

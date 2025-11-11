@@ -12,6 +12,7 @@ interface DocumentUploadProps {
 
 export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUploadProps) {
   const [file, setFile] = useState<File | null>(null);
+  const [description, setDescription] = useState<string>('Invoice for services rendered');
   const [chunkSize, setChunkSize] = useState<number>(1024);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -55,14 +56,20 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
     setUploadProgress(0);
 
     try {
-      const result = await uploadDocument(file, chunkSize, (progress: number) => {
-        setUploadProgress(progress);
-      });
+      const result = await uploadDocument(
+        file, 
+        chunkSize, 
+        (progress: number) => {
+          setUploadProgress(progress);
+        },
+        description
+      );
       
       console.log('Upload successful:', result);
       
       // Reset form
       setFile(null);
+      setDescription('');
       setChunkSize(1024);
       setUploadProgress(0);
       if (fileInputRef.current) {
@@ -87,6 +94,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
   const handleClose = () => {
     if (!isUploading) {
       setFile(null);
+      setDescription('Invoice for services rendered');
       setError(null);
       setUploadProgress(0);
       if (fileInputRef.current) {
@@ -157,7 +165,10 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
                 <div className="document-upload-modal__file-details">
                   <p className="document-upload-modal__file-name">{file.name}</p>
                   <p className="document-upload-modal__file-size">
-                    {(file.size / 1024 / 1024).toFixed(2)} MB
+                    {file.size < 1024 * 1024 
+                      ? `${(file.size / 1024).toFixed(2)} KB`
+                      : `${(file.size / 1024 / 1024).toFixed(2)} MB`
+                    }
                   </p>
                 </div>
               </div>
@@ -182,6 +193,20 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
             )}
           </div>
 
+          <div className="document-upload-modal__description">
+            <label className="document-upload-modal__label">
+              <span>Description</span>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Add description for this document..."
+                className="document-upload-modal__textarea"
+                rows={3}
+                disabled={isUploading}
+              />
+            </label>
+          </div>
+
           {isUploading && (
             <div className="document-upload-modal__progress">
               <div className="document-upload-modal__progress-bar">
@@ -198,15 +223,18 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
 
           <div className="document-upload-modal__settings">
             <label className="document-upload-modal__label">
-              <span>Chunk Size (bytes)</span>
+              <div className="document-upload-modal__label-header">
+                <span>Chunk Size</span>
+                <span className="document-upload-modal__value">{chunkSize} bytes</span>
+              </div>
               <input
-                type="number"
+                type="range"
                 value={chunkSize}
                 onChange={(e) => setChunkSize(Number(e.target.value))}
                 min={512}
                 max={8192}
                 step={512}
-                className="document-upload-modal__input"
+                className="document-upload-modal__slider"
                 disabled={isUploading}
               />
             </label>

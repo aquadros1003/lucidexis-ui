@@ -2,8 +2,16 @@
 @use '../../styles/mixins' as *;
 
 .dashboard {
-  min-height: 100vh;
-  background-color: $bg-color;
+  background-color: $card-bg;
+  position: relative;
+  height: 100%;
+
+  &--with-preview {
+    .dashboard-content {
+      width: calc(100% - 480px);
+      max-width: calc(100% - 480px);
+    }
+  }
 
   &-header {
     background-color: $card-bg;
@@ -23,8 +31,10 @@
 
   &-content {
     padding: $spacing-md;
-    max-width: 1400px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: 100%;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
   }
 
   &-error,
@@ -71,7 +81,6 @@
   }
 
   &-section {
-    margin-bottom: $spacing-2xl;
 
     .section-title {
       font-size: $font-2xl;
@@ -81,11 +90,30 @@
     }
   }
 
+  &-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-md;
+    padding: 0 $spacing-xs;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $spacing-sm;
+    }
+
+    &__info {
+      color: $text-secondary;
+      font-size: $font-sm;
+    }
+  }
+
   .documents-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: $spacing-md;
-    margin-bottom: $spacing-2xl;
+    margin-bottom: $spacing-lg;
 
     @media (max-width: 768px) {
       grid-template-columns: 1fr;
@@ -94,13 +122,13 @@
     @media (min-width: 769px) and (max-width: 1024px) {
       grid-template-columns: repeat(2, 1fr);
     }
+  }
 
-    @media (min-width: 1025px) {
-      grid-template-columns: repeat(3, 1fr);
-    }
+  &--with-preview .documents-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 
-    @media (min-width: 1400px) {
-      grid-template-columns: repeat(4, 1fr);
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     }
   }
 
