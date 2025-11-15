@@ -25,6 +25,20 @@
     flex-shrink: 0;
   }
 
+  &__header-actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+  }
+
+  &__favorite {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-xs;
+    color: #FFD700;
+  }
+
   &__icon {
     width: 64px;
     height: 64px;

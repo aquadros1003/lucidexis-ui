@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import type { FormEvent, ChangeEvent } from 'react';
 import { uploadDocument } from '../../api/documents';
 import { Loader } from '../Loader';
@@ -19,6 +19,18 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
   const [error, setError] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const adjustTextareaHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+    }
+  };
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [description]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -57,7 +69,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
     setUploadProgress(0);
 
     try {
-      const result = await uploadDocument(
+      await uploadDocument(
         file, 
         chunkSize, 
         (progress: number) => {
@@ -65,8 +77,6 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
         },
         description
       );
-      
-      // Reset form
       setFile(null);
       setDescription('');
       setChunkSize(1024);
@@ -74,11 +84,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
-      
-      // Call success callback
       onUploadSuccess?.();
-      
-      // Close modal
       setTimeout(() => {
         onClose();
       }, 500);
@@ -165,11 +171,11 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
             <label className="document-upload-modal__label">
               <span>Description</span>
               <textarea
+                ref={textareaRef}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Add description for this document..."
                 className="document-upload-modal__textarea"
-                rows={3}
                 disabled={isUploading}
               />
             </label>

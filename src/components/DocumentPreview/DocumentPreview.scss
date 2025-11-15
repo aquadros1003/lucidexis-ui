@@ -205,6 +205,8 @@
     line-height: 1.6;
     color: $text-secondary;
     margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 
     &--editable {
       cursor: pointer;
@@ -218,81 +220,32 @@
     }
   }
 
-  &__description-editor {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-
   &__description-textarea {
     width: 100%;
-    padding: 12px;
+    padding: 8px;
     font-size: $font-sm;
     line-height: 1.6;
     color: $text-primary;
-    background-color: $card-bg;
-    border: 1px solid $border-color;
-    border-radius: $radius-md;
-    resize: vertical;
-    min-height: 100px;
+    background-color: $bg-color;
+    border: none;
+    border-radius: $radius-sm;
+    resize: none;
+    overflow: hidden;
+    min-height: auto;
     font-family: inherit;
-    transition: border-color 0.2s ease;
+    transition: background-color 0.2s ease;
     box-sizing: border-box;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 
     &:focus {
       outline: none;
-      border-color: color.adjust($border-color, $lightness: -20%);
+      background-color: $bg-color;
     }
 
     &:disabled {
       opacity: 0.6;
       cursor: not-allowed;
-    }
-  }
-
-  &__description-actions {
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
-  }
-
-  &__description-btn {
-    padding: 8px 16px;
-    font-size: $font-sm;
-    font-weight: $font-medium;
-    border-radius: $radius-md;
-    border: 1px solid $border-color;
-    cursor: pointer;
-    transition: all 0.2s ease;
-
-    &--save {
-      background-color: #3b82f6;
-      color: white;
-      border-color: #3b82f6;
-
-      &:hover:not(:disabled) {
-        background-color: #2563eb;
-        border-color: #2563eb;
-      }
-
-      &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-    }
-
-    &--cancel {
-      background-color: $card-bg;
-      color: $text-primary;
-
-      &:hover:not(:disabled) {
-        background-color: $bg-color;
-      }
-
-      &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
     }
   }
 

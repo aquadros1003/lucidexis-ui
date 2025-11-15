@@ -3,7 +3,7 @@ import { useAuthContext } from '../../contexts';
 import { Dropdown, type DropdownItem } from '../Dropdown';
 import { downloadFile } from '../../utils/downloadFile';
 import { formatRelativeDate } from '../../utils/dateFormatter';
-import { DownloadIcon, MenuDotsIcon, TagIcon, CalendarIcon } from '../../assets/icons';
+import { DownloadIcon, MenuDotsIcon, TagIcon, CalendarIcon, StarIcon } from '../../assets/icons';
 import './DocumentCard.scss';
 
 export type DocumentStatus = 'active' | 'draft' | 'archived';
@@ -49,6 +49,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
   type,
   tags,
   date,
+  isFavorite,
   onCardClick,
   onMenuClick,
 }) => {
@@ -98,7 +99,20 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
         <div className={`document-card__icon document-card__icon--${type}`}>
           <span className="document-card__icon-emoji">{getFileIcon(type)}</span>
         </div>
-        <Dropdown trigger={menuTrigger} items={dropdownItems} position="bottom-right" />
+        <div className="document-card__header-actions">
+          {isFavorite && (
+            <div 
+              className="document-card__favorite"
+              style={{
+                '--star-fill': '#FFD700',
+                '--star-stroke': '#FFD700',
+              } as React.CSSProperties}
+            >
+              <StarIcon width="16" height="16" />
+            </div>
+          )}
+          <Dropdown trigger={menuTrigger} items={dropdownItems} position="bottom-right" />
+        </div>
       </div>
 
       <div className="document-card__content">

@@ -48,12 +48,32 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
     setEditedDescription(document.description);
   }, [document.description]);
 
+  const adjustTextareaHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+    }
+  };
+
   useEffect(() => {
-    if (isEditingDescription && textareaRef.current) {
-      textareaRef.current.focus();
-      textareaRef.current.select();
+    if (isEditingDescription) {
+      adjustTextareaHeight();
+      if (textareaRef.current) {
+        textareaRef.current.focus();
+        textareaRef.current.select();
+      }
     }
   }, [isEditingDescription]);
+
+  useEffect(() => {
+    if (isEditingDescription) {
+      adjustTextareaHeight();
+    }
+  }, [editedDescription, isEditingDescription]);
+
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setEditedDescription(e.target.value);
+  };
 
   const handleDownload = async () => {
     try {
@@ -112,10 +132,12 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
     setIsEditingDescription(false);
   };
 
+  const handleDescriptionBlur = () => {
+    handleDescriptionSave();
+  };
+
   const handleDescriptionKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && e.ctrlKey) {
-      handleDescriptionSave();
-    } else if (e.key === 'Escape') {
+    if (e.key === 'Escape') {
       handleDescriptionCancel();
     }
   };
@@ -205,33 +227,15 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
           <section className="document-preview__section">
             <h3 className="document-preview__section-title">Description</h3>
             {isEditingDescription ? (
-              <div className="document-preview__description-editor">
-                <textarea
-                  ref={textareaRef}
-                  className="document-preview__description-textarea"
-                  value={editedDescription}
-                  onChange={(e) => setEditedDescription(e.target.value)}
-                  onKeyDown={handleDescriptionKeyDown}
-                  rows={4}
-                  disabled={isSaving}
-                />
-                <div className="document-preview__description-actions">
-                  <button
-                    className="document-preview__description-btn document-preview__description-btn--save"
-                    onClick={handleDescriptionSave}
-                    disabled={isSaving}
-                  >
-                    {isSaving ? 'Saving...' : 'Save'}
-                  </button>
-                  <button
-                    className="document-preview__description-btn document-preview__description-btn--cancel"
-                    onClick={handleDescriptionCancel}
-                    disabled={isSaving}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
+              <textarea
+                ref={textareaRef}
+                className="document-preview__description-textarea"
+                value={editedDescription}
+                onChange={handleDescriptionChange}
+                onBlur={handleDescriptionBlur}
+                onKeyDown={handleDescriptionKeyDown}
+                disabled={isSaving}
+              />
             ) : (
               <p 
                 className="document-preview__description document-preview__description--editable"

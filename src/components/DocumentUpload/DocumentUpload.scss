@@ -307,10 +307,16 @@
     border: 1px solid $border-color;
     border-radius: $radius-md;
     font-size: $font-sm;
+    line-height: 1.6;
     color: $text-primary;
     background-color: $input-bg;
     transition: all 0.2s;
-
+    resize: none;
+    overflow: hidden;
+    min-height: auto;
+    font-family: inherit;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 
     &::placeholder {
       color: $text-secondary;
@@ -319,8 +325,6 @@
 
     &:focus {
       outline: none;
-      border-color: $input-focus-border;
-      box-shadow: 0 0 0 3px rgba($input-focus-border, 0.1);
     }
 
     &:disabled {
