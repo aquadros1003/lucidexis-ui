@@ -1,12 +1,15 @@
 import { Link, useLocation } from 'react-router-dom';
+import { MenuLinesIcon } from '../../assets/icons';
 import './Sidebar.scss';
 import { UserMenu } from '../UserMenu';
+import { useDocumentStats } from '../../hooks';
+import type { DocumentStats } from '../../api/documents';
 
 interface NavItem {
   name: string;
   path: string;
   icon: string;
-  count?: number;
+  countKey?: keyof DocumentStats;
 }
 
 interface Category {
@@ -15,10 +18,10 @@ interface Category {
 }
 
 const navItems: NavItem[] = [
-  { name: 'All Documents', path: '/', icon: '📄', count: 156 },
-  { name: 'Favorites', path: '/favorites', icon: '⭐', count: 12 },
-  { name: 'Recent', path: '/recent', icon: '🕐', count: 24 },
-  { name: 'Archived', path: '/archived', icon: '📦', count: 45 },
+  { name: 'All Documents', path: '/', icon: '📄', countKey: 'total_documents' },
+  { name: 'Favorites', path: '/favorites', icon: '⭐', countKey: 'favorite_documents' },
+  { name: 'Recent', path: '/recent', icon: '🕐' },
+  { name: 'Archived', path: '/archived', icon: '📦', countKey: 'archived_documents' },
 ];
 
 const categories: Category[] = [
@@ -33,15 +36,14 @@ const categories: Category[] = [
 
 export function Sidebar() {
   const location = useLocation();
+  const { data: stats, isLoading: loading } = useDocumentStats();
 
   return (
     <aside className="sidebar">
       <div className="sidebar__header">
         <div className="sidebar__logo">
           <div className="sidebar__logo-icon">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
+            <MenuLinesIcon />
           </div>
             <div className="sidebar__logo-text">
               <h1>Lucidexis</h1>
@@ -53,20 +55,24 @@ export function Sidebar() {
       <nav className="sidebar__nav">
         <h3 className="sidebar__section-title">Navigation</h3>
         <ul className="sidebar__nav-list">
-          {navItems.map((item) => (
-            <li key={item.path}>
-              <Link
-                to={item.path}
-                className={`sidebar__nav-item ${location.pathname === item.path ? 'sidebar__nav-item--active' : ''}`}
-                title={item.name}
-              >
-                    <span className="sidebar__nav-name">{item.name}</span>
-                    {item.count !== undefined && (
-                      <span className="sidebar__nav-count">{item.count}</span>
-                    )}
-              </Link>
-            </li>
-          ))}
+          {navItems.map((item) => {
+            const count = item.countKey && stats ? stats[item.countKey] : undefined;
+            
+            return (
+              <li key={item.path}>
+                <Link
+                  to={item.path}
+                  className={`sidebar__nav-item ${location.pathname === item.path ? 'sidebar__nav-item--active' : ''}`}
+                  title={item.name}
+                >
+                  <span className="sidebar__nav-name">{item.name}</span>
+                  {!loading && count !== undefined && (
+                    <span className="sidebar__nav-count">{count}</span>
+                  )}
+                </Link>
+              </li>
+            );
+          })} 
         </ul>
       </nav>
         <div className="sidebar__categories">

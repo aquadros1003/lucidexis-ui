@@ -1,23 +1,59 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useAuthContext } from '../../contexts';
 import { downloadFile } from '../../utils/downloadFile';
+import { updateDocument } from '../../api/documents';
+import { formatFullDate } from '../../utils/dateFormatter';
 import type { DocumentCardProps } from '../DocumentCard/DocumentCard';
+import {
+  DocumentIcon,
+  CloseIcon,
+  StarIcon,
+  DownloadIcon,
+  ArchiveIcon,
+  UnarchiveIcon,
+  TrashIcon,
+  FileTypeIcon,
+  UserIcon,
+  CalendarIcon,
+  FileSizeIcon,
+  TagIcon,
+  ClockIcon,
+} from '../../assets/icons';
 import './DocumentPreview.scss';
 
 interface DocumentPreviewProps {
   document: DocumentCardProps;
   onClose: () => void;
-  onArchive?: (id: string) => void;
+  onArchive?: (id: string, isArchived: boolean) => void;
+  onFavorite?: (id: string, isFavorite: boolean) => void;
   onDelete?: (id: string) => void;
+  onDescriptionUpdate?: (id: string, description: string) => void;
 }
 
 const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   document,
   onClose,
   onArchive,
+  onFavorite,
   onDelete,
+  onDescriptionUpdate,
 }) => {
   const { token } = useAuthContext();
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [editedDescription, setEditedDescription] = useState(document.description);
+  const [isSaving, setIsSaving] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    setEditedDescription(document.description);
+  }, [document.description]);
+
+  useEffect(() => {
+    if (isEditingDescription && textareaRef.current) {
+      textareaRef.current.focus();
+      textareaRef.current.select();
+    }
+  }, [isEditingDescription]);
 
   const handleDownload = async () => {
     try {
@@ -29,56 +65,74 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
 
   const handleArchive = () => {
     if (onArchive) {
-      onArchive(document.id);
+      onArchive(document.id, document.isArchived || false);
+    }
+  };
+
+  const handleFavorite = () => {
+    if (onFavorite) {
+      onFavorite(document.id, document.isFavorite || false);
     }
   };
 
   const handleDelete = () => {
-    if (onDelete && confirm('Are you sure you want to delete this document?')) {
+    if (onDelete) {
       onDelete(document.id);
     }
   };
 
-  // Mock data
+  const handleDescriptionDoubleClick = () => {
+    setIsEditingDescription(true);
+  };
+
+  const handleDescriptionSave = async () => {
+    if (editedDescription === document.description) {
+      setIsEditingDescription(false);
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      await updateDocument(document.id, { description: editedDescription });
+      if (onDescriptionUpdate) {
+        onDescriptionUpdate(document.id, editedDescription);
+      }
+      setIsEditingDescription(false);
+    } catch (error) {
+      console.error('Failed to update description:', error);
+      alert(error instanceof Error ? error.message : 'Failed to update description');
+      setEditedDescription(document.description);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDescriptionCancel = () => {
+    setEditedDescription(document.description);
+    setIsEditingDescription(false);
+  };
+
+  const handleDescriptionKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && e.ctrlKey) {
+      handleDescriptionSave();
+    } else if (e.key === 'Escape') {
+      handleDescriptionCancel();
+    }
+  };
+
   const fileType = document.type === 'pdf' ? 'DOCX' : document.type.toUpperCase();
-  const fileSize = '1.8 MB';
-  const author = 'John Doe';
+  const fileSize = document.fileSize;
+  const author = document.authorName || 'Unknown Author';
   const category = 'Technical';
-  const createdDate = document.date;
-  const lastModified = document.date;
-  const permissions = [
-    'Can be viewed by all team members',
-    'Can be edited by document owner and admins',
-    'Can be shared externally with approval',
-  ];
+  const createdDate = formatFullDate(document.date);
+  const lastModified = formatFullDate(document.date);
 
   return (
     <div className="document-preview">
       <div className="document-preview__header">
           <div className="document-preview__header-content">
             <div className="document-preview__icon">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M14 2v6h6M16 13H8M16 17H8M10 9H8"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <DocumentIcon width="24" height="24" />
             </div>
             <div className="document-preview__header-info">
               <h2 className="document-preview__title">{document.title}</h2>
@@ -89,97 +143,56 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
             onClick={onClose}
             aria-label="Close preview"
           >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M18 6L6 18M6 6l12 12"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <CloseIcon width="24" height="24" />
           </button>
         </div>
 
         <div className="document-preview__actions">
           <button 
+            className={`document-preview__action-btn ${document.isFavorite ? 'document-preview__action-btn--favorite' : ''}`}
+            onClick={handleFavorite}
+            aria-label={document.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+            style={{
+              '--star-fill': document.isFavorite ? '#FFD700' : 'none',
+              '--star-stroke': document.isFavorite ? '#FFD700' : 'currentColor',
+            } as React.CSSProperties}
+          >
+            <StarIcon
+              width="16"
+              height="16"
+            />
+          </button>
+          <button 
             className="document-preview__action-btn"
             onClick={handleDownload}
           >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M8 10.5V2M8 10.5L5.5 8M8 10.5L10.5 8"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M2 11v2a1 1 0 001 1h10a1 1 0 001-1v-2"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
+            <DownloadIcon width="16" height="16" />
             Download
           </button>
           <button 
             className="document-preview__action-btn"
             onClick={handleArchive}
           >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect x="3" y="3" width="14" height="3" rx="1" stroke="currentColor" strokeWidth="1.5"/>
-              <path
-                d="M4 6v9a2 2 0 002 2h8a2 2 0 002-2V6M8 9v4m4-4v4"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              />
-            </svg>
-            Archive
+            {document.isArchived ? (
+              <>
+                <UnarchiveIcon width="16" height="16" />
+                Unarchive
+              </>
+            ) : (
+              <>
+                <ArchiveIcon width="16" height="16" />
+                Archive
+              </>
+            )}
           </button>
           <button 
             className="document-preview__action-btn document-preview__action-btn--danger"
             onClick={handleDelete}
           >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M3 6h14M8 9v6m4-6v6M4 6l1 10a1 1 0 001 1h8a1 1 0 001-1l1-10M7 6V4a1 1 0 011-1h4a1 1 0 011 1v2"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <TrashIcon width="16" height="16" />
             Delete
           </button>
         </div>
-
-
         <div className="document-preview__content">
         <div className="document-preview__tabs">
           <button className="document-preview__tab document-preview__tab--active">
@@ -188,34 +201,53 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
           <button className="document-preview__tab">
             Preview
           </button>
-          <button className="document-preview__tab">
-            Activity
-          </button>
         </div>
           <section className="document-preview__section">
             <h3 className="document-preview__section-title">Description</h3>
-            <p className="document-preview__description">{document.description}</p>
+            {isEditingDescription ? (
+              <div className="document-preview__description-editor">
+                <textarea
+                  ref={textareaRef}
+                  className="document-preview__description-textarea"
+                  value={editedDescription}
+                  onChange={(e) => setEditedDescription(e.target.value)}
+                  onKeyDown={handleDescriptionKeyDown}
+                  rows={4}
+                  disabled={isSaving}
+                />
+                <div className="document-preview__description-actions">
+                  <button
+                    className="document-preview__description-btn document-preview__description-btn--save"
+                    onClick={handleDescriptionSave}
+                    disabled={isSaving}
+                  >
+                    {isSaving ? 'Saving...' : 'Save'}
+                  </button>
+                  <button
+                    className="document-preview__description-btn document-preview__description-btn--cancel"
+                    onClick={handleDescriptionCancel}
+                    disabled={isSaving}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <p 
+                className="document-preview__description document-preview__description--editable"
+                onDoubleClick={handleDescriptionDoubleClick}
+                title="Double-click to edit"
+              >
+                {document.description || 'No description. Double-click to add one.'}
+              </p>
+            )}
           </section>
 
           <section className="document-preview__section">
             <div className="document-preview__info-row">
               <div className="document-preview__info-col">
                 <div className="document-preview__info-item">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M5 1v3h6V1M3 3h10a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V4a1 1 0 011-1z"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                  <FileTypeIcon width="16" height="16" />
                   <div>
                     <div className="document-preview__info-label">File Type</div>
                     <div className="document-preview__info-value">{fileType}</div>
@@ -223,27 +255,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                 </div>
 
                 <div className="document-preview__info-item">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle
-                      cx="8"
-                      cy="5"
-                      r="2.5"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                    />
-                    <path
-                      d="M2 13c0-2.5 2.5-4 6-4s6 1.5 6 4"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
+                  <UserIcon width="16" height="16" />
                   <div>
                     <div className="document-preview__info-label">Author</div>
                     <div className="document-preview__info-value">{author}</div>
@@ -251,29 +263,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                 </div>
 
                 <div className="document-preview__info-item">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <rect
-                      x="2"
-                      y="3"
-                      width="12"
-                      height="11"
-                      rx="1.5"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                    />
-                    <path
-                      d="M5 1.5v2M11 1.5v2M2 6h12"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
+                  <CalendarIcon width="16" height="16" />
                   <div>
                     <div className="document-preview__info-label">Created Date</div>
                     <div className="document-preview__info-value">{createdDate}</div>
@@ -283,28 +273,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
 
               <div className="document-preview__info-col">
                 <div className="document-preview__info-item">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M13 8H8L6 10L8 12H13C13.5523 12 14 11.5523 14 11V9C14 8.44772 13.5523 8 13 8Z"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M2 8V4C2 3.44772 2.44772 3 3 3H13C13.5523 3 14 3.44772 14 4V5"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                  <FileSizeIcon width="16" height="16" />
                   <div>
                     <div className="document-preview__info-label">File Size</div>
                     <div className="document-preview__info-value">{fileSize}</div>
@@ -312,21 +281,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                 </div>
 
                 <div className="document-preview__info-item">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M2.333 7.583L6.125 11.375a.583.583 0 00.825 0l4.375-4.375a.583.583 0 000-.825L7.533 2.383a.583.583 0 00-.825 0L2.333 6.758a.583.583 0 000 .825z"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                  <TagIcon width="16" height="16" />
                   <div>
                     <div className="document-preview__info-label">Category</div>
                     <div className="document-preview__info-value">
@@ -336,27 +291,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                 </div>
 
                 <div className="document-preview__info-item">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle
-                      cx="8"
-                      cy="8"
-                      r="6"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                    />
-                    <path
-                      d="M8 4v4l2.5 2.5"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                      strokeLinecap="round"
-                    />
-                  </svg>
+                  <ClockIcon width="16" height="16" />
                   <div>
                     <div className="document-preview__info-label">Last Modified</div>
                     <div className="document-preview__info-value">{lastModified}</div>
@@ -372,39 +307,13 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               <div className="document-preview__tags">
                 {document.tags.map((tag) => (
                   <span key={tag.id} className="document-preview__tag">
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M2.333 7.583L6.125 11.375a.583.583 0 00.825 0l4.375-4.375a.583.583 0 000-.825L7.533 2.383a.583.583 0 00-.825 0L2.333 6.758a.583.583 0 000 .825z"
-                        stroke="currentColor"
-                        strokeWidth="1.2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                      <circle cx="5.25" cy="5.25" r="0.583" fill="currentColor" />
-                    </svg>
+                    <TagIcon width="14" height="14" />
                     {tag.label}
                   </span>
                 ))}
               </div>
             </section>
           )}
-
-          <section className="document-preview__section">
-            <h3 className="document-preview__section-title">Permissions</h3>
-            <ul className="document-preview__permissions">
-              {permissions.map((permission, index) => (
-                <li key={index} className="document-preview__permission">
-                  • {permission}
-                </li>
-              ))}
-            </ul>
-          </section>
         </div>
     </div>
   );

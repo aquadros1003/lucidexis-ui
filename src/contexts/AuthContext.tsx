@@ -14,6 +14,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const loadUserPromiseRef = useRef<Promise<void> | null>(null);
   const currentTokenRef = useRef(token);
+  const isInitialLoadRef = useRef(true);
 
   const loadUser = useCallback(async (authToken: string | null) => {
     if (authToken) {
@@ -28,6 +29,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setUser(null);
     }
     setIsLoading(false);
+    isInitialLoadRef.current = false;
   }, [setTokenStorage]);
 
   if (loadUserPromiseRef.current === null) {
@@ -36,7 +38,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   if (currentTokenRef.current !== token) {
     currentTokenRef.current = token;
-    setIsLoading(true);
+    // Only show loading on initial load or when token actually changes
+    if (isInitialLoadRef.current || token !== currentTokenRef.current) {
+      setIsLoading(true);
+    }
     loadUserPromiseRef.current = loadUser(token);
   }
 

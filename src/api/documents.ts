@@ -6,18 +6,41 @@ export interface DocumentUploadResponse {
   status: string;
 }
 
+export interface DocumentOwner {
+  id: string;
+  full_name: string;
+  email: string;
+}
+
 export interface DocumentPublic {
   id: string;
   created_at: string;
   filename: string;
+  file_size: number;
   content_type: string;
   is_processed: boolean;
+  is_archived: boolean;
+  is_favorite: boolean;
+  description: string;
   download_url: string;
+  owner?: DocumentOwner;
 }
 
 export interface DocumentsPublic {
   data: DocumentPublic[];
   count: number;
+}
+
+export interface DocumentStats {
+  total_documents: number;
+  archived_documents: number;
+  favorite_documents: number;
+}
+
+export interface UpdateDocumentRequest {
+  description?: string;
+  is_archived?: boolean;
+  is_favorite?: boolean;
 }
 
 /**
@@ -53,10 +76,7 @@ export const uploadDocument = async (
   const formData = new FormData();
   formData.append('file', file);
   formData.append('chunk_size', chunkSize.toString());
-  
-  if (description && description.trim()) {
-    formData.append('description', description.trim());
-  }
+  formData.append('description', description || '');
 
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -124,4 +144,82 @@ export const getDocuments = async (
   }
 
   return response.json();
+};
+
+export const getDocumentStats = async (): Promise<DocumentStats> => {
+  const token = getAuthToken();
+
+  const response = await fetch('http://localhost/api/v1/documents/stats', {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({
+      detail: 'Failed to fetch document statistics.',
+    }));
+    throw new Error(error.detail);
+  }
+
+  return response.json();
+};
+
+export const updateDocument = async (
+  documentId: string,
+  updates: UpdateDocumentRequest
+): Promise<DocumentPublic> => {
+  const token = getAuthToken();
+
+  const response = await fetch(`http://localhost/api/v1/documents/${documentId}`, {
+    method: 'PATCH',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(updates),
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({
+      detail: 'Failed to update document.',
+    }));
+    throw new Error(error.detail);
+  }
+
+  return response.json();
+};
+
+export const archiveDocument = async (documentId: string): Promise<DocumentPublic> => {
+  return updateDocument(documentId, { is_archived: true });
+};
+
+export const unarchiveDocument = async (documentId: string): Promise<DocumentPublic> => {
+  return updateDocument(documentId, { is_archived: false });
+};
+
+export const favoriteDocument = async (documentId: string): Promise<DocumentPublic> => {
+  return updateDocument(documentId, { is_favorite: true });
+};
+
+export const unfavoriteDocument = async (documentId: string): Promise<DocumentPublic> => {
+  return updateDocument(documentId, { is_favorite: false });
+};
+
+export const deleteDocument = async (documentId: string): Promise<void> => {
+  const token = getAuthToken();
+
+  const response = await fetch(`http://localhost/api/v1/documents/${documentId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({
+      detail: 'Failed to delete document.',
+    }));
+    throw new Error(error.detail);
+  }
 };

@@ -2,6 +2,8 @@ import React from 'react';
 import { useAuthContext } from '../../contexts';
 import { Dropdown, type DropdownItem } from '../Dropdown';
 import { downloadFile } from '../../utils/downloadFile';
+import { formatRelativeDate } from '../../utils/dateFormatter';
+import { DownloadIcon, MenuDotsIcon, TagIcon, CalendarIcon } from '../../assets/icons';
 import './DocumentCard.scss';
 
 export type DocumentStatus = 'active' | 'draft' | 'archived';
@@ -17,10 +19,14 @@ export interface DocumentCardProps {
   title: string;
   downloadUrl: string;
   description: string;
+  fileSize: string;
   status: DocumentStatus;
   type: DocumentType;
   tags: DocumentTag[];
-  date: string;
+  date: Date;
+  authorName?: string;
+  isArchived?: boolean;
+  isFavorite?: boolean;
   onCardClick?: (id: string) => void;
   onMenuClick?: (id: string) => void;
 }
@@ -66,27 +72,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
     {
       id: 'download',
       label: 'Download',
-      icon: (
-        <svg
-          viewBox="0 0 16 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M8 10.5V2M8 10.5L5.5 8M8 10.5L10.5 8"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M2 11v2a1 1 0 001 1h10a1 1 0 001-1v-2"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
-        </svg>
-      ),
+      icon: <DownloadIcon />,
       onClick: handleDownload,
     },
   ];
@@ -102,17 +88,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
       }}
       aria-label="Document menu"
     >
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle cx="10" cy="4" r="1.5" fill="currentColor" />
-        <circle cx="10" cy="10" r="1.5" fill="currentColor" />
-        <circle cx="10" cy="16" r="1.5" fill="currentColor" />
-      </svg>
+      <MenuDotsIcon width="20" height="20" />
     </button>
   );
 
@@ -133,22 +109,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
           <div className="document-card__tags">
             {tags.map((tag) => (
               <span key={tag.id} className="document-card__tag">
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M2.333 7.583L6.125 11.375a.583.583 0 00.825 0l4.375-4.375a.583.583 0 000-.825L7.533 2.383a.583.583 0 00-.825 0L2.333 6.758a.583.583 0 000 .825z"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <circle cx="5.25" cy="5.25" r="0.583" fill="currentColor" />
-                </svg>
+                <TagIcon width="14" height="14" />
                 {tag.label}
               </span>
             ))}
@@ -158,30 +119,8 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
 
       <div className="document-card__footer">
         <div className="document-card__date">
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect
-              x="2"
-              y="3"
-              width="12"
-              height="11"
-              rx="1.5"
-              stroke="currentColor"
-              strokeWidth="1.2"
-            />
-            <path
-              d="M5 1.5v2M11 1.5v2M2 6h12"
-              stroke="currentColor"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-            />
-          </svg>
-          <span>{date}</span>
+          <CalendarIcon width="16" height="16" />
+          <span>{formatRelativeDate(date)}</span>
         </div>
       </div>
     </div>

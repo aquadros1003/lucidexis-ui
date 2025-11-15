@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { ChevronDownIcon, CheckIcon } from '../../assets/icons';
 import './PerPageSelect.scss';
 
 interface PerPageSelectProps {
@@ -42,22 +43,11 @@ const PerPageSelect = ({ value, onChange, options = DEFAULT_OPTIONS }: PerPageSe
         type="button"
       >
         <span className="per-page-select__value">{value} per page</span>
-        <svg
+        <ChevronDownIcon
           className={`per-page-select__arrow ${isOpen ? 'per-page-select__arrow--open' : ''}`}
           width="12"
           height="12"
-          viewBox="0 0 12 12"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M2.5 4.5L6 8L9.5 4.5"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        />
       </button>
 
       {isOpen && (
@@ -71,22 +61,11 @@ const PerPageSelect = ({ value, onChange, options = DEFAULT_OPTIONS }: PerPageSe
             >
               {option} per page
               {option === value && (
-                <svg
+                <CheckIcon
                   className="per-page-select__check"
                   width="16"
                   height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M13.5 4L6 11.5L2.5 8"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                />
               )}
             </button>
           ))}

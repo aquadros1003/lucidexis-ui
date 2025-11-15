@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import type { FormEvent, ChangeEvent } from 'react';
 import { uploadDocument } from '../../api/documents';
 import { Loader } from '../Loader';
+import { CloseIcon, DocumentIcon, UploadIcon } from '../../assets/icons';
 import './DocumentUpload.scss';
 
 interface DocumentUploadProps {
@@ -65,8 +66,6 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
         description
       );
       
-      console.log('Upload successful:', result);
-      
       // Reset form
       setFile(null);
       setDescription('');
@@ -117,15 +116,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
             disabled={isUploading}
             aria-label="Close"
           >
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M18 6L6 18M6 6l12 12"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <CloseIcon />
           </button>
         </div>
 
@@ -146,22 +137,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
             
             {file ? (
               <div className="document-upload-modal__file-info">
-                <svg className="document-upload-modal__file-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M14 2v6h6M16 13H8m8 4H8m2-8H8"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                <DocumentIcon className="document-upload-modal__file-icon" />
                 <div className="document-upload-modal__file-details">
                   <p className="document-upload-modal__file-name">{file.name}</p>
                   <p className="document-upload-modal__file-size">
@@ -174,15 +150,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
               </div>
             ) : (
               <div className="document-upload-modal__dropzone-content">
-                <svg className="document-upload-modal__upload-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
+                <UploadIcon className="document-upload-modal__upload-icon" />
                 <p className="document-upload-modal__dropzone-text">
                   <strong>Click to upload</strong> or drag and drop
                 </p>

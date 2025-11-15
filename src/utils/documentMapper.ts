@@ -28,46 +28,31 @@ const generateMockTags = (filename: string): DocumentTag[] => {
   return tags;
 };
 
-const generateMockDescription = (filename: string): string => {
-  const nameWithoutExt = filename.replace(/\.[^/.]+$/, '');
-  return `Document file: ${nameWithoutExt}. Click to view or download.`;
-};
-
-const formatDate = (dateString: string): string => {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffTime = Math.abs(now.getTime() - date.getTime());
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  
-  if (diffDays === 0) {
-    return 'Today';
-  } else if (diffDays === 1) {
-    return 'Yesterday';
-  } else if (diffDays < 7) {
-    return `${diffDays} days ago`;
-  } else {
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined 
-    });
-  }
-};
-
 const getDocumentStatus = (isProcessed: boolean): DocumentStatus => {
   return isProcessed ? 'active' : 'draft';
 };
+
+
+const fileSize = (doc: DocumentPublic): string => {
+  return doc.file_size < 1024 * 1024
+    ? `${(doc.file_size / 1024).toFixed(2)} KB`
+    : `${(doc.file_size / (1024 * 1024)).toFixed(2)} MB`;
+}
 
 export const mapDocumentToCard = (doc: DocumentPublic): DocumentCardProps => {
   return {
     id: doc.id,
     title: doc.filename,
     downloadUrl: doc.download_url,
-    description: generateMockDescription(doc.filename),
+    description: doc.description,
+    fileSize: fileSize(doc),
     status: getDocumentStatus(doc.is_processed),
     type: mapContentTypeToDocType(doc.content_type),
     tags: generateMockTags(doc.filename),
-    date: formatDate(doc.created_at),
+    date: new Date(doc.created_at),
+    authorName: doc.owner ? doc.owner.full_name : 'Unknown',
+    isArchived: doc.is_archived,
+    isFavorite: doc.is_favorite,
   };
 };
 

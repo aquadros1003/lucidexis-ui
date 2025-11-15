@@ -4,11 +4,12 @@ import { useState } from 'react';
 import DocumentCard from '../../components/DocumentCard/DocumentCard';
 import type { DocumentCardProps } from '../../components/DocumentCard/DocumentCard';
 import { DocumentPreview } from '../../components/DocumentPreview';
+import { ConfirmModal } from '../../components/ConfirmModal';
 import { getDocuments } from '../../api/documents';
 import { mapDocumentsToCards } from '../../utils/documentMapper';
-import { Loader } from '../../components/Loader';
 import { Pagination } from '../../components/Pagination';
 import { PerPageSelect } from '../../components/PerPageSelect';
+import { useArchiveDocument, useUnarchiveDocument, useFavoriteDocument, useUnfavoriteDocument, useDeleteDocument } from '../../hooks';
 import './Dashboard.scss';
 
 const DEFAULT_ITEMS_PER_PAGE = 10;
@@ -18,6 +19,13 @@ function Dashboard() {
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const itemsPerPage = parseInt(searchParams.get('perPage') || String(DEFAULT_ITEMS_PER_PAGE), 10);
   const [selectedDocument, setSelectedDocument] = useState<DocumentCardProps | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [documentToDelete, setDocumentToDelete] = useState<string | null>(null);
+  const archiveMutation = useArchiveDocument();
+  const unarchiveMutation = useUnarchiveDocument();
+  const favoriteMutation = useFavoriteDocument();
+  const unfavoriteMutation = useUnfavoriteDocument();
+  const deleteMutation = useDeleteDocument();
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['documents', currentPage, itemsPerPage],
@@ -45,16 +53,75 @@ function Dashboard() {
     setSelectedDocument(null);
   };
 
-  const handleArchive = (id: string) => {
-    console.log('Archive document:', id);
-    // TODO: Implement archive functionality
-    setSelectedDocument(null);
+  const handleArchive = async (id: string, isArchived: boolean) => {
+    try {
+      const result = isArchived 
+        ? await unarchiveMutation.mutateAsync(id)
+        : await archiveMutation.mutateAsync(id);
+      
+      if (selectedDocument && selectedDocument.id === id) {
+        setSelectedDocument({
+          ...selectedDocument,
+          isArchived: result.is_archived,
+          isFavorite: result.is_favorite,
+        });
+      }
+    } catch (error) {
+      console.error('Failed to update document:', error);
+      alert(error instanceof Error ? error.message : 'Failed to update document');
+    }
+  };
+
+  const handleFavorite = async (id: string, isFavorite: boolean) => {
+    try {
+      const result = isFavorite
+        ? await unfavoriteMutation.mutateAsync(id)
+        : await favoriteMutation.mutateAsync(id);
+      
+      if (selectedDocument && selectedDocument.id === id) {
+        setSelectedDocument({
+          ...selectedDocument,
+          isFavorite: result.is_favorite,
+        });
+      }
+    } catch (error) {
+      console.error('Failed to update document:', error);
+      alert(error instanceof Error ? error.message : 'Failed to update document');
+    }
+  };
+
+  const handleDescriptionUpdate = (id: string, description: string) => {
+    if (selectedDocument && selectedDocument.id === id) {
+      setSelectedDocument({
+        ...selectedDocument,
+        description,
+      });
+    }
+    refetch();
   };
 
   const handleDelete = (id: string) => {
-    console.log('Delete document:', id);
-    // TODO: Implement delete functionality
-    setSelectedDocument(null);
+    setDocumentToDelete(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!documentToDelete) return;
+
+    try {
+      await deleteMutation.mutateAsync(documentToDelete);
+      setIsDeleteModalOpen(false);
+      setDocumentToDelete(null);
+      setSelectedDocument(null);
+    } catch (error) {
+      console.error('Failed to delete document:', error);
+      alert(error instanceof Error ? error.message : 'Failed to delete document');
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false);
+    setDocumentToDelete(null);
   };
 
   const handlePageChange = (page: number) => {
@@ -66,23 +133,12 @@ function Dashboard() {
   };
 
   const handlePerPageChange = (perPage: number) => {
-    // Reset to page 1 when changing items per page
     const params: Record<string, string> = { page: '1' };
     if (perPage !== DEFAULT_ITEMS_PER_PAGE) {
       params.perPage = perPage.toString();
     }
     setSearchParams(params);
   };
-
-  if (isLoading) {
-    return (
-      <div className="dashboard">
-        <div className="dashboard-content">
-          <Loader message="Loading documents..." />
-        </div>
-      </div>
-    );
-  }
 
   if (error) {
     return (
@@ -104,7 +160,12 @@ function Dashboard() {
     <div className={`dashboard ${selectedDocument ? 'dashboard--with-preview' : ''}`}>
       <div className="dashboard-content">
         <div className="dashboard-section">
-          {documents.length === 0 ? (
+          {isLoading ? (
+            <div className="dashboard-empty">
+              <h2>Loading documents...</h2>
+              <p>Please wait while we fetch your documents</p>
+            </div>
+          ) : documents.length === 0 ? (
             <div className="dashboard-empty">
               <h2>No documents yet</h2>
               <p>Upload your first document to get started</p>
@@ -146,9 +207,27 @@ function Dashboard() {
           document={selectedDocument}
           onClose={handleClosePreview}
           onArchive={handleArchive}
+          onFavorite={handleFavorite}
+          onDescriptionUpdate={handleDescriptionUpdate}
           onDelete={handleDelete}
         />
       )}
+
+      <ConfirmModal
+        isOpen={isDeleteModalOpen}
+        title="Delete Document"
+        message={
+          <>
+            Are you sure you want to delete <strong>{selectedDocument?.title}</strong>? This action cannot be undone.
+          </>
+        }
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+        isLoading={deleteMutation.isPending}
+      />
     </div>
   );
 }

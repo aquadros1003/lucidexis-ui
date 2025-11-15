@@ -1,0 +1,10 @@
+<svg viewBox="0 0 20 20" fill="var(--star-fill, none)" xmlns="http://www.w3.org/2000/svg">
+  <path
+    d="M10 2l2.39 6.09L19 9l-5 4.88L15.18 20 10 16.09 4.82 20 6 13.88 1 9l6.61-.91L10 2z"
+    stroke="var(--star-stroke, currentColor)"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    fill="inherit"
+  />
+</svg>

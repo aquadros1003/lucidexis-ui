@@ -7,7 +7,16 @@ export function ProtectedRoute() {
   const { isAuthenticated, isLoading } = useAuthContext();
 
   if (isLoading) {
-    return <Loader fullScreen message="Loading your account..." />;
+    return (
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        minHeight: '100vh' 
+      }}>
+        <Loader message="Loading your account..." />
+      </div>
+    );
   }
 
   if (!isAuthenticated) {

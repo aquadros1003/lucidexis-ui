@@ -15,7 +15,16 @@ export function PublicRoute({ children }: PublicRouteProps) {
   const { isAuthenticated, isLoading } = useAuthContext();
 
   if (isLoading) {
-    return <Loader fullScreen message="Checking authentication..." />;
+    return (
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        minHeight: '100vh' 
+      }}>
+        <Loader message="Checking authentication..." />
+      </div>
+    );
   }
 
   if (isAuthenticated) {
