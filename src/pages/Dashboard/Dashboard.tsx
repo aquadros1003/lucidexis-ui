@@ -18,6 +18,7 @@ function Dashboard() {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const itemsPerPage = parseInt(searchParams.get('perPage') || String(DEFAULT_ITEMS_PER_PAGE), 10);
+  const searchQuery = searchParams.get('search') || '';
   const [selectedDocument, setSelectedDocument] = useState<DocumentCardProps | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [documentToDelete, setDocumentToDelete] = useState<string | null>(null);
@@ -28,10 +29,10 @@ function Dashboard() {
   const deleteMutation = useDeleteDocument();
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['documents', currentPage, itemsPerPage],
+    queryKey: ['documents', currentPage, itemsPerPage, searchQuery],
     queryFn: async () => {
       const offset = (currentPage - 1) * itemsPerPage;
-      const response = await getDocuments(itemsPerPage, offset);
+      const response = await getDocuments(itemsPerPage, offset, undefined, undefined, searchQuery);
       return {
         documents: mapDocumentsToCards(response.data),
         totalCount: response.count,

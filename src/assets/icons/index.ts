@@ -23,3 +23,5 @@ export { ReactComponent as FileDocIcon } from './file-doc.svg';
 export { ReactComponent as FileSheetIcon } from './file-sheet.svg';
 export { ReactComponent as FileImageIcon } from './file-image.svg';
 export { ReactComponent as FileOtherIcon } from './file-other.svg';
+export { ReactComponent as SearchIcon } from './search.svg';
+export { ReactComponent as FilterIcon } from './filter.svg';

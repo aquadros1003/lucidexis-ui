@@ -3,8 +3,8 @@
 
 .document-preview {
   text-align: left;
-  position: fixed;
-  top: 64px;
+  position: absolute;
+  top: 0;
   right: 0;
   bottom: 0;
   width: 480px;
@@ -14,7 +14,6 @@
   border-left: 1px solid $border-color;
   animation: slideInRight 0.3s ease-out;
   overflow-y: auto;
-  z-index: 50;
 
   &__header {
     display: flex;
@@ -25,7 +24,6 @@
     background-color: $card-bg;
     position: sticky;
     top: 0;
-    z-index: 10;
   }
 
   &__header-content {
@@ -359,11 +357,10 @@
 
 @media (max-width: 1024px) {
   .document-preview {
-    top: 64px;
+    top: 0;
     left: 0;
     width: 100%;
     border-left: none;
-    border-top: 1px solid $border-color;
 
     &__info-row {
       grid-template-columns: 1fr;

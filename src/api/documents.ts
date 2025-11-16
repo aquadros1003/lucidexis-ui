@@ -124,7 +124,8 @@ export const getDocuments = async (
   limit: number = 100,
   offset: number = 0,
   isFavorite?: boolean,
-  isArchived?: boolean
+  isArchived?: boolean,
+  search?: string
 ): Promise<DocumentsPublic> => {
   const token = getAuthToken();
 
@@ -138,6 +139,10 @@ export const getDocuments = async (
   
   if (isArchived !== undefined) {
     url.searchParams.append('is_archived', isArchived.toString());
+  }
+  
+  if (search) {
+    url.searchParams.append('search', search);
   }
 
   const response = await fetch(url.toString(), {

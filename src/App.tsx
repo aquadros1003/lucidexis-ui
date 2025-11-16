@@ -48,6 +48,7 @@ function App() {
           } 
         />
         <Route element={<ProtectedRoute />}>
+          <Route index element={<Dashboard />} />
           <Route path="/" element={<Dashboard />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/archived" element={<Archived />} />

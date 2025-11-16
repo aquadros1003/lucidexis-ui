@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 import { getDocuments } from '../../api/documents';
 import DocumentCard from '../../components/DocumentCard/DocumentCard';
 import { DocumentPreview } from '../../components/DocumentPreview';
@@ -18,6 +19,8 @@ import type { DocumentCardProps } from '../../components/DocumentCard/DocumentCa
 import './Archived.scss';
 
 export function Archived() {
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get('search') || '';
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(20);
   const [selectedDocument, setSelectedDocument] = useState<DocumentCardProps | null>(null);
@@ -26,8 +29,8 @@ export function Archived() {
   const offset = (currentPage - 1) * perPage;
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['documents', 'archived', perPage, offset],
-    queryFn: () => getDocuments(perPage, offset, undefined, true),
+    queryKey: ['documents', 'archived', perPage, offset, searchQuery],
+    queryFn: () => getDocuments(perPage, offset, undefined, true, searchQuery),
   });
 
   const archiveMutation = useArchiveDocument();

@@ -2,16 +2,14 @@
 
 .sidebar {
   width: 280px;
-  min-height: 100vh;
-  max-height: 100vh;
+  height: 100vh;
   background-color: $bg-color;
   border-right: 1px solid $border-color;
   display: flex;
   flex-direction: column;
-  position: sticky;
-  top: 0;
   overflow-y: auto;
   transition: all 0.3s ease;
+  flex-shrink: 0;
 
   &__header {
     padding: $spacing-md $spacing-md;

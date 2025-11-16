@@ -1,0 +1,58 @@
+@use '../../styles/variables' as *;
+
+.search-bar {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+
+  &__icon {
+    position: absolute;
+    left: $spacing-md;
+    color: $text-muted;
+    pointer-events: none;
+  }
+
+  &__input {
+    width: 100%;
+    padding: $spacing-sm $spacing-md $spacing-sm 44px;
+    border: 1px solid #e5e7eb;
+    border-radius: $radius-sm;
+    font-size: $font-sm;
+    color: $text-primary;
+    background-color: #e5e7eb;
+    transition: all 0.2s;
+
+    &::placeholder {
+      color: $text-muted;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__clear {
+    position: absolute;
+    right: $spacing-md;
+    background: transparent;
+    border: none;
+    padding: $spacing-xs;
+    cursor: pointer;
+    color: $text-muted;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $radius-sm;
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: $bg-color;
+      color: $text-primary;
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}

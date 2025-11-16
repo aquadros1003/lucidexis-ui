@@ -3,17 +3,21 @@
 .main-layout {
   display: flex;
   flex-direction: row;
-  min-height: 100vh;
+  height: 100vh;
   background-color: $card-bg;
+  overflow: hidden;
 
   &__main {
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
   }
 
   &__content {
     flex: 1;
     overflow-y: auto;
+    position: relative;
   }
 }
