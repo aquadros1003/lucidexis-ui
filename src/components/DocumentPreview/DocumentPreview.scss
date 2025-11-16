@@ -14,6 +14,7 @@
   border-left: 1px solid $border-color;
   animation: slideInRight 0.3s ease-out;
   overflow-y: auto;
+  z-index: 999;
 
   &__header {
     display: flex;
@@ -373,13 +374,6 @@
 
     &__action-btn {
       width: 100%;
-    }
-  }
-
-  .dashboard--with-preview {
-    .dashboard-content {
-      width: 100%;
-      max-width: 100%;
     }
   }
 }

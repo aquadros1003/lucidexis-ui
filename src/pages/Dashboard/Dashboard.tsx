@@ -158,7 +158,7 @@ function Dashboard() {
   }
 
   return (
-    <div className={`dashboard ${selectedDocument ? 'dashboard--with-preview' : ''}`}>
+    <div className="dashboard">
       <div className="dashboard-content">
         <div className="dashboard-section">
           {isLoading && (

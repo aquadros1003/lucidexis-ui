@@ -114,7 +114,7 @@ export function Archived() {
   }
 
   return (
-    <div className={`archived ${selectedDocument ? 'archived--with-preview' : ''}`}>
+    <div className="archived">
       <div className="archived-content">
         {isLoading && (
           <div className="archived__loading-overlay">

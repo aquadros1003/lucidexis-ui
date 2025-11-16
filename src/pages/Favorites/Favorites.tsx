@@ -114,7 +114,7 @@ export function Favorites() {
   }
 
   return (
-    <div className={`favorites ${selectedDocument ? 'favorites--with-preview' : ''}`}>
+    <div className="favorites">
       <div className="favorites-content">
         {isLoading && (
           <div className="favorites__loading-overlay">
