@@ -160,12 +160,12 @@ function Dashboard() {
     <div className={`dashboard ${selectedDocument ? 'dashboard--with-preview' : ''}`}>
       <div className="dashboard-content">
         <div className="dashboard-section">
-          {isLoading ? (
-            <div className="dashboard-empty">
-              <h2>Loading documents...</h2>
-              <p>Please wait while we fetch your documents</p>
+          {isLoading && (
+            <div className="dashboard__loading-overlay">
+              <div className="dashboard__spinner" />
             </div>
-          ) : documents.length === 0 ? (
+          )}
+          {documents.length === 0 && !isLoading ? (
             <div className="dashboard-empty">
               <h2>No documents yet</h2>
               <p>Upload your first document to get started</p>

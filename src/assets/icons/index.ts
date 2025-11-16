@@ -18,3 +18,8 @@ export { ReactComponent as LogoutIcon } from './logout.svg';
 export { ReactComponent as UploadIcon } from './upload.svg';
 export { ReactComponent as ChevronDownIcon } from './chevron-down.svg';
 export { ReactComponent as CheckIcon } from './check.svg';
+export { ReactComponent as FilePdfIcon } from './file-pdf.svg';
+export { ReactComponent as FileDocIcon } from './file-doc.svg';
+export { ReactComponent as FileSheetIcon } from './file-sheet.svg';
+export { ReactComponent as FileImageIcon } from './file-image.svg';
+export { ReactComponent as FileOtherIcon } from './file-other.svg';

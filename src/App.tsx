@@ -4,6 +4,8 @@ import Register from './pages/Register'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 import Dashboard from './pages/Dashboard'
+import { Favorites } from './pages/Favorites'
+import { Archived } from './pages/Archived'
 import NotFound from './pages/NotFound'
 import { ProtectedRoute } from './components/Routes/ProtectedRoute'
 import { PublicRoute } from './components/Routes/PublicRoute'
@@ -47,6 +49,8 @@ function App() {
         />
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/archived" element={<Archived />} />
         </Route>
         <Route path="/404" element={<NotFound />} />
         <Route path="*" element={<Navigate to="/404" replace />} />

@@ -1,10 +1,35 @@
 import type { DocumentPublic } from '../api/documents';
 import type { DocumentCardProps, DocumentType, DocumentStatus, DocumentTag } from '../components/DocumentCard/DocumentCard';
 
-const mapContentTypeToDocType = (contentType: string): DocumentType => {
+const mapContentTypeToDocType = (contentType: string, filename: string): DocumentType => {
+  // PDF
   if (contentType.includes('application/pdf')) return 'pdf';
-  if (contentType.includes('text/plain') || contentType.includes('document')) return 'doc';
-  if (contentType.includes('text/csv') || contentType.includes('excel')) return 'sheet';
+  
+  // Documents
+  if (contentType.includes('application/msword') || contentType.includes('wordprocessingml')) return 'doc';
+  if (contentType.includes('text/plain')) return 'txt';
+  
+  // Spreadsheets
+  if (contentType.includes('application/vnd.ms-excel') || contentType.includes('spreadsheetml')) return 'xlsx';
+  if (contentType.includes('text/csv')) return 'csv';
+  
+  // Images
+  if (contentType.includes('image/jpeg')) return 'jpeg';
+  if (contentType.includes('image/png')) return 'png';
+  if (contentType.includes('image/gif')) return 'gif';
+  if (contentType.includes('image/')) return 'image';
+  
+  // Fallback based on extension
+  const ext = filename.split('.').pop()?.toLowerCase();
+  if (ext === 'pdf') return 'pdf';
+  if (['doc', 'docx'].includes(ext || '')) return 'docx';
+  if (['txt', 'text'].includes(ext || '')) return 'txt';
+  if (['xls', 'xlsx'].includes(ext || '')) return 'xlsx';
+  if (['csv'].includes(ext || '')) return 'csv';
+  if (['jpg', 'jpeg'].includes(ext || '')) return 'jpeg';
+  if (['png'].includes(ext || '')) return 'png';
+  if (['gif'].includes(ext || '')) return 'gif';
+  
   return 'other';
 };
 
@@ -47,7 +72,7 @@ export const mapDocumentToCard = (doc: DocumentPublic): DocumentCardProps => {
     description: doc.description,
     fileSize: fileSize(doc),
     status: getDocumentStatus(doc.is_processed),
-    type: mapContentTypeToDocType(doc.content_type),
+    type: mapContentTypeToDocType(doc.content_type, doc.filename),
     tags: generateMockTags(doc.filename),
     date: new Date(doc.created_at),
     authorName: doc.owner ? doc.owner.full_name : 'Unknown',

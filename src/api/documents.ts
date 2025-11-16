@@ -122,13 +122,23 @@ export const uploadDocument = async (
 
 export const getDocuments = async (
   limit: number = 100,
-  offset: number = 0
+  offset: number = 0,
+  isFavorite?: boolean,
+  isArchived?: boolean
 ): Promise<DocumentsPublic> => {
   const token = getAuthToken();
 
   const url = new URL('http://localhost/api/v1/documents/');
   url.searchParams.append('limit', limit.toString());
   url.searchParams.append('offset', offset.toString());
+  
+  if (isFavorite !== undefined) {
+    url.searchParams.append('is_favorite', isFavorite.toString());
+  }
+  
+  if (isArchived !== undefined) {
+    url.searchParams.append('is_archived', isArchived.toString());
+  }
 
   const response = await fetch(url.toString(), {
     headers: {

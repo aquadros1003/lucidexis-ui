@@ -3,11 +3,22 @@ import { useAuthContext } from '../../contexts';
 import { Dropdown, type DropdownItem } from '../Dropdown';
 import { downloadFile } from '../../utils/downloadFile';
 import { formatRelativeDate } from '../../utils/dateFormatter';
-import { DownloadIcon, MenuDotsIcon, TagIcon, CalendarIcon, StarIcon } from '../../assets/icons';
+import { 
+  DownloadIcon, 
+  MenuDotsIcon, 
+  TagIcon, 
+  CalendarIcon, 
+  StarIcon,
+  FilePdfIcon,
+  FileDocIcon,
+  FileSheetIcon,
+  FileImageIcon,
+  FileOtherIcon
+} from '../../assets/icons';
 import './DocumentCard.scss';
 
 export type DocumentStatus = 'active' | 'draft' | 'archived';
-export type DocumentType = 'pdf' | 'doc' | 'sheet' | 'other';
+export type DocumentType = 'pdf' | 'doc' | 'docx' | 'txt' | 'sheet' | 'xlsx' | 'csv' | 'image' | 'jpg' | 'jpeg' | 'png' | 'gif' | 'other';
 
 export interface DocumentTag {
   id: string;
@@ -31,14 +42,29 @@ export interface DocumentCardProps {
   onMenuClick?: (id: string) => void;
 }
 
-const getFileIcon = (type: DocumentType): string => {
-  const icons = {
-    pdf: '📄',
-    doc: '📘',
-    sheet: '📊',
-    other: '📋',
-  };
-  return icons[type] || icons.other;
+const getFileIcon = (type: DocumentType): React.ReactElement => {
+  // PDF files
+  if (type === 'pdf') {
+    return <FilePdfIcon />;
+  }
+  
+  // Document files
+  if (['doc', 'docx', 'txt'].includes(type)) {
+    return <FileDocIcon />;
+  }
+  
+  // Spreadsheet files
+  if (['sheet', 'xlsx', 'csv'].includes(type)) {
+    return <FileSheetIcon />;
+  }
+  
+  // Image files
+  if (['image', 'jpg', 'jpeg', 'png', 'gif'].includes(type)) {
+    return <FileImageIcon />;
+  }
+  
+  // Other files
+  return <FileOtherIcon />;
 };
 
 const DocumentCard: React.FC<DocumentCardProps> = ({
@@ -96,8 +122,8 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
   return (
     <div className="document-card" onClick={handleCardClick}>
       <div className="document-card__header">
-        <div className={`document-card__icon document-card__icon--${type}`}>
-          <span className="document-card__icon-emoji">{getFileIcon(type)}</span>
+        <div className="document-card__icon">
+          {getFileIcon(type)}
         </div>
         <div className="document-card__header-actions">
           {isFavorite && (
