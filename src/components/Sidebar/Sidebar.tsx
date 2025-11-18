@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { MenuLinesIcon } from '../../assets/icons';
+import { LogoIcon, StarIcon, ArchiveIcon, ClockIcon, FileOtherIcon } from '../../assets/icons';
 import './Sidebar.scss';
 import { UserMenu } from '../UserMenu';
 import { useDocumentStats } from '../../hooks';
@@ -8,7 +8,7 @@ import type { DocumentStats } from '../../api/documents';
 interface NavItem {
   name: string;
   path: string;
-  icon: string;
+  icon: React.ReactNode;
   countKey?: keyof DocumentStats;
 }
 
@@ -18,10 +18,10 @@ interface Category {
 }
 
 const navItems: NavItem[] = [
-  { name: 'All Documents', path: '/', icon: '📄', countKey: 'total_documents' },
-  { name: 'Favorites', path: '/favorites', icon: '⭐', countKey: 'favorite_documents' },
-  { name: 'Recent', path: '/recent', icon: '🕐' },
-  { name: 'Archived', path: '/archived', icon: '📦', countKey: 'archived_documents' },
+  { name: 'All Documents', path: '/', icon: <FileOtherIcon/>, countKey: 'total_documents' },
+  { name: 'Favorites', path: '/favorites', icon: <StarIcon/>, countKey: 'favorite_documents' },
+  { name: 'Recent', path: '/recent', icon: <ClockIcon/> },
+  { name: 'Archived', path: '/archived', icon: <ArchiveIcon/>, countKey: 'archived_documents' },
 ];
 
 const categories: Category[] = [
@@ -43,7 +43,7 @@ export function Sidebar() {
       <div className="sidebar__header">
         <div className="sidebar__logo">
           <div className="sidebar__logo-icon">
-            <MenuLinesIcon />
+            <LogoIcon />
           </div>
             <div className="sidebar__logo-text">
               <h1>Lucidexis</h1>
@@ -65,6 +65,9 @@ export function Sidebar() {
                   className={`sidebar__nav-item ${location.pathname === item.path ? 'sidebar__nav-item--active' : ''}`}
                   title={item.name}
                 >
+                  <span className="sidebar__nav-icon" aria-hidden="true">
+                    {item.icon}
+                  </span>
                   <span className="sidebar__nav-name">{item.name}</span>
                   {!loading && count !== undefined && (
                     <span className="sidebar__nav-count">{count}</span>

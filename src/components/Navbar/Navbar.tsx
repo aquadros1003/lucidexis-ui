@@ -42,7 +42,7 @@ export function Navbar() {
               title="Upload Document"
             >
               <PlusIcon className="navbar__upload-icon" />
-              <span>Upload</span>
+              <span>New Document</span>
             </button>
           </div>
           <div className="navbar__row navbar__row--bottom">

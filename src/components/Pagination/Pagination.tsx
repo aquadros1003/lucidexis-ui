@@ -45,7 +45,7 @@ const Pagination = ({
   return (
     <div className="pagination">
       <div className="pagination-info">
-        Showing {startItem} to {endItem} of {totalItems || endItem} documents
+        Showing <strong>{startItem}</strong> to <strong>{endItem}</strong> of <strong>{totalItems || endItem}</strong> documents
       </div>
       <div className="pagination-controls">
         <button

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useRegister } from '../../hooks/useRegister'
 import { useNavigate } from 'react-router-dom'
+import { LogoIcon } from '../../assets/icons'
 import './Register.scss'
 
 function Register() {
@@ -43,7 +44,15 @@ function Register() {
 
   return (
     <div className="register-container">
+        <div className="auth-header">
+          <div className="auth-logo">
+            <LogoIcon />
+          </div>
+          <h1 className="auth-app-name">Lucidexis</h1>
+          <p className="auth-tagline">Document Management & Knowledge Search</p>
+        </div>
       <div className="register-card">
+
         <div className="register-form-container">
           <h2 className="register-title">Create Account</h2>
           <p className="register-subtitle">Sign up to start managing your documents</p>

@@ -25,3 +25,4 @@ export { ReactComponent as FileImageIcon } from './file-image.svg';
 export { ReactComponent as FileOtherIcon } from './file-other.svg';
 export { ReactComponent as SearchIcon } from './search.svg';
 export { ReactComponent as FilterIcon } from './filter.svg';
+export { ReactComponent as LogoIcon } from './logo.svg';

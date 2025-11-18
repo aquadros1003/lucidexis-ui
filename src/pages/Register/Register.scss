@@ -5,39 +5,36 @@
   min-height: 100vh;
   @include flex-center;
   flex-direction: column;
-  background: linear-gradient(135deg, #faf9fe 0%, #f3ebff 20%, #fff5f9 40%, #f0f6ff 60%, #fff5f9 80%, #faf9fe 100%);
-  background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
+  background: #e9e4f5;
   position: relative;
   
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at 20% 50%, rgba(147, 51, 234, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.03) 0%, transparent 50%);
+    inset: 0;
+    background: 
+      radial-gradient(circle at 15% 20%, rgba(216, 180, 254, 0.4), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(251, 207, 232, 0.3), transparent 40%),
+      radial-gradient(circle at 50% 50%, rgba(196, 181, 253, 0.2), transparent 50%);
     pointer-events: none;
   }
-}
-
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.03;
+    background-image: 
+      linear-gradient(to right, rgba(147, 51, 234, 1) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(147, 51, 234, 1) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
   }
 }
 
 .register-card {
   width: 100%;
-  max-width: 500px;
+  max-width: 450px;
   background-color: $card-bg;
   border-radius: $radius-xl;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1);
@@ -45,6 +42,42 @@
   position: relative;
   z-index: 1;
   backdrop-filter: blur(10px);
+}
+
+.auth-header {
+  text-align: center;
+  padding: $spacing-xl $spacing-xl $spacing-lg;
+}
+
+.auth-logo {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto $spacing-md;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  border-radius: 20px;
+  @include flex-center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 4px 10px rgba(0, 0, 0, 0.1);
+
+  svg {
+    width: 45px;
+    height: 45px;
+    color: white;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  }
+}
+
+.auth-app-name {
+  font-size: $font-3xl;
+  font-weight: $font-semibold;
+  color: $text-primary;
+  margin: 0 0 $spacing-xs;
+  letter-spacing: -0.5px;
+}
+
+.auth-tagline {
+  font-size: $font-sm;
+  color: $text-secondary;
+  margin: 0;
 }
 
 .register-form-container {
@@ -63,7 +96,6 @@
 .register-subtitle {
   font-size: $font-sm;
   color: $text-secondary;
-  margin: 0 0 $spacing-xl;
   text-align: center;
 }
 

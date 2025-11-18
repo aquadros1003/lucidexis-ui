@@ -22,7 +22,7 @@ export function Favorites() {
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get('search') || '';
   const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(20);
+  const [perPage, setPerPage] = useState(10);
   const [selectedDocument, setSelectedDocument] = useState<DocumentCardProps | null>(null);
   const [documentToDelete, setDocumentToDelete] = useState<{ id: string; title: string } | null>(null);
 

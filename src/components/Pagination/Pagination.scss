@@ -18,6 +18,11 @@
   &-info {
     color: $text-secondary;
     font-size: $font-sm;
+    
+    strong {
+      color: $text-primary;
+      font-weight: $font-semibold;
+    }
   }
 
   &-controls {
@@ -26,8 +31,8 @@
   }
 
   &-btn {
-    min-width: 40px;
-    height: 40px;
+    min-width: 35px;
+    height: 35px;
     padding: $spacing-xs $spacing-sm;
     border: 1px solid #e5e7eb;
     background-color: white;

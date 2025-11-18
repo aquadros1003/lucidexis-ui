@@ -8,6 +8,7 @@ import {
   MenuDotsIcon, 
   TagIcon, 
   CalendarIcon, 
+  UserIcon,
   StarIcon,
   FilePdfIcon,
   FileDocIcon,
@@ -72,6 +73,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
   title,
   description,
   downloadUrl,
+  authorName = 'Unknown Author',
   type,
   tags,
   date,
@@ -158,6 +160,10 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
       </div>
 
       <div className="document-card__footer">
+        <div className="document-card__author">
+          <UserIcon width="16" height="16" />
+          <span>{authorName}</span>
+        </div>
         <div className="document-card__date">
           <CalendarIcon width="16" height="16" />
           <span>{formatRelativeDate(date)}</span>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useLogin } from '../../hooks/useLogin'
 import { useNavigate } from 'react-router-dom'
+import { LogoIcon } from '../../assets/icons'
 import './Login.scss'
 
 function Login() {
@@ -32,6 +33,13 @@ function Login() {
 
   return (
     <div className="login-container">
+        <div className="auth-header">
+          <div className="auth-logo">
+            <LogoIcon />
+          </div>
+          <h1 className="auth-app-name">Lucidexis</h1>
+          <p className="auth-tagline">Document Management & Knowledge Search</p>
+        </div>
       <div className="login-card">
 
         <div className="login-form-container">
@@ -117,13 +125,6 @@ function Login() {
               <button type="button" className="btn-secondary" onClick={handleSignUp}>
                 Sign Up
               </button>
-            <div className="demo-credentials">
-              <div className="demo-header">Demo Credentials:</div>
-              <div className="demo-info">
-                <div>Email: demo@lucidexis.com</div>
-                <div>Password: demo12345</div>
-              </div>
-            </div>
           </form>
         </div>
       </div>

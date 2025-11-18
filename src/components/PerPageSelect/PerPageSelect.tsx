@@ -69,14 +69,6 @@ const PerPageSelect = ({ value, onChange, options = DEFAULT_OPTIONS }: PerPageSe
               )}
             </button>
           ))}
-          <div className="per-page-select__divider" />
-          <button
-            className={`per-page-select__option ${!options.includes(value) ? 'per-page-select__option--active' : ''}`}
-            onClick={() => handleSelect(value)}
-            type="button"
-          >
-            Show all
-          </button>
         </div>
       )}
     </div>
