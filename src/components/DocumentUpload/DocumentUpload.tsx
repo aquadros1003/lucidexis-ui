@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import type { FormEvent, ChangeEvent } from 'react';
-import { uploadDocument } from '../../api/documents';
+import { uploadDocument } from '../../api/hooks/documents';
 import { Loader } from '../Loader';
 import { CloseIcon, DocumentIcon, UploadIcon } from '../../assets/icons';
 import './DocumentUpload.scss';

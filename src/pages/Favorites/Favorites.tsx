@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
-import { getDocuments } from '../../api/documents';
+import { getDocuments } from '../../api/hooks/documents';
 import DocumentCard from '../../components/DocumentCard/DocumentCard';
 import { DocumentPreview } from '../../components/DocumentPreview';
 import { ConfirmModal } from '../../components/ConfirmModal';

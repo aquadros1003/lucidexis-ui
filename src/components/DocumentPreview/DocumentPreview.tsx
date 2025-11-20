@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { useAuthContext } from '../../contexts';
 import { downloadFile } from '../../utils/downloadFile';
-import { updateDocument } from '../../api/documents';
+import { updateDocument, getDocumentMarkdownPreview } from '../../api/hooks/documents';
 import { formatFullDate } from '../../utils/dateFormatter';
 import type { DocumentCardProps } from '../DocumentCard/DocumentCard';
 import {
@@ -42,11 +44,76 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [editedDescription, setEditedDescription] = useState(document.description);
   const [isSaving, setIsSaving] = useState(false);
+  const [activeTab, setActiveTab] = useState<'details' | 'preview'>('details');
+  const [markdownContent, setMarkdownContent] = useState<string>('');
+  const [isLoadingPreview, setIsLoadingPreview] = useState(false);
+  const [previewError, setPreviewError] = useState<string | null>(null);
+  const [panelWidth, setPanelWidth] = useState(480);
+  const [isResizing, setIsResizing] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setEditedDescription(document.description);
-  }, [document.description]);
+    // Reset markdown content when document changes
+    setMarkdownContent('');
+    setPreviewError(null);
+    if (activeTab === 'preview') {
+      loadMarkdownPreview();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [document.id]);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsResizing(true);
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing) return;
+      
+      const newWidth = window.innerWidth - e.clientX;
+      if (newWidth >= 400 && newWidth <= window.innerWidth * 0.9) {
+        setPanelWidth(newWidth);
+      }
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+    };
+
+    if (isResizing) {
+      window.document.addEventListener('mousemove', handleMouseMove);
+      window.document.addEventListener('mouseup', handleMouseUp);
+    }
+
+    return () => {
+      window.document.removeEventListener('mousemove', handleMouseMove);
+      window.document.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [isResizing]);
+
+  const loadMarkdownPreview = async () => {
+    setIsLoadingPreview(true);
+    setPreviewError(null);
+    try {
+      const content = await getDocumentMarkdownPreview(document.id);
+      setMarkdownContent(content);
+    } catch (error) {
+      console.error('Failed to load markdown preview:', error);
+      setPreviewError(error instanceof Error ? error.message : 'Failed to load preview');
+    } finally {
+      setIsLoadingPreview(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'preview' && markdownContent === '' && !isLoadingPreview) {
+      loadMarkdownPreview();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab]);
 
   const adjustTextareaHeight = () => {
     if (textareaRef.current) {
@@ -150,7 +217,15 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   const lastModified = formatFullDate(document.date);
 
   return (
-    <div className="document-preview">
+    <div 
+      ref={panelRef}
+      className={`document-preview ${isResizing ? 'resizing' : ''}`}
+      style={{ width: `${panelWidth}px` }}
+    >
+      <div 
+        className="document-preview__resize-handle"
+        onMouseDown={handleMouseDown}
+      />
       <div className="document-preview__header">
           <div className="document-preview__header-content">
             <div className="document-preview__icon">
@@ -217,13 +292,22 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
         </div>
         <div className="document-preview__content">
         <div className="document-preview__tabs">
-          <button className="document-preview__tab document-preview__tab--active">
+          <button 
+            className={`document-preview__tab ${activeTab === 'details' ? 'document-preview__tab--active' : ''}`}
+            onClick={() => setActiveTab('details')}
+          >
             Details
           </button>
-          <button className="document-preview__tab">
+          <button 
+            className={`document-preview__tab ${activeTab === 'preview' ? 'document-preview__tab--active' : ''}`}
+            onClick={() => setActiveTab('preview')}
+          >
             Preview
           </button>
         </div>
+
+        {activeTab === 'details' && (
+          <>
           <section className="document-preview__section">
             <h3 className="document-preview__section-title">Description</h3>
             {isEditingDescription ? (
@@ -318,7 +402,25 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               </div>
             </section>
           )}
-        </div>
+          </>
+        )}
+
+        {activeTab === 'preview' && (
+          <section className="document-preview__section document-preview__markdown-preview">
+            {isLoadingPreview && (
+              <div className="document-preview__loading">Loading preview...</div>
+            )}
+            {previewError && (
+              <div className="document-preview__error">{previewError}</div>
+            )}
+            {!isLoadingPreview && !previewError && markdownContent && (
+              <div className="document-preview__markdown-content">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdownContent}</ReactMarkdown>
+              </div>
+            )}
+          </section>
+        )}
+      </div>
     </div>
   );
 };

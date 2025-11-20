@@ -1,13 +1,15 @@
 @use '../../styles/variables' as *;
 @use 'sass:color';
 
+
 .document-preview {
   text-align: left;
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
-  width: 480px;
+  min-width: 500px;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   background-color: $card-bg;
@@ -15,6 +17,27 @@
   animation: slideInRight 0.3s ease-out;
   overflow-y: auto;
   z-index: 999;
+
+  &__resize-handle {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 8px;
+    cursor: ew-resize;
+    z-index: 1000;
+    background: transparent;
+    transition: background-color 0.2s ease;
+  }
+
+  &.resizing {
+    user-select: none;
+    
+    * {
+      cursor: ew-resize !important;
+      user-select: none;
+    }
+  }
 
   &__header {
     display: flex;
@@ -310,6 +333,161 @@
       color: $text-muted;
     }
   }
+
+  &__markdown-preview {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: $text-secondary;
+    font-size: $font-sm;
+  }
+
+  &__error {
+    padding: 16px;
+    background-color: rgba(220, 38, 38, 0.05);
+    border: 1px solid rgba(220, 38, 38, 0.2);
+    border-radius: $radius-md;
+    color: #dc2626;
+    font-size: $font-sm;
+  }
+
+  &__markdown-content {
+    flex: 1;
+    background-color: $bg-color;
+    border-radius: $radius-md;
+    padding: 20px;
+    overflow: auto;
+
+    h1, h2, h3, h4, h5, h6 {
+      color: $text-primary;
+      margin-top: 24px;
+      margin-bottom: 16px;
+      font-weight: $font-semibold;
+      line-height: 1.25;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+
+    h1 {
+      font-size: 2em;
+      border-bottom: 1px solid $border-color;
+      padding-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 1.5em;
+      border-bottom: 1px solid $border-color;
+      padding-bottom: 8px;
+    }
+
+    h3 {
+      font-size: 1.25em;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 16px;
+      line-height: 1.6;
+      color: $text-secondary;
+    }
+
+    ul, ol {
+      margin-top: 0;
+      margin-bottom: 16px;
+      padding-left: 2em;
+      color: $text-secondary;
+
+      li {
+        margin-bottom: 4px;
+        line-height: 1.6;
+      }
+    }
+
+    code {
+      background-color: rgba(175, 184, 193, 0.2);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.85em;
+      color: $text-primary;
+    }
+
+    pre {
+      background-color: rgba(175, 184, 193, 0.1);
+      padding: 16px;
+      border-radius: $radius-md;
+      overflow-x: auto;
+      margin-bottom: 16px;
+
+      code {
+        background-color: transparent;
+        padding: 0;
+        font-size: $font-sm;
+        line-height: 1.6;
+      }
+    }
+
+    blockquote {
+      margin: 0 0 16px;
+      padding-left: 16px;
+      border-left: 4px solid $border-color;
+      color: $text-muted;
+      font-style: italic;
+    }
+
+    a {
+      color: #3b82f6;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid $border-color;
+      margin: 24px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+
+      th, td {
+        padding: 8px 12px;
+        border: 1px solid $border-color;
+        text-align: left;
+      }
+
+      th {
+        background-color: rgba(175, 184, 193, 0.1);
+        font-weight: $font-semibold;
+        color: $text-primary;
+      }
+
+      td {
+        color: $text-secondary;
+      }
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: $radius-md;
+      margin: 16px 0;
+    }
+  }
 }
 
 .status-badge {
@@ -360,8 +538,12 @@
   .document-preview {
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100% !important;
     border-left: none;
+
+    &__resize-handle {
+      display: none;
+    }
 
     &__info-row {
       grid-template-columns: 1fr;

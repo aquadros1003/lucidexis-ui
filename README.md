@@ -71,3 +71,35 @@ export default defineConfig([
   },
 ])
 ```
+
+## Environment variables
+
+This project uses Vite — environment variables exposed to the browser must begin with `VITE_`.
+
+- `VITE_API_BASE_URL` — base URL of your API (no trailing slash). Default: `http://localhost`.
+
+Create a `.env` or `.env.local` file with the following example content (already provided in `.env.example`):
+
+```
+VITE_API_BASE_URL=http://localhost
+```
+
+In code you can use `import.meta.env.VITE_API_BASE_URL`. This project provides a helper in `src/config.ts`:
+
+```
+import { API_V1 } from './config';
+// API_V1 => 'http://localhost/api/v1' by default
+```
+
+### Predefined headers
+
+All API requests go through a central helper: `src/api/client.ts` which exposes `fetchWithHeaders` and `getAuthToken`.
+
+- `fetchWithHeaders(path, init)` automatically adds:
+  - `Accept: application/json`
+  - `Content-Type: application/json` (when body is present and not FormData)
+  - `Authorization: Bearer <token>` (reads token from `localStorage`)
+
+This helper is used across the API modules (`src/api/*.ts`) so any TanStack Query (`@tanstack/react-query`) that calls them will automatically use these predefined headers.
+
+If you need to override headers for a single call, provide them in the `init.headers` option of `fetchWithHeaders`.

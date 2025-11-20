@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
-import { registerApi } from '../api/auth';
-import type { RegisterRequest, RegisterResponse } from '../api/auth';
+import { registerApi } from '../api/hooks/auth';
+import type { RegisterRequest, RegisterResponse } from '../api/schema/auth';
 
 export function useRegister() {
   const mutation = useMutation<RegisterResponse, Error, RegisterRequest>({

@@ -5,7 +5,7 @@ import DocumentCard from '../../components/DocumentCard/DocumentCard';
 import type { DocumentCardProps } from '../../components/DocumentCard/DocumentCard';
 import { DocumentPreview } from '../../components/DocumentPreview';
 import { ConfirmModal } from '../../components/ConfirmModal';
-import { getDocuments } from '../../api/documents';
+import { getDocuments } from '../../api/hooks/documents';
 import { mapDocumentsToCards } from '../../utils/documentMapper';
 import { Pagination } from '../../components/Pagination';
 import { PerPageSelect } from '../../components/PerPageSelect';

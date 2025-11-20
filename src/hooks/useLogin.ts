@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
-import { loginApi } from '../api/auth';
-import type { LoginRequest, LoginResponse } from '../api/auth';
+import { loginApi } from '../api/hooks/auth';
+import type { LoginRequest, LoginResponse } from '../api/schema/auth';
 import { useAuthContext } from '../contexts';
 
 export function useLogin() {

@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
-import { resetPasswordApi } from '../api/auth';
-import type { ResetPasswordRequest, ResetPasswordResponse } from '../api/auth';
+import { resetPasswordApi } from '../api/hooks/auth';
+import type { ResetPasswordRequest, ResetPasswordResponse } from '../api/schema/auth';
 
 export function useResetPassword() {
   const mutation = useMutation<ResetPasswordResponse, Error, ResetPasswordRequest>({

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
-import { getDocuments } from '../../api/documents';
+import { getDocuments } from '../../api/hooks/documents';
 import DocumentCard from '../../components/DocumentCard/DocumentCard';
 import { DocumentPreview } from '../../components/DocumentPreview';
 import { ConfirmModal } from '../../components/ConfirmModal';
@@ -29,8 +29,8 @@ export function Archived() {
   const offset = (currentPage - 1) * perPage;
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['documents', 'archived', perPage, offset, searchQuery],
-    queryFn: () => getDocuments(perPage, offset, undefined, true, searchQuery),
+    queryKey: ['archivedDocuments', currentPage, perPage, searchQuery],
+    queryFn: () => getDocuments({ limit: perPage, offset, search: searchQuery, isArchived: true}),
   });
 
   const archiveMutation = useArchiveDocument();

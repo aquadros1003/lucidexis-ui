@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getDocumentStats } from '../api/documents';
+import { getDocumentStats } from '../api/hooks/documents';
 
 export function useDocumentStats() {
   return useQuery({

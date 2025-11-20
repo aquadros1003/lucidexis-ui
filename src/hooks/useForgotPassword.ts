@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
-import { forgotPasswordApi } from '../api/auth';
-import type { ForgotPasswordResponse } from '../api/auth';
+import { forgotPasswordApi } from '../api/hooks/auth';
+import type { ForgotPasswordResponse } from '../api/schema/auth';
 
 export function useForgotPassword() {
   const mutation = useMutation<ForgotPasswordResponse, Error, string>({

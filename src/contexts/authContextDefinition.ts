@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import type { User as ApiUser } from '../api/auth';
+import type { User as ApiUser } from '../api/hooks/auth';
 
 export type User = ApiUser;
 

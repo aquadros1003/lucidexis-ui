@@ -3,7 +3,7 @@ import { LogoIcon, StarIcon, ArchiveIcon, ClockIcon, FileOtherIcon } from '../..
 import './Sidebar.scss';
 import { UserMenu } from '../UserMenu';
 import { useDocumentStats } from '../../hooks';
-import type { DocumentStats } from '../../api/documents';
+import type { DocumentStats } from '../../api/hooks/documents';
 
 interface NavItem {
   name: string;

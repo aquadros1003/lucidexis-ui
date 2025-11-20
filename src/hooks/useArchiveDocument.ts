@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { archiveDocument, unarchiveDocument, favoriteDocument, unfavoriteDocument } from '../api/documents';
+import { archiveDocument, unarchiveDocument, favoriteDocument, unfavoriteDocument } from '../api/hooks/documents';
 
 export function useArchiveDocument() {
   const queryClient = useQueryClient();

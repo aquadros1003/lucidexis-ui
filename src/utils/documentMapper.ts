@@ -1,4 +1,4 @@
-import type { DocumentPublic } from '../api/documents';
+import type { DocumentPublic } from '../api/hooks/documents';
 import type { DocumentCardProps, DocumentType, DocumentStatus, DocumentTag } from '../components/DocumentCard/DocumentCard';
 
 const mapContentTypeToDocType = (contentType: string, filename: string): DocumentType => {
