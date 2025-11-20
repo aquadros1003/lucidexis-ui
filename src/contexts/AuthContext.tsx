@@ -16,21 +16,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const currentTokenRef = useRef(token);
   const isInitialLoadRef = useRef(true);
 
-  const loadUser = useCallback(async (authToken: string | null) => {
-    if (authToken) {
-      try {
-        const userData = await getCurrentUser(authToken);
-        setUser(userData);
-      } catch {
-        setTokenStorage(null);
+  const loadUser = useCallback(
+    async (authToken: string | null) => {
+      if (authToken) {
+        try {
+          const userData = await getCurrentUser(authToken);
+          setUser(userData);
+        } catch {
+          setTokenStorage(null);
+          setUser(null);
+        }
+      } else {
         setUser(null);
       }
-    } else {
-      setUser(null);
-    }
-    setIsLoading(false);
-    isInitialLoadRef.current = false;
-  }, [setTokenStorage]);
+      setIsLoading(false);
+      isInitialLoadRef.current = false;
+    },
+    [setTokenStorage],
+  );
 
   if (loadUserPromiseRef.current === null) {
     loadUserPromiseRef.current = loadUser(token);
@@ -45,9 +48,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     loadUserPromiseRef.current = loadUser(token);
   }
 
-  const setToken = useCallback((newToken: string | null) => {
-    setTokenStorage(newToken);
-  }, [setTokenStorage]);
+  const setToken = useCallback(
+    (newToken: string | null) => {
+      setTokenStorage(newToken);
+    },
+    [setTokenStorage],
+  );
 
   const logout = useCallback(() => {
     removeTokenStorage();

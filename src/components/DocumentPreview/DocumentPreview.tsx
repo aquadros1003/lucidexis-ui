@@ -72,7 +72,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!isResizing) return;
-      
+
       const newWidth = window.innerWidth - e.clientX;
       if (newWidth >= 400 && newWidth <= window.innerWidth * 0.9) {
         setPanelWidth(newWidth);
@@ -217,88 +217,71 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   const lastModified = formatFullDate(document.date);
 
   return (
-    <div 
+    <div
       ref={panelRef}
       className={`document-preview ${isResizing ? 'resizing' : ''}`}
       style={{ width: `${panelWidth}px` }}
     >
-      <div 
-        className="document-preview__resize-handle"
-        onMouseDown={handleMouseDown}
-      />
+      <div className="document-preview__resize-handle" onMouseDown={handleMouseDown} />
       <div className="document-preview__header">
-          <div className="document-preview__header-content">
-            <div className="document-preview__icon">
-              <DocumentIcon width="24" height="24" />
-            </div>
-            <div className="document-preview__header-info">
-              <h2 className="document-preview__title">{document.title}</h2>
-            </div>
+        <div className="document-preview__header-content">
+          <div className="document-preview__icon">
+            <DocumentIcon width="24" height="24" />
           </div>
-          <button 
-            className="document-preview__close" 
-            onClick={onClose}
-            aria-label="Close preview"
-          >
-            <CloseIcon width="24" height="24" />
-          </button>
+          <div className="document-preview__header-info">
+            <h2 className="document-preview__title">{document.title}</h2>
+          </div>
         </div>
+        <button className="document-preview__close" onClick={onClose} aria-label="Close preview">
+          <CloseIcon width="24" height="24" />
+        </button>
+      </div>
 
-        <div className="document-preview__actions">
-          <button 
-            className={`document-preview__action-btn ${document.isFavorite ? 'document-preview__action-btn--favorite' : ''}`}
-            onClick={handleFavorite}
-            aria-label={document.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-            style={{
+      <div className="document-preview__actions">
+        <button
+          className={`document-preview__action-btn ${document.isFavorite ? 'document-preview__action-btn--favorite' : ''}`}
+          onClick={handleFavorite}
+          aria-label={document.isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+          style={
+            {
               '--star-fill': document.isFavorite ? '#FFD700' : 'none',
               '--star-stroke': document.isFavorite ? '#FFD700' : 'currentColor',
-            } as React.CSSProperties}
-          >
-            <StarIcon
-              width="16"
-              height="16"
-            />
-          </button>
-          <button 
-            className="document-preview__action-btn"
-            onClick={handleDownload}
-          >
-            <DownloadIcon width="16" height="16" />
-            Download
-          </button>
-          <button 
-            className="document-preview__action-btn"
-            onClick={handleArchive}
-          >
-            {document.isArchived ? (
-              <>
-                <UnarchiveIcon width="16" height="16" />
-                Unarchive
-              </>
-            ) : (
-              <>
-                <ArchiveIcon width="16" height="16" />
-                Archive
-              </>
-            )}
-          </button>
-          <button 
-            className="document-preview__action-btn document-preview__action-btn--danger"
-            onClick={handleDelete}
-          >
-            <TrashIcon width="16" height="16" />
-            Delete
-          </button>
-        </div>
-        <div className="document-preview__content">
+            } as React.CSSProperties
+          }
+        >
+          <StarIcon width="16" height="16" />
+        </button>
+        <button className="document-preview__action-btn" onClick={handleDownload}>
+          <DownloadIcon width="16" height="16" />
+          Download
+        </button>
+        <button className="document-preview__action-btn" onClick={handleArchive}>
+          {document.isArchived ? (
+            <>
+              <UnarchiveIcon width="16" height="16" />
+              Unarchive
+            </>
+          ) : (
+            <>
+              <ArchiveIcon width="16" height="16" />
+              Archive
+            </>
+          )}
+        </button>
+        <button className="document-preview__action-btn document-preview__action-btn--danger" onClick={handleDelete}>
+          <TrashIcon width="16" height="16" />
+          Delete
+        </button>
+      </div>
+      <div className="document-preview__content">
         <div className="document-preview__tabs">
-          <button 
+          <button
             className={`document-preview__tab ${activeTab === 'details' ? 'document-preview__tab--active' : ''}`}
             onClick={() => setActiveTab('details')}
           >
             Details
           </button>
-          <button 
+          <button
             className={`document-preview__tab ${activeTab === 'preview' ? 'document-preview__tab--active' : ''}`}
             onClick={() => setActiveTab('preview')}
           >
@@ -308,111 +291,107 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
 
         {activeTab === 'details' && (
           <>
-          <section className="document-preview__section">
-            <h3 className="document-preview__section-title">Description</h3>
-            {isEditingDescription ? (
-              <textarea
-                ref={textareaRef}
-                className="document-preview__description-textarea"
-                value={editedDescription}
-                onChange={handleDescriptionChange}
-                onBlur={handleDescriptionBlur}
-                onKeyDown={handleDescriptionKeyDown}
-                disabled={isSaving}
-              />
-            ) : (
-              <p 
-                className="document-preview__description document-preview__description--editable"
-                onDoubleClick={handleDescriptionDoubleClick}
-                title="Double-click to edit"
-              >
-                {document.description || 'No description. Double-click to add one.'}
-              </p>
-            )}
-          </section>
+            <section className="document-preview__section">
+              <h3 className="document-preview__section-title">Description</h3>
+              {isEditingDescription ? (
+                <textarea
+                  ref={textareaRef}
+                  className="document-preview__description-textarea"
+                  value={editedDescription}
+                  onChange={handleDescriptionChange}
+                  onBlur={handleDescriptionBlur}
+                  onKeyDown={handleDescriptionKeyDown}
+                  disabled={isSaving}
+                />
+              ) : (
+                <p
+                  className="document-preview__description document-preview__description--editable"
+                  onDoubleClick={handleDescriptionDoubleClick}
+                  title="Double-click to edit"
+                >
+                  {document.description || 'No description. Double-click to add one.'}
+                </p>
+              )}
+            </section>
 
-          <section className="document-preview__section">
-            <div className="document-preview__info-row">
-              <div className="document-preview__info-col">
-                <div className="document-preview__info-item">
-                  <FileTypeIcon width="16" height="16" />
-                  <div>
-                    <div className="document-preview__info-label">File Type</div>
-                    <div className="document-preview__info-value">{fileType}</div>
+            <section className="document-preview__section">
+              <div className="document-preview__info-row">
+                <div className="document-preview__info-col">
+                  <div className="document-preview__info-item">
+                    <FileTypeIcon width="16" height="16" />
+                    <div>
+                      <div className="document-preview__info-label">File Type</div>
+                      <div className="document-preview__info-value">{fileType}</div>
+                    </div>
                   </div>
-                </div>
 
-                <div className="document-preview__info-item">
-                  <UserIcon width="16" height="16" />
-                  <div>
-                    <div className="document-preview__info-label">Author</div>
-                    <div className="document-preview__info-value">{author}</div>
+                  <div className="document-preview__info-item">
+                    <UserIcon width="16" height="16" />
+                    <div>
+                      <div className="document-preview__info-label">Author</div>
+                      <div className="document-preview__info-value">{author}</div>
+                    </div>
                   </div>
-                </div>
 
-                <div className="document-preview__info-item">
-                  <CalendarIcon width="16" height="16" />
-                  <div>
-                    <div className="document-preview__info-label">Created Date</div>
-                    <div className="document-preview__info-value">{createdDate}</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="document-preview__info-col">
-                <div className="document-preview__info-item">
-                  <FileSizeIcon width="16" height="16" />
-                  <div>
-                    <div className="document-preview__info-label">File Size</div>
-                    <div className="document-preview__info-value">{fileSize}</div>
-                  </div>
-                </div>
-
-                <div className="document-preview__info-item">
-                  <TagIcon width="16" height="16" />
-                  <div>
-                    <div className="document-preview__info-label">Category</div>
-                    <div className="document-preview__info-value">
-                      <span className="category-badge">{category}</span>
+                  <div className="document-preview__info-item">
+                    <CalendarIcon width="16" height="16" />
+                    <div>
+                      <div className="document-preview__info-label">Created Date</div>
+                      <div className="document-preview__info-value">{createdDate}</div>
                     </div>
                   </div>
                 </div>
 
-                <div className="document-preview__info-item">
-                  <ClockIcon width="16" height="16" />
-                  <div>
-                    <div className="document-preview__info-label">Last Modified</div>
-                    <div className="document-preview__info-value">{lastModified}</div>
+                <div className="document-preview__info-col">
+                  <div className="document-preview__info-item">
+                    <FileSizeIcon width="16" height="16" />
+                    <div>
+                      <div className="document-preview__info-label">File Size</div>
+                      <div className="document-preview__info-value">{fileSize}</div>
+                    </div>
+                  </div>
+
+                  <div className="document-preview__info-item">
+                    <TagIcon width="16" height="16" />
+                    <div>
+                      <div className="document-preview__info-label">Category</div>
+                      <div className="document-preview__info-value">
+                        <span className="category-badge">{category}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="document-preview__info-item">
+                    <ClockIcon width="16" height="16" />
+                    <div>
+                      <div className="document-preview__info-label">Last Modified</div>
+                      <div className="document-preview__info-value">{lastModified}</div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </section>
-
-          {document.tags.length > 0 && (
-            <section className="document-preview__section">
-              <h3 className="document-preview__section-title">Tags</h3>
-              <div className="document-preview__tags">
-                {document.tags.map((tag) => (
-                  <span key={tag.id} className="document-preview__tag">
-                    <TagIcon width="14" height="14" />
-                    {tag.label}
-                  </span>
-                ))}
-              </div>
             </section>
-          )}
+
+            {document.tags.length > 0 && (
+              <section className="document-preview__section">
+                <h3 className="document-preview__section-title">Tags</h3>
+                <div className="document-preview__tags">
+                  {document.tags.map((tag) => (
+                    <span key={tag.id} className="document-preview__tag">
+                      <TagIcon width="14" height="14" />
+                      {tag.label}
+                    </span>
+                  ))}
+                </div>
+              </section>
+            )}
           </>
         )}
 
         {activeTab === 'preview' && (
           <section className="document-preview__section document-preview__markdown-preview">
-            {isLoadingPreview && (
-              <div className="document-preview__loading">Loading preview...</div>
-            )}
-            {previewError && (
-              <div className="document-preview__error">{previewError}</div>
-            )}
+            {isLoadingPreview && <div className="document-preview__loading">Loading preview...</div>}
+            {previewError && <div className="document-preview__error">{previewError}</div>}
             {!isLoadingPreview && !previewError && markdownContent && (
               <div className="document-preview__markdown-content">
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdownContent}</ReactMarkdown>

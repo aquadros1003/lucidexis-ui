@@ -3,23 +3,36 @@ import { useAuthContext } from '../../contexts';
 import { Dropdown, type DropdownItem } from '../Dropdown';
 import { downloadFile } from '../../utils/downloadFile';
 import { formatRelativeDate } from '../../utils/dateFormatter';
-import { 
-  DownloadIcon, 
-  MenuDotsIcon, 
-  TagIcon, 
-  CalendarIcon, 
+import {
+  DownloadIcon,
+  MenuDotsIcon,
+  TagIcon,
+  CalendarIcon,
   UserIcon,
   StarIcon,
   FilePdfIcon,
   FileDocIcon,
   FileSheetIcon,
   FileImageIcon,
-  FileOtherIcon
+  FileOtherIcon,
 } from '../../assets/icons';
 import './DocumentCard.scss';
 
 export type DocumentStatus = 'active' | 'draft' | 'archived';
-export type DocumentType = 'pdf' | 'doc' | 'docx' | 'txt' | 'sheet' | 'xlsx' | 'csv' | 'image' | 'jpg' | 'jpeg' | 'png' | 'gif' | 'other';
+export type DocumentType =
+  | 'pdf'
+  | 'doc'
+  | 'docx'
+  | 'txt'
+  | 'sheet'
+  | 'xlsx'
+  | 'csv'
+  | 'image'
+  | 'jpg'
+  | 'jpeg'
+  | 'png'
+  | 'gif'
+  | 'other';
 
 export interface DocumentTag {
   id: string;
@@ -48,22 +61,22 @@ const getFileIcon = (type: DocumentType): React.ReactElement => {
   if (type === 'pdf') {
     return <FilePdfIcon />;
   }
-  
+
   // Document files
   if (['doc', 'docx', 'txt'].includes(type)) {
     return <FileDocIcon />;
   }
-  
+
   // Spreadsheet files
   if (['sheet', 'xlsx', 'csv'].includes(type)) {
     return <FileSheetIcon />;
   }
-  
+
   // Image files
   if (['image', 'jpg', 'jpeg', 'png', 'gif'].includes(type)) {
     return <FileImageIcon />;
   }
-  
+
   // Other files
   return <FileOtherIcon />;
 };
@@ -124,17 +137,17 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
   return (
     <div className="document-card" onClick={handleCardClick}>
       <div className="document-card__header">
-        <div className="document-card__icon">
-          {getFileIcon(type)}
-        </div>
+        <div className="document-card__icon">{getFileIcon(type)}</div>
         <div className="document-card__header-actions">
           {isFavorite && (
-            <div 
+            <div
               className="document-card__favorite"
-              style={{
-                '--star-fill': '#FFD700',
-                '--star-stroke': '#FFD700',
-              } as React.CSSProperties}
+              style={
+                {
+                  '--star-fill': '#FFD700',
+                  '--star-stroke': '#FFD700',
+                } as React.CSSProperties
+              }
             >
               <StarIcon width="16" height="16" />
             </div>

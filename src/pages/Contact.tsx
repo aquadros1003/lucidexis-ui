@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 function Contact() {
   return (
@@ -7,7 +7,7 @@ function Contact() {
       <p>Skontaktuj się z nami!</p>
       <Link to="/">Powrót do strony głównej</Link>
     </div>
-  )
+  );
 }
 
-export default Contact
+export default Contact;

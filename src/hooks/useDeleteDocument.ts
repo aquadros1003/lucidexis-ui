@@ -13,9 +13,7 @@ export function useDeleteDocument() {
       toast.success('Document deleted successfully.');
     },
     onError: (error: unknown) => {
-      toast.error(
-        error instanceof Error ? error.message : 'An error occurred while deleting the document.'
-      );
-    }
+      toast.error(error instanceof Error ? error.message : 'An error occurred while deleting the document.');
+    },
   });
 }

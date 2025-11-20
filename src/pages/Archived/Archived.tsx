@@ -24,13 +24,22 @@ export function Archived() {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [selectedDocument, setSelectedDocument] = useState<DocumentCardProps | null>(null);
-  const [documentToDelete, setDocumentToDelete] = useState<{ id: string; title: string } | null>(null);
+  const [documentToDelete, setDocumentToDelete] = useState<{
+    id: string;
+    title: string;
+  } | null>(null);
 
   const offset = (currentPage - 1) * perPage;
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['archivedDocuments', currentPage, perPage, searchQuery],
-    queryFn: () => getDocuments({ limit: perPage, offset, search: searchQuery, isArchived: true}),
+    queryFn: () =>
+      getDocuments({
+        limit: perPage,
+        offset,
+        search: searchQuery,
+        isArchived: true,
+      }),
   });
 
   const archiveMutation = useArchiveDocument();
@@ -124,25 +133,20 @@ export function Archived() {
         {data?.data.length === 0 && !isLoading ? (
           <div className="archived__empty">
             <p>No archived documents yet.</p>
-            <p className="archived__empty-hint">
-              Archive documents to keep your workspace organized.
-            </p>
+            <p className="archived__empty-hint">Archive documents to keep your workspace organized.</p>
           </div>
         ) : (
           <>
             <div className="archived__controls">
               <div className="archived__controls-info">
-                Showing {data?.data.length} document{data?.data.length !== 1 ? 's' : ''}
+                Showing {data?.data.length} document
+                {data?.data.length !== 1 ? 's' : ''}
               </div>
               <PerPageSelect value={perPage} onChange={setPerPage} />
             </div>
             <div className="archived__grid">
               {data?.data.map((doc) => (
-                <DocumentCard
-                  key={doc.id}
-                  {...mapDocumentToCard(doc)}
-                  onCardClick={handleCardClick}
-                />
+                <DocumentCard key={doc.id} {...mapDocumentToCard(doc)} onCardClick={handleCardClick} />
               ))}
             </div>
 
@@ -173,8 +177,7 @@ export function Archived() {
         title="Delete Document"
         message={
           <>
-            Are you sure you want to delete <strong>{documentToDelete?.title}</strong>?
-            This action cannot be undone.
+            Are you sure you want to delete <strong>{documentToDelete?.title}</strong>? This action cannot be undone.
           </>
         }
         confirmText="Delete"

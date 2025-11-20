@@ -1,51 +1,51 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
-import Login from './pages/Login/Login'
-import Register from './pages/Register'
-import ForgotPassword from './pages/ForgotPassword'
-import ResetPassword from './pages/ResetPassword'
-import Dashboard from './pages/Dashboard'
-import { Favorites } from './pages/Favorites'
-import { Archived } from './pages/Archived'
-import NotFound from './pages/NotFound'
-import { ProtectedRoute } from './components/Routes/ProtectedRoute'
-import { PublicRoute } from './components/Routes/PublicRoute'
-import './App.scss'
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Login from './pages/Login/Login';
+import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import Dashboard from './pages/Dashboard';
+import { Favorites } from './pages/Favorites';
+import { Archived } from './pages/Archived';
+import NotFound from './pages/NotFound';
+import { ProtectedRoute } from './components/Routes/ProtectedRoute';
+import { PublicRoute } from './components/Routes/PublicRoute';
+import './App.scss';
 
 function App() {
   return (
     <div className="app">
       <Routes>
-        <Route 
-          path="/signin" 
+        <Route
+          path="/signin"
           element={
             <PublicRoute>
               <Login />
             </PublicRoute>
-          } 
+          }
         />
-        <Route 
-          path="/signup" 
+        <Route
+          path="/signup"
           element={
             <PublicRoute>
               <Register />
             </PublicRoute>
-          } 
+          }
         />
-        <Route 
-          path="/forgot-password" 
+        <Route
+          path="/forgot-password"
           element={
             <PublicRoute>
               <ForgotPassword />
             </PublicRoute>
-          } 
+          }
         />
-        <Route 
-          path="/reset-password/" 
+        <Route
+          path="/reset-password/"
           element={
             <PublicRoute>
               <ResetPassword />
             </PublicRoute>
-          } 
+          }
         />
         <Route element={<ProtectedRoute />}>
           <Route index element={<Dashboard />} />
@@ -57,7 +57,7 @@ function App() {
         <Route path="*" element={<Navigate to="/404" replace />} />
       </Routes>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

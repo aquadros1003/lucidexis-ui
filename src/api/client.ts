@@ -42,7 +42,9 @@ export const fetchWithHeaders = async (path: string, init: ApiRequestInit = {}) 
     try {
       errorPayload = errorText ? JSON.parse(errorText) : { detail: `Request failed with status ${response.status}` };
     } catch {
-      errorPayload = { detail: errorText || `Request failed with status ${response.status}` };
+      errorPayload = {
+        detail: errorText || `Request failed with status ${response.status}`,
+      };
     }
     throw new Error(errorPayload.detail || 'API request failed');
   }

@@ -8,13 +8,7 @@ interface PaginationProps {
   totalItems?: number;
 }
 
-const Pagination = ({ 
-  currentPage, 
-  totalPages, 
-  onPageChange,
-  itemsPerPage = 10,
-  totalItems,
-}: PaginationProps) => {
+const Pagination = ({ currentPage, totalPages, onPageChange, itemsPerPage = 10, totalItems }: PaginationProps) => {
   const handleFirst = () => {
     if (currentPage > 1) {
       onPageChange(1);
@@ -45,7 +39,8 @@ const Pagination = ({
   return (
     <div className="pagination">
       <div className="pagination-info">
-        Showing <strong>{startItem}</strong> to <strong>{endItem}</strong> of <strong>{totalItems || endItem}</strong> documents
+        Showing <strong>{startItem}</strong> to <strong>{endItem}</strong> of <strong>{totalItems || endItem}</strong>{' '}
+        documents
       </div>
       <div className="pagination-controls">
         <button
@@ -64,9 +59,7 @@ const Pagination = ({
         >
           ‹
         </button>
-        <button className="pagination-btn pagination-btn--active">
-          {currentPage}
-        </button>
+        <button className="pagination-btn pagination-btn--active">{currentPage}</button>
         <button
           onClick={handleNext}
           disabled={currentPage === totalPages}

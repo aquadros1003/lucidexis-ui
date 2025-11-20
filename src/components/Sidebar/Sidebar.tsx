@@ -18,10 +18,25 @@ interface Category {
 }
 
 const navItems: NavItem[] = [
-  { name: 'All Documents', path: '/', icon: <FileOtherIcon/>, countKey: 'total_documents' },
-  { name: 'Favorites', path: '/favorites', icon: <StarIcon/>, countKey: 'favorite_documents' },
-  { name: 'Recent', path: '/recent', icon: <ClockIcon/> },
-  { name: 'Archived', path: '/archived', icon: <ArchiveIcon/>, countKey: 'archived_documents' },
+  {
+    name: 'All Documents',
+    path: '/',
+    icon: <FileOtherIcon />,
+    countKey: 'total_documents',
+  },
+  {
+    name: 'Favorites',
+    path: '/favorites',
+    icon: <StarIcon />,
+    countKey: 'favorite_documents',
+  },
+  { name: 'Recent', path: '/recent', icon: <ClockIcon /> },
+  {
+    name: 'Archived',
+    path: '/archived',
+    icon: <ArchiveIcon />,
+    countKey: 'archived_documents',
+  },
 ];
 
 const categories: Category[] = [
@@ -45,10 +60,10 @@ export function Sidebar() {
           <div className="sidebar__logo-icon">
             <LogoIcon />
           </div>
-            <div className="sidebar__logo-text">
-              <h1>Lucidexis</h1>
-              <span>Knowledge Hub</span>
-            </div>
+          <div className="sidebar__logo-text">
+            <h1>Lucidexis</h1>
+            <span>Knowledge Hub</span>
+          </div>
         </div>
       </div>
 
@@ -57,7 +72,7 @@ export function Sidebar() {
         <ul className="sidebar__nav-list">
           {navItems.map((item) => {
             const count = item.countKey && stats ? stats[item.countKey] : undefined;
-            
+
             return (
               <li key={item.path}>
                 <Link
@@ -69,26 +84,24 @@ export function Sidebar() {
                     {item.icon}
                   </span>
                   <span className="sidebar__nav-name">{item.name}</span>
-                  {!loading && count !== undefined && (
-                    <span className="sidebar__nav-count">{count}</span>
-                  )}
+                  {!loading && count !== undefined && <span className="sidebar__nav-count">{count}</span>}
                 </Link>
               </li>
             );
-          })} 
+          })}
         </ul>
       </nav>
-        <div className="sidebar__categories">
-          <h3 className="sidebar__section-title">Categories</h3>
-          <ul className="sidebar__category-list">
-            {categories.map((category) => (
-              <li key={category.name} className="sidebar__category-item">
-                <span className="sidebar__category-name">{category.name}</span>
-                <span className="sidebar__category-count">{category.count}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+      <div className="sidebar__categories">
+        <h3 className="sidebar__section-title">Categories</h3>
+        <ul className="sidebar__category-list">
+          {categories.map((category) => (
+            <li key={category.name} className="sidebar__category-item">
+              <span className="sidebar__category-name">{category.name}</span>
+              <span className="sidebar__category-count">{category.count}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
       <div className="sidebar__footer">
         <UserMenu />
       </div>

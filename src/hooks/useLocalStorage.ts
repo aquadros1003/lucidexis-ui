@@ -18,28 +18,34 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     }
   }, [key, initialValue]);
 
-  const subscribe = useCallback((callback: () => void) => {
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === key) {
-        callback();
-      }
-    };
-    
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, [key]);
+  const subscribe = useCallback(
+    (callback: () => void) => {
+      const handleStorageChange = (e: StorageEvent) => {
+        if (e.key === key) {
+          callback();
+        }
+      };
+
+      window.addEventListener('storage', handleStorageChange);
+      return () => window.removeEventListener('storage', handleStorageChange);
+    },
+    [key],
+  );
 
   const storedValue = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
-  const setValue = useCallback((value: T | ((val: T) => T)) => {
-    try {
-      const valueToStore = value instanceof Function ? value(getSnapshot()) : value;
-      window.localStorage.setItem(key, JSON.stringify(valueToStore));
-      window.dispatchEvent(new StorageEvent('storage', { key }));
-    } catch {
-      // Error saving to localStorage - silent failure
-    }
-  }, [key, getSnapshot]);
+  const setValue = useCallback(
+    (value: T | ((val: T) => T)) => {
+      try {
+        const valueToStore = value instanceof Function ? value(getSnapshot()) : value;
+        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        window.dispatchEvent(new StorageEvent('storage', { key }));
+      } catch {
+        // Error saving to localStorage - silent failure
+      }
+    },
+    [key, getSnapshot],
+  );
 
   const removeValue = useCallback(() => {
     try {

@@ -9,7 +9,13 @@ import { getDocuments } from '../../api/hooks/documents';
 import { mapDocumentsToCards } from '../../utils/documentMapper';
 import { Pagination } from '../../components/Pagination';
 import { PerPageSelect } from '../../components/PerPageSelect';
-import { useArchiveDocument, useUnarchiveDocument, useFavoriteDocument, useUnfavoriteDocument, useDeleteDocument } from '../../hooks';
+import {
+  useArchiveDocument,
+  useUnarchiveDocument,
+  useFavoriteDocument,
+  useUnfavoriteDocument,
+  useDeleteDocument,
+} from '../../hooks';
 import './Dashboard.scss';
 
 const DEFAULT_ITEMS_PER_PAGE = 10;
@@ -44,7 +50,7 @@ function Dashboard() {
   const totalPages = data ? Math.ceil(data.totalCount / itemsPerPage) : 1;
 
   const handleCardClick = (id: string) => {
-    const doc = documents.find(d => d.id === id);
+    const doc = documents.find((d) => d.id === id);
     if (doc) {
       setSelectedDocument(doc);
     }
@@ -56,10 +62,8 @@ function Dashboard() {
 
   const handleArchive = async (id: string, isArchived: boolean) => {
     try {
-      const result = isArchived 
-        ? await unarchiveMutation.mutateAsync(id)
-        : await archiveMutation.mutateAsync(id);
-      
+      const result = isArchived ? await unarchiveMutation.mutateAsync(id) : await archiveMutation.mutateAsync(id);
+
       if (selectedDocument && selectedDocument.id === id) {
         setSelectedDocument({
           ...selectedDocument,
@@ -75,10 +79,8 @@ function Dashboard() {
 
   const handleFavorite = async (id: string, isFavorite: boolean) => {
     try {
-      const result = isFavorite
-        ? await unfavoriteMutation.mutateAsync(id)
-        : await favoriteMutation.mutateAsync(id);
-      
+      const result = isFavorite ? await unfavoriteMutation.mutateAsync(id) : await favoriteMutation.mutateAsync(id);
+
       if (selectedDocument && selectedDocument.id === id) {
         setSelectedDocument({
           ...selectedDocument,
@@ -174,21 +176,12 @@ function Dashboard() {
           ) : (
             <>
               <div className="dashboard-controls">
-                <div className="dashboard-controls__info">
-                  Showing {documents.length} documents
-                </div>
-                <PerPageSelect
-                  value={itemsPerPage}
-                  onChange={handlePerPageChange}
-                />
+                <div className="dashboard-controls__info">Showing {documents.length} documents</div>
+                <PerPageSelect value={itemsPerPage} onChange={handlePerPageChange} />
               </div>
               <div className="documents-grid">
                 {documents.map((doc) => (
-                  <DocumentCard
-                    key={doc.id}
-                    {...doc}
-                    onCardClick={handleCardClick}
-                  />
+                  <DocumentCard key={doc.id} {...doc} onCardClick={handleCardClick} />
                 ))}
               </div>
               <Pagination
@@ -202,7 +195,7 @@ function Dashboard() {
           )}
         </div>
       </div>
-      
+
       {selectedDocument && (
         <DocumentPreview
           document={selectedDocument}

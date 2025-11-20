@@ -36,11 +36,7 @@ export function Navbar() {
               <h1 className="navbar__title">Document Library</h1>
               <p className="navbar__subtitle">Manage and search your knowledge base</p>
             </div>
-            <button
-              className="navbar__upload-btn"
-              onClick={() => setIsUploadModalOpen(true)}
-              title="Upload Document"
-            >
+            <button className="navbar__upload-btn" onClick={() => setIsUploadModalOpen(true)} title="Upload Document">
               <PlusIcon className="navbar__upload-icon" />
               <span>New Document</span>
             </button>
@@ -49,7 +45,9 @@ export function Navbar() {
             <SearchBar onSearch={handleSearch} />
             <button
               className="navbar__filters-btn"
-              onClick={() => {/* TODO: Implement filters */}}
+              onClick={() => {
+                /* TODO: Implement filters */
+              }}
               title="Advanced Filters"
             >
               <FilterIcon width="20" height="20" />
@@ -58,7 +56,7 @@ export function Navbar() {
           </div>
         </div>
       </nav>
-      
+
       <DocumentUpload
         isOpen={isUploadModalOpen}
         onClose={() => setIsUploadModalOpen(false)}

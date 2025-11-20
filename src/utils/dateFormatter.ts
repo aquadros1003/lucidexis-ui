@@ -6,7 +6,7 @@ export const formatRelativeDate = (date: Date): string => {
   const now = new Date();
   const diffTime = now.getTime() - date.getTime();
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  
+
   if (diffDays === 0) {
     return 'Today';
   } else if (diffDays === 1) {
@@ -30,17 +30,17 @@ export const formatRelativeDate = (date: Date): string => {
  * For use in details/preview views
  */
 export const formatFullDate = (date: Date): string => {
-  const dateStr = date.toLocaleDateString('en-US', { 
-    month: 'short', 
-    day: 'numeric', 
-    year: 'numeric' 
+  const dateStr = date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
   });
-  
+
   const timeStr = date.toLocaleTimeString('en-US', {
     hour: '2-digit',
     minute: '2-digit',
-    hour12: false
+    hour12: false,
   });
-  
+
   return `${dateStr} at ${timeStr}`;
 };

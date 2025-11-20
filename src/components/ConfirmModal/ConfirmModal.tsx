@@ -38,12 +38,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       <div className="confirm-modal" onClick={(e) => e.stopPropagation()}>
         <div className="confirm-modal__header">
           <h2 className="confirm-modal__title">{title}</h2>
-          <button
-            className="confirm-modal__close"
-            onClick={onCancel}
-            disabled={isLoading}
-            aria-label="Close"
-          >
+          <button className="confirm-modal__close" onClick={onCancel} disabled={isLoading} aria-label="Close">
             <CloseIcon width="20" height="20" />
           </button>
         </div>
@@ -53,11 +48,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
         </div>
 
         <div className="confirm-modal__actions">
-          <button
-            className="confirm-modal__btn confirm-modal__btn--cancel"
-            onClick={onCancel}
-            disabled={isLoading}
-          >
+          <button className="confirm-modal__btn confirm-modal__btn--cancel" onClick={onCancel} disabled={isLoading}>
             {cancelText}
           </button>
           <button

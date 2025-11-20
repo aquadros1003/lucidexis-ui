@@ -48,7 +48,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     const droppedFile = e.dataTransfer.files?.[0];
     if (droppedFile) {
       setFile(droppedFile);
@@ -58,7 +58,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    
+
     if (!file) {
       setError('Please select a file to upload');
       return;
@@ -70,12 +70,12 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
 
     try {
       await uploadDocument(
-        file, 
-        chunkSize, 
+        file,
+        chunkSize,
         (progress: number) => {
           setUploadProgress(progress);
         },
-        description
+        description,
       );
       setFile(null);
       setDescription('');
@@ -140,17 +140,16 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
               className="document-upload-modal__file-input"
               disabled={isUploading}
             />
-            
+
             {file ? (
               <div className="document-upload-modal__file-info">
                 <DocumentIcon className="document-upload-modal__file-icon" />
                 <div className="document-upload-modal__file-details">
                   <p className="document-upload-modal__file-name">{file.name}</p>
                   <p className="document-upload-modal__file-size">
-                    {file.size < 1024 * 1024 
+                    {file.size < 1024 * 1024
                       ? `${(file.size / 1024).toFixed(2)} KB`
-                      : `${(file.size / 1024 / 1024).toFixed(2)} MB`
-                    }
+                      : `${(file.size / 1024 / 1024).toFixed(2)} MB`}
                   </p>
                 </div>
               </div>
@@ -160,9 +159,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
                 <p className="document-upload-modal__dropzone-text">
                   <strong>Click to upload</strong> or drag and drop
                 </p>
-                <p className="document-upload-modal__dropzone-hint">
-                  PDF, DOC, DOCX, TXT or any document file
-                </p>
+                <p className="document-upload-modal__dropzone-hint">PDF, DOC, DOCX, TXT or any document file</p>
               </div>
             )}
           </div>
@@ -184,14 +181,9 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
           {isUploading && (
             <div className="document-upload-modal__progress">
               <div className="document-upload-modal__progress-bar">
-                <div
-                  className="document-upload-modal__progress-fill"
-                  style={{ width: `${uploadProgress}%` }}
-                />
+                <div className="document-upload-modal__progress-fill" style={{ width: `${uploadProgress}%` }} />
               </div>
-              <p className="document-upload-modal__progress-text">
-                Uploading... {uploadProgress}%
-              </p>
+              <p className="document-upload-modal__progress-text">Uploading... {uploadProgress}%</p>
             </div>
           )}
 
@@ -214,11 +206,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
             </label>
           </div>
 
-          {error && (
-            <div className="document-upload-modal__error">
-              {error}
-            </div>
-          )}
+          {error && <div className="document-upload-modal__error">{error}</div>}
 
           <div className="document-upload-modal__actions">
             <button

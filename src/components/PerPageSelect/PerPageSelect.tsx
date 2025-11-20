@@ -37,11 +37,7 @@ const PerPageSelect = ({ value, onChange, options = DEFAULT_OPTIONS }: PerPageSe
 
   return (
     <div className="per-page-select" ref={selectRef}>
-      <button
-        className="per-page-select__trigger"
-        onClick={() => setIsOpen(!isOpen)}
-        type="button"
-      >
+      <button className="per-page-select__trigger" onClick={() => setIsOpen(!isOpen)} type="button">
         <span className="per-page-select__value">{value} per page</span>
         <ChevronDownIcon
           className={`per-page-select__arrow ${isOpen ? 'per-page-select__arrow--open' : ''}`}
@@ -60,13 +56,7 @@ const PerPageSelect = ({ value, onChange, options = DEFAULT_OPTIONS }: PerPageSe
               type="button"
             >
               {option} per page
-              {option === value && (
-                <CheckIcon
-                  className="per-page-select__check"
-                  width="16"
-                  height="16"
-                />
-              )}
+              {option === value && <CheckIcon className="per-page-select__check" width="16" height="16" />}
             </button>
           ))}
         </div>

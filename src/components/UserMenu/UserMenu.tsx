@@ -27,10 +27,7 @@ export function UserMenu() {
   ];
 
   const trigger = (
-    <button
-      className="user-menu__trigger"
-      aria-label="User menu"
-    >
+    <button className="user-menu__trigger" aria-label="User menu">
       <div className="user-menu__avatar">{getUserInitial()}</div>
       <div className="user-menu__info">
         <div className="user-menu__name">{user?.full_name || 'User'}</div>

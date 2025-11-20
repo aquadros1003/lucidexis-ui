@@ -45,17 +45,26 @@ export function Dropdown({ trigger, items, position = 'bottom-right', className 
 
   // Clone trigger element and add onClick handler
   const triggerElement = React.isValidElement(trigger)
-    ? React.cloneElement(trigger as React.ReactElement<{ onClick?: (e: React.MouseEvent) => void }>, {
-        onClick: (e: React.MouseEvent) => {
-          e.stopPropagation();
-          // Call original onClick if exists
-          const originalOnClick = (trigger as React.ReactElement<{ onClick?: (e: React.MouseEvent) => void }>).props?.onClick;
-          if (originalOnClick) {
-            originalOnClick(e);
-          }
-          setIsOpen(!isOpen);
+    ? React.cloneElement(
+        trigger as React.ReactElement<{
+          onClick?: (e: React.MouseEvent) => void;
+        }>,
+        {
+          onClick: (e: React.MouseEvent) => {
+            e.stopPropagation();
+            // Call original onClick if exists
+            const originalOnClick = (
+              trigger as React.ReactElement<{
+                onClick?: (e: React.MouseEvent) => void;
+              }>
+            ).props?.onClick;
+            if (originalOnClick) {
+              originalOnClick(e);
+            }
+            setIsOpen(!isOpen);
+          },
         },
-      })
+      )
     : trigger;
 
   return (

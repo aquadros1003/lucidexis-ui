@@ -88,15 +88,15 @@ export const getDocuments = async ({
   const url = new URL(`${API_V1}/documents/`);
   url.searchParams.append('limit', limit.toString());
   url.searchParams.append('offset', offset.toString());
-  
+
   if (isFavorite !== undefined) {
     url.searchParams.append('is_favorite', isFavorite.toString());
   }
-  
+
   if (isArchived !== undefined) {
     url.searchParams.append('is_archived', isArchived.toString());
   }
-  
+
   if (search) {
     url.searchParams.append('search', search);
   }
@@ -117,10 +117,7 @@ export const getDocumentStats = async (): Promise<DocumentStats> => {
   }
 };
 
-export const updateDocument = async (
-  documentId: string,
-  updates: UpdateDocumentRequest
-): Promise<DocumentPublic> => {
+export const updateDocument = async (documentId: string, updates: UpdateDocumentRequest): Promise<DocumentPublic> => {
   try {
     return (await fetchWithHeaders(`/documents/${documentId}`, {
       method: 'PATCH',
@@ -153,7 +150,7 @@ export const deleteDocument = async (documentId: string): Promise<void> => {
   } catch (err) {
     throw new Error(err instanceof Error ? err.message : 'Failed to delete document.');
   }
-  };
+};
 
 export const getDocumentMarkdownPreview = async (documentId: string): Promise<string> => {
   try {

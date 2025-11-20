@@ -8,10 +8,10 @@ interface SearchBarProps {
   defaultValue?: string;
 }
 
-export function SearchBar({ 
-  placeholder = 'Search by title, description, or tags...', 
+export function SearchBar({
+  placeholder = 'Search by title, description, or tags...',
   onSearch,
-  defaultValue = ''
+  defaultValue = '',
 }: SearchBarProps) {
   const [query, setQuery] = useState(defaultValue);
 
@@ -43,12 +43,7 @@ export function SearchBar({
         onChange={handleChange}
       />
       {query && (
-        <button
-          type="button"
-          className="search-bar__clear"
-          onClick={handleClear}
-          aria-label="Clear search"
-        >
+        <button type="button" className="search-bar__clear" onClick={handleClear} aria-label="Clear search">
           <CloseIcon width="16" height="16" />
         </button>
       )}

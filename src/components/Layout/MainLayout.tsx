@@ -5,7 +5,6 @@ import { Toaster } from 'sonner';
 import './MainLayout.scss';
 
 export function MainLayout() {
-  
   return (
     <div className="main-layout">
       <Sidebar />
