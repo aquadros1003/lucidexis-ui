@@ -69,14 +69,14 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
     setUploadProgress(0);
 
     try {
-      await uploadDocument(
+      await uploadDocument({
         file,
         chunkSize,
-        (progress: number) => {
+        description,
+        onProgress: (progress) => {
           setUploadProgress(progress);
         },
-        description,
-      );
+      });
       setFile(null);
       setDescription('');
       setChunkSize(1024);

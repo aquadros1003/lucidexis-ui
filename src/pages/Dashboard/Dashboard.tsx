@@ -38,7 +38,11 @@ function Dashboard() {
     queryKey: ['documents', currentPage, itemsPerPage, searchQuery],
     queryFn: async () => {
       const offset = (currentPage - 1) * itemsPerPage;
-      const response = await getDocuments(itemsPerPage, offset, undefined, undefined, searchQuery);
+      const response = await getDocuments({
+        limit: itemsPerPage,
+        offset,
+        search: searchQuery || undefined,
+      });
       return {
         documents: mapDocumentsToCards(response.data),
         totalCount: response.count,
@@ -73,7 +77,6 @@ function Dashboard() {
       }
     } catch (error) {
       console.error('Failed to update document:', error);
-      alert(error instanceof Error ? error.message : 'Failed to update document');
     }
   };
 
@@ -89,7 +92,6 @@ function Dashboard() {
       }
     } catch (error) {
       console.error('Failed to update document:', error);
-      alert(error instanceof Error ? error.message : 'Failed to update document');
     }
   };
 
@@ -118,7 +120,6 @@ function Dashboard() {
       setSelectedDocument(null);
     } catch (error) {
       console.error('Failed to delete document:', error);
-      alert(error instanceof Error ? error.message : 'Failed to delete document');
     }
   };
 

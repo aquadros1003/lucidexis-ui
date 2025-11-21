@@ -187,7 +187,6 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
       setIsEditingDescription(false);
     } catch (error) {
       console.error('Failed to update description:', error);
-      alert(error instanceof Error ? error.message : 'Failed to update description');
       setEditedDescription(document.description);
     } finally {
       setIsSaving(false);

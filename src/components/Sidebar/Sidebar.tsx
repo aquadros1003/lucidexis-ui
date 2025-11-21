@@ -1,23 +1,11 @@
-import { Link, useLocation } from 'react-router-dom';
 import { LogoIcon, StarIcon, ArchiveIcon, ClockIcon, FileOtherIcon } from '../../assets/icons';
 import './Sidebar.scss';
 import { UserMenu } from '../UserMenu';
 import { useDocumentStats } from '../../hooks';
-import type { DocumentStats } from '../../api/hooks/documents';
+import { SidebarItem } from '../SidebarItem/SidebarItem';
+import type { SidebarItemType } from '../SidebarItem/SidebarItem';
 
-interface NavItem {
-  name: string;
-  path: string;
-  icon: React.ReactNode;
-  countKey?: keyof DocumentStats;
-}
-
-interface Category {
-  name: string;
-  count: number;
-}
-
-const navItems: NavItem[] = [
+const navItems: SidebarItemType[] = [
   {
     name: 'All Documents',
     path: '/',
@@ -39,18 +27,17 @@ const navItems: NavItem[] = [
   },
 ];
 
-const categories: Category[] = [
-  { name: 'Technical', count: 23 },
-  { name: 'Marketing', count: 34 },
-  { name: 'Sales', count: 18 },
-  { name: 'HR', count: 15 },
-  { name: 'Finance', count: 28 },
-  { name: 'Legal', count: 12 },
-  { name: 'Product', count: 26 },
+const categories: SidebarItemType[] = [
+  { name: 'Technical', count: 23, path: '' },
+  { name: 'Marketing', count: 34, path: '' },
+  { name: 'Sales', count: 18, path: '' },
+  { name: 'HR', count: 15, path: '' },
+  { name: 'Finance', count: 9, path: '' },
+  { name: 'Legal', count: 12, path: '' },
+  { name: 'Product', count: 26, path: '' },
 ];
 
 export function Sidebar() {
-  const location = useLocation();
   const { data: stats, isLoading: loading } = useDocumentStats();
 
   return (
@@ -72,32 +59,20 @@ export function Sidebar() {
         <ul className="sidebar__nav-list">
           {navItems.map((item) => {
             const count = item.countKey && stats ? stats[item.countKey] : undefined;
-
             return (
               <li key={item.path}>
-                <Link
-                  to={item.path}
-                  className={`sidebar__nav-item ${location.pathname === item.path ? 'sidebar__nav-item--active' : ''}`}
-                  title={item.name}
-                >
-                  <span className="sidebar__nav-icon" aria-hidden="true">
-                    {item.icon}
-                  </span>
-                  <span className="sidebar__nav-name">{item.name}</span>
-                  {!loading && count !== undefined && <span className="sidebar__nav-count">{count}</span>}
-                </Link>
+                <SidebarItem item={{ ...item, count }} loading={loading} />
               </li>
             );
           })}
         </ul>
       </nav>
-      <div className="sidebar__categories">
+      <div className="sidebar__nav">
         <h3 className="sidebar__section-title">Categories</h3>
-        <ul className="sidebar__category-list">
+        <ul className="sidebar__nav-list">
           {categories.map((category) => (
-            <li key={category.name} className="sidebar__category-item">
-              <span className="sidebar__category-name">{category.name}</span>
-              <span className="sidebar__category-count">{category.count}</span>
+            <li key={category.name}>
+              <SidebarItem item={category} loading={false} />
             </li>
           ))}
         </ul>

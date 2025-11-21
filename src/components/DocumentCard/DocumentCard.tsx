@@ -3,6 +3,8 @@ import { useAuthContext } from '../../contexts';
 import { Dropdown, type DropdownItem } from '../Dropdown';
 import { downloadFile } from '../../utils/downloadFile';
 import { formatRelativeDate } from '../../utils/dateFormatter';
+import { useArchiveDocument, useUnarchiveDocument } from '../../hooks';
+import { ArchiveIcon, UnarchiveIcon } from '../../assets/icons';
 import {
   DownloadIcon,
   MenuDotsIcon,
@@ -90,15 +92,30 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
   type,
   tags,
   date,
+  isArchived,
   isFavorite,
   onCardClick,
   onMenuClick,
 }) => {
   const { token } = useAuthContext();
+  const archiveMutation = useArchiveDocument();
+  const unarchiveMutation = useUnarchiveDocument();
 
   const handleCardClick = () => {
     if (onCardClick) {
       onCardClick(id);
+    }
+  };
+
+  const handleArchive = async () => {
+    try {
+      if (isArchived) {
+        await unarchiveMutation.mutateAsync(id);
+      } else {
+        await archiveMutation.mutateAsync(id);
+      }
+    } catch (error) {
+      console.error('Failed to update document:', error);
     }
   };
 
@@ -116,6 +133,12 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
       label: 'Download',
       icon: <DownloadIcon />,
       onClick: handleDownload,
+    },
+    {
+      id: isArchived ? 'unarchive' : 'archive',
+      label: isArchived ? 'Unarchive' : 'Archive',
+      icon: isArchived ? <UnarchiveIcon /> : <ArchiveIcon />,
+      onClick: handleArchive,
     },
   ];
 

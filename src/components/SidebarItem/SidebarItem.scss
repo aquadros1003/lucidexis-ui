@@ -1,0 +1,54 @@
+@use '../../styles/variables' as *;
+
+.sidebar-item{
+    display: flex;
+    align-items: center;
+    padding: 0.4rem $spacing-sm;
+    color: $text-primary;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+    border-radius: 0 4px 4px 0;
+
+    &:hover {
+      background-color: oklch(0.97 0 0);
+      border-radius: 0 4px 4px 0;
+    }
+
+    &--active {
+      background-color: rgba($link-color, 0.1);
+      background-color: oklch(0.97 0 0);
+      font-weight: $font-semibold;
+    }
+    
+    &__icon {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: $spacing-xs;
+        
+        svg {
+            width: 16px;
+            height: 16px;
+        }
+        svg path {
+            stroke: black
+        }
+    }
+    
+    &__name {
+        flex: 1;
+        font-size: $font-xs;
+    }
+    
+    &__count {
+        font-size: $font-xs;
+        color: $text-primary;
+        font-weight: $font-semibold;
+        background-color: #EDEEF2;
+        padding: 1px $spacing-sm;
+        border-radius: $radius-md;
+    }
+}
