@@ -540,6 +540,7 @@
     top: 0;
     left: 0;
     width: 100% !important;
+    min-width: 100% !important;
     border-left: none;
 
     &__resize-handle {

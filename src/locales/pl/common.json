@@ -1,0 +1,18 @@
+{
+  "app": { "title": "Lucidexis" },
+  "signIn": {
+    "welcomeBack": "Witaj z powrotem",
+    "signInTitle": "Document Management & Knowledge Search",
+    "signInSubtitle": "Zaloguj się, aby uzyskać dostęp do swoich dokumentów",
+    "emailAddress": "Adres e-mail",
+    "password": "Hasło",
+    "emailAddressPlaceholder": "you@example.com",
+    "forgotPassword": "Zapomniałeś hasła?",
+    "passwordPlaceholder": "Wprowadź swoje hasło",
+    "signIn": "Zaloguj się",
+    "orLabel": "Lub",
+    "signUp": "Zarejestruj się",
+    "signingIn": "Logowanie...",
+    "invalidCredentials": "Nieprawidłowy adres e-mail lub hasło."
+  }
+}

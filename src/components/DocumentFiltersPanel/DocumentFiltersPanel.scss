@@ -1,0 +1,87 @@
+@use '../../styles/variables' as *;
+
+.filters {
+	width: 100%;
+	background: #fff;
+	border-radius: $radius-md;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+}
+
+.filters__header {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	padding: $spacing-lg $spacing-md;
+	border-bottom: 1px solid #eee;
+}
+
+.filters__title {
+	margin: 0 0 6px 0;
+	font-size: $font-sm;
+	font-weight: $font-semibold;
+}
+
+.filters__subtitle {
+	margin: 0;
+	font-size: $font-sm;
+	color: $text-secondary;
+}
+
+.filters__close {
+	background: transparent;
+	border: none;
+	font-size: 20px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.filters__body {
+	padding: $spacing-md $spacing-lg;
+}
+
+.filters__section-title {
+	margin: 0 0 $spacing-sm 0;
+	font-size: $font-sm;
+	font-weight: $font-semibold;
+}
+
+.filters__list {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.filters__item {
+	display: flex;
+	align-items: center;
+}
+
+.filters__footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	padding: $spacing-sm $spacing-lg;
+	border-top: 1px solid #eee;
+}
+
+.filters__btn {
+	padding: $spacing-sm $spacing-md;
+	border-radius: $radius-sm;
+	font-size: $font-sm;
+	cursor: pointer;
+	border: 1px solid transparent;
+}
+
+.filters__btn--ghost {
+	background: transparent;
+	color: $text-primary;
+	border-color: #e5e7eb;
+}
+
+.filters__btn--primary {
+	background: #081834;
+	color: #fff;
+}
+

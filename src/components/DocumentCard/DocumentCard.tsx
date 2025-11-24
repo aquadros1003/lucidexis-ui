@@ -17,6 +17,7 @@ import {
   FileSheetIcon,
   FileImageIcon,
   FileOtherIcon,
+  OpenInNewIcon,
 } from '../../assets/icons';
 import './DocumentCard.scss';
 
@@ -127,18 +128,28 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
     }
   };
 
+  const handleOpenDetails = () => {
+    // Implement opening document details logic here
+  };
+
   const dropdownItems: DropdownItem[] = [
     {
-      id: 'download',
-      label: 'Download',
-      icon: <DownloadIcon />,
-      onClick: handleDownload,
+      id: 'details',
+      label: 'View Details',
+      icon: <OpenInNewIcon />,
+      onClick: handleOpenDetails,
     },
     {
       id: isArchived ? 'unarchive' : 'archive',
       label: isArchived ? 'Unarchive' : 'Archive',
       icon: isArchived ? <UnarchiveIcon /> : <ArchiveIcon />,
       onClick: handleArchive,
+    },
+    {
+      id: 'download',
+      label: 'Download',
+      icon: <DownloadIcon />,
+      onClick: handleDownload,
     },
   ];
 
@@ -175,7 +186,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
               <StarIcon width="16" height="16" />
             </div>
           )}
-          <Dropdown trigger={menuTrigger} items={dropdownItems} position="bottom-right" />
+          <Dropdown trigger={menuTrigger} items={dropdownItems} position="bottom-right" size="small" />
         </div>
       </div>
 

@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { DocumentUpload } from '../DocumentUpload/DocumentUpload';
 import { SearchBar } from '../SearchBar';
-import { PlusIcon, FilterIcon } from '../../assets/icons';
+import { PlusIcon } from '../../assets/icons';
 import './Navbar.scss';
 
 export function Navbar() {
@@ -32,26 +32,10 @@ export function Navbar() {
       <nav className="navbar">
         <div className="navbar__content">
           <div className="navbar__row navbar__row--top">
-            <div className="navbar__left">
-              <h1 className="navbar__title">Document Library</h1>
-              <p className="navbar__subtitle">Manage and search your knowledge base</p>
-            </div>
+            <SearchBar onSearch={handleSearch} />
             <button className="navbar__upload-btn" onClick={() => setIsUploadModalOpen(true)} title="Upload Document">
               <PlusIcon className="navbar__upload-icon" />
               <span>New Document</span>
-            </button>
-          </div>
-          <div className="navbar__row navbar__row--bottom">
-            <SearchBar onSearch={handleSearch} />
-            <button
-              className="navbar__filters-btn"
-              onClick={() => {
-                /* TODO: Implement filters */
-              }}
-              title="Advanced Filters"
-            >
-              <FilterIcon width="20" height="20" />
-              <span>Advanced Filters</span>
             </button>
           </div>
         </div>

@@ -1,0 +1,18 @@
+{
+  "app": { "title": "Lucidexis" },
+  "signIn": {
+    "welcomeBack": "Welcome back",
+    "signInTitle": "Document Management & Knowledge Search",
+    "signInSubtitle": "Sign in to access your documents",
+    "emailAddress": "Email Address",
+    "password": "Password",
+    "emailAddressPlaceholder": "you@example.com",
+    "forgotPassword": "Forgot password?",
+    "passwordPlaceholder": "Enter your password",
+    "signIn": "Sign In",
+    "orLabel": "Or",
+    "signUp": "Sign Up",
+    "signingIn": "Signing in...",
+    "invalidCredentials": "Invalid credentials"
+  }
+}

@@ -21,11 +21,9 @@ function Register() {
     if (password !== confirmPassword) {
       return;
     }
-
     if (!agreeToTerms) {
       return;
     }
-
     try {
       await registerAsync({
         email: email,

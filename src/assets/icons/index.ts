@@ -26,3 +26,8 @@ export { ReactComponent as FileOtherIcon } from './file-other.svg';
 export { ReactComponent as SearchIcon } from './search.svg';
 export { ReactComponent as FilterIcon } from './filter.svg';
 export { ReactComponent as LogoIcon } from './logo.svg';
+export { ReactComponent as OpenInNewIcon } from './square-arrow-out-up-right.svg';
+export { ReactComponent as EyeOnIcon } from './eye_on.svg';
+export { ReactComponent as EyeOffIcon } from './eye_off.svg';
+export { ReactComponent as LockIcon } from './lock.svg';
+export { ReactComponent as MessageIcon } from './message.svg';
