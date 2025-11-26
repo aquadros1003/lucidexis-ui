@@ -1,5 +1,17 @@
 {
-  "app": { "title": "Lucidexis" },
+  "app": { "name": "Lucidexis", "title": "Document Management & Knowledge Search" },
+  "date": {
+    "today": "Dziś",
+    "yesterday": "Wczoraj",
+    "oneDayAgo": "1 dzień temu",
+    "daysAgo": "{{count}} dni temu",
+    "oneWeekAgo": "1 tydzień temu",
+    "weeksAgo": "{{count}} tygodni temu",
+    "oneMonthAgo": "1 miesiąc temu",
+    "monthsAgo": "{{count}} miesięcy temu",
+    "oneYearAgo": "1 rok temu",
+    "yearsAgo": "{{count}} lat temu"
+  },
   "signIn": {
     "welcomeBack": "Witaj z powrotem",
     "signInTitle": "Document Management & Knowledge Search",
@@ -14,5 +26,49 @@
     "signUp": "Zarejestruj się",
     "signingIn": "Logowanie...",
     "invalidCredentials": "Nieprawidłowy adres e-mail lub hasło."
+  },
+  "signUp": {
+    "createAccount": "Utwórz konto",
+    "signUpSubtitle": "Zarejestruj się, aby zarządzać dokumentami",
+    "fullName": "Imię i nazwisko",
+    "fullNamePlaceholder": "John Doe",
+    "emailAddress": "Adres e-mail",
+    "emailAddressPlaceholder": "you@example.com",
+    "password": "Hasło",
+    "passwordPlaceholder": "Przynajmniej 8 znaków",
+    "confirmPassword": "Potwierdź hasło",
+    "confirmPasswordPlaceholder": "Wprowadź ponownie swoje hasło",
+    "alreadyHaveAccount": "Masz już konto?",
+    "signIn": "Zaloguj się",
+    "termsofService": "Regulamin",
+    "privacyPolicy": "Politykę prywatności",
+    "acceptTerms": "Akceptuję",
+    "and": "oraz",
+    "passwordMismatch": "Hasła nie pasują do siebie",
+    "creatingAccount": "Tworzenie konta..."
+  },
+  "forgotPassword": {
+    "title": "Zapomniałeś hasła?",
+    "subtitle": "Nie martw się, wyślemy Ci wszystkie instrukcje",
+    "checkYourEmail": "Sprawdź swoją skrzynkę e-mail",
+    "sentPasswordInstructions": "Wysłaliśmy link do resetowania hasła na adres",
+    "didntReceiveEmail": "Kliknij link w e-mailu, aby zresetować hasło. Jeśli nie widzisz wiadomości, sprawdź folder spam.",
+    "resendEmail": "Nie otrzymałeś e-maila? Sprawdź folder spam lub spróbuj ponownie.",
+    "backToSignIn": "Powrót do logowania",
+    "emailAddress": "Adres e-mail",
+    "emailAddressPlaceholder": "you@example.com",
+    "sendResetLink": "Wyślij link do resetowania",
+    "sendingResetLink": "Wysyłanie..."
+  },
+  "dashboard": {
+    "noDocumentsTitle": "Brak dokumentów.",
+    "uploadFirstDocument": "Prześlij swój pierwszy dokument, aby zacząć.",
+    "showingDocuments": "Wyświetlanie {{count}} dokumentów",
+    "deleteDocument": "Usuń dokument",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "deleteDocumentConfirmation": "Czy na pewno chcesz usunąć",
+    "actionUndone": "Ta akcja nie może zostać cofnięta.",
+    "documentDeletedSuccessfully": "Dokument został pomyślnie usunięty."
   }
 }

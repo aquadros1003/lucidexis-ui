@@ -1,4 +1,4 @@
-import type { DocumentPublic } from '../api/hooks/documents';
+import type { DocumentPublic } from '../api/schema/documents';
 import type {
   DocumentCardProps,
   DocumentType,
@@ -70,18 +70,18 @@ const fileSize = (doc: DocumentPublic): string => {
 
 export const mapDocumentToCard = (doc: DocumentPublic): DocumentCardProps => {
   return {
-    id: doc.id,
-    title: doc.filename,
-    downloadUrl: doc.download_url,
-    description: doc.description,
+    id: doc?.id,
+    title: doc?.filename,
+    downloadUrl: doc?.download_url,
+    description: doc?.description,
     fileSize: fileSize(doc),
-    status: getDocumentStatus(doc.is_processed),
-    type: mapContentTypeToDocType(doc.content_type, doc.filename),
-    tags: generateMockTags(doc.filename),
-    date: new Date(doc.created_at),
-    authorName: doc.owner ? doc.owner.full_name : 'Unknown',
-    isArchived: doc.is_archived,
-    isFavorite: doc.is_favorite,
+    status: getDocumentStatus(doc?.is_processed),
+    type: mapContentTypeToDocType(doc?.content_type, doc?.filename),
+    tags: generateMockTags(doc?.filename),
+    date: new Date(doc?.created_at),
+    authorName: doc?.owner ? doc?.owner.full_name : 'Unknown',
+    isArchived: doc?.is_archived,
+    isFavorite: doc?.is_favorite,
   };
 };
 

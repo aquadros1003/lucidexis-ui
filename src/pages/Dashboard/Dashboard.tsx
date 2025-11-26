@@ -17,10 +17,12 @@ import {
   useDeleteDocument,
 } from '../../hooks';
 import './Dashboard.scss';
+import { useTranslation } from 'react-i18next';
 
 const DEFAULT_ITEMS_PER_PAGE = 10;
 
 function Dashboard() {
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const itemsPerPage = parseInt(searchParams.get('perPage') || String(DEFAULT_ITEMS_PER_PAGE), 10);
@@ -41,7 +43,7 @@ function Dashboard() {
       const response = await getDocuments({
         limit: itemsPerPage,
         offset,
-        search: searchQuery || undefined,
+        search: searchQuery,
       });
       return {
         documents: mapDocumentsToCards(response.data),
@@ -149,11 +151,7 @@ function Dashboard() {
       <div className="dashboard">
         <div className="dashboard-content">
           <div className="dashboard-error">
-            <h2>Error Loading Documents</h2>
-            <p>{error instanceof Error ? error.message : 'Failed to load documents'}</p>
-            <button onClick={() => refetch()} className="dashboard-retry-btn">
-              Try Again
-            </button>
+            <p>{t('errors.somethingWentWrong')}</p>
           </div>
         </div>
       </div>
@@ -171,13 +169,15 @@ function Dashboard() {
           )}
           {documents.length === 0 && !isLoading ? (
             <div className="dashboard-empty">
-              <h2>No documents yet</h2>
-              <p>Upload your first document to get started</p>
+              <h2>{t('dashboard.noDocumentsTitle')}</h2>
+              <p>{t('dashboard.uploadFirstDocument')}</p>
             </div>
           ) : (
             <>
               <div className="dashboard-controls">
-                <div className="dashboard-controls__info">Showing {documents.length} documents</div>
+                <div className="dashboard-controls__info">
+                  {t('dashboard.showingDocuments', { count: documents.length })}
+                </div>
                 <PerPageSelect value={itemsPerPage} onChange={handlePerPageChange} />
               </div>
               <div className="documents-grid">
@@ -196,7 +196,6 @@ function Dashboard() {
           )}
         </div>
       </div>
-
       {selectedDocument && (
         <DocumentPreview
           document={selectedDocument}
@@ -207,17 +206,16 @@ function Dashboard() {
           onDelete={handleDelete}
         />
       )}
-
       <ConfirmModal
         isOpen={isDeleteModalOpen}
-        title="Delete Document"
+        title={t('dashboard.deleteDocument')}
         message={
-          <>
-            Are you sure you want to delete <strong>{selectedDocument?.title}</strong>? This action cannot be undone.
-          </>
+          <p>
+            {t('dashboard.deleteDocumentConfirmation')} <strong>{selectedDocument?.title}</strong>?
+          </p>
         }
-        confirmText="Delete"
-        cancelText="Cancel"
+        confirmText={t('dashboard.delete')}
+        cancelText={t('dashboard.cancel')}
         variant="danger"
         onConfirm={handleConfirmDelete}
         onCancel={handleCancelDelete}

@@ -1,5 +1,18 @@
 {
-  "app": { "title": "Lucidexis" },
+  "app": { "name": "Lucidexis", "title": "Document Management & Knowledge Search" },
+  "errors": {"somethingWentWrong": "Something went wrong. Please try again."},
+  "date": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "oneDayAgo": "1 day ago",
+    "daysAgo": "{{count}} days ago",
+    "oneWeekAgo": "1 week ago",
+    "weeksAgo": "{{count}} weeks ago",
+    "oneMonthAgo": "1 month ago",
+    "monthsAgo": "{{count}} months ago",
+    "oneYearAgo": "1 year ago",
+    "yearsAgo": "{{count}} years ago"
+  },
   "signIn": {
     "welcomeBack": "Welcome back",
     "signInTitle": "Document Management & Knowledge Search",
@@ -14,5 +27,50 @@
     "signUp": "Sign Up",
     "signingIn": "Signing in...",
     "invalidCredentials": "Invalid credentials"
+  },
+  "signUp": {
+    "createAccount": "Create Account",
+    "signUpTitle": "Document Management & Knowledge Search",
+    "signUpSubtitle": "Sign up to start managing your documents",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "John Doe",
+    "emailAddress": "Email Address",
+    "emailAddressPlaceholder": "you@example.com",
+    "password": "Password",
+    "passwordPlaceholder": "At least 8 characters",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Re-enter your password",
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign In",
+    "termsofService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "acceptTerms": "I agree to the",
+    "and": "and",
+    "passwordMismatch": "Passwords do not match",
+    "creatingAccount": "Creating account..."
+  },
+  "forgotPassword": {
+    "title": "Forgot Password?",
+    "subtitle": "No worries, we'll send you reset instructions",
+    "checkYourEmail": "Check Your Email",
+    "sentPasswordInstructions": "We've sent a password reset link to",
+    "didntReceiveEmail": "Click the link in the email to reset your password. If you don't see the email, check your spam folder.",
+    "resendEmail": "Didn't receive the email? Check your spam folder or try again.",
+    "backToSignIn": "Back to Sign In",
+    "emailAddress": "Email Address",
+    "emailAddressPlaceholder": "you@example.com",
+    "sendResetLink": "Send Reset Link",
+    "sendingResetLink": "Sending..."
+  },
+  "dashboard": {
+    "noDocumentsTitle": "No documents yet.",
+    "uploadFirstDocument": "Upload your first document to get started.",
+    "showingDocuments": "Showing {{count}} documents",
+    "deleteDocument": "Delete Document",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleteDocumentConfirmation": "Are you sure you want to delete",
+    "actionUndone": "Action cannot be undone.",
+    "documentDeletedSuccessfully": "Document deleted successfully."
   }
 }

@@ -17,12 +17,16 @@ import {
 import { useDeleteDocument } from '../../hooks/useDeleteDocument';
 import type { DocumentCardProps } from '../../components/DocumentCard/DocumentCard';
 import './Favorites.scss';
+import { useTranslation } from 'react-i18next';
+
+const DEFAULT_ITEMS_PER_PAGE = 10;
 
 export function Favorites() {
-  const [searchParams] = useSearchParams();
+  const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = parseInt(searchParams.get('page') || '1', 10);
+  const perPage = parseInt(searchParams.get('perPage') || String(DEFAULT_ITEMS_PER_PAGE), 10);
   const searchQuery = searchParams.get('search') || '';
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(10);
   const [selectedDocument, setSelectedDocument] = useState<DocumentCardProps | null>(null);
   const [documentToDelete, setDocumentToDelete] = useState<{
     id: string;
@@ -33,7 +37,13 @@ export function Favorites() {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['documents', 'favorites', perPage, offset, searchQuery],
-    queryFn: () => getDocuments(perPage, offset, true, undefined, searchQuery),
+    queryFn: () =>
+      getDocuments({
+        limit: perPage,
+        offset,
+        search: searchQuery,
+        isFavorite: true,
+      }),
   });
 
   const archiveMutation = useArchiveDocument();
@@ -103,14 +113,29 @@ export function Favorites() {
       });
     }
   };
-
   const totalPages = data ? Math.ceil(data.count / perPage) : 0;
+
+  const handlePageChange = (page: number) => {
+    const params: Record<string, string> = { page: page.toString() };
+    if (perPage !== DEFAULT_ITEMS_PER_PAGE) {
+      params.perPage = perPage.toString();
+    }
+    setSearchParams(params);
+  };
+
+  const handlePerPageChange = (perPage: number) => {
+    const params: Record<string, string> = { page: '1' };
+    if (perPage !== DEFAULT_ITEMS_PER_PAGE) {
+      params.perPage = perPage.toString();
+    }
+    setSearchParams(params);
+  };
 
   if (error) {
     return (
       <div className="favorites">
         <div className="favorites__error">
-          <p>Failed to load favorite documents. Please try again.</p>
+          <p>{t('errors.somethingWentWrong')}</p>
         </div>
       </div>
     );
@@ -126,17 +151,16 @@ export function Favorites() {
         )}
         {data?.data.length === 0 && !isLoading ? (
           <div className="favorites__empty">
-            <p>No favorite documents yet.</p>
-            <p className="favorites__empty-hint">Star documents from the main page to see them here.</p>
+            <h2>{t('dashboard.noDocumentsTitle')}</h2>
+            <p>{t('dashboard.uploadFirstDocument')}</p>
           </div>
         ) : (
           <>
             <div className="favorites__controls">
               <div className="favorites__controls-info">
-                Showing {data?.data.length} document
-                {data?.data.length !== 1 ? 's' : ''}
+                {t('dashboard.showingDocuments', { count: data?.data.length || 0 })}
               </div>
-              <PerPageSelect value={perPage} onChange={setPerPage} />
+              <PerPageSelect value={perPage} onChange={handlePerPageChange} />
             </div>
             <div className="favorites__grid">
               {data?.data.map((doc) => (
@@ -147,7 +171,7 @@ export function Favorites() {
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
-              onPageChange={setCurrentPage}
+              onPageChange={handlePageChange}
               itemsPerPage={perPage}
               totalItems={data?.count}
             />
@@ -168,14 +192,14 @@ export function Favorites() {
 
       <ConfirmModal
         isOpen={!!documentToDelete}
-        title="Delete Document"
+        title={t('dashboard.deleteDocument')}
         message={
-          <>
-            Are you sure you want to delete <strong>{documentToDelete?.title}</strong>? This action cannot be undone.
-          </>
+          <p>
+            {t('dashboard.deleteDocumentConfirmation')} <strong>{selectedDocument?.title}</strong>?
+          </p>
         }
-        confirmText="Delete"
-        cancelText="Cancel"
+        confirmText={t('dashboard.delete')}
+        cancelText={t('dashboard.cancel')}
         onConfirm={handleConfirmDelete}
         onCancel={() => setDocumentToDelete(null)}
         isLoading={deleteMutation.isPending}

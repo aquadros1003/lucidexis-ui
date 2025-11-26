@@ -1,25 +1,23 @@
 import { useState } from 'react';
 import { useForgotPassword } from '../../hooks/useForgotPassword';
 import { useNavigate } from 'react-router-dom';
+import { MessageIcon } from '../../assets/icons';
+import { useTranslation } from 'react-i18next';
 import './ForgotPassword.scss';
 
 function ForgotPassword() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const { forgotPasswordAsync, isLoading, isError, isSuccess, error } = useForgotPassword();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
       await forgotPasswordAsync(email);
     } catch {
       // Error handling is managed by useForgotPassword hook
     }
-  };
-
-  const handleBackToLogin = () => {
-    navigate('/signin');
   };
 
   if (isSuccess) {
@@ -28,17 +26,15 @@ function ForgotPassword() {
         <div className="forgot-password-card">
           <div className="forgot-password-form-container">
             <div className="success-icon">✓</div>
-            <h2 className="forgot-password-title">Check Your Email</h2>
+            <h2 className="forgot-password-title">{t('forgotPassword.checkYourEmail')}</h2>
             <p className="forgot-password-subtitle">
-              We've sent a password reset link to <strong>{email}</strong>
+              {t('forgotPassword.sentPasswordInstructions')} <strong>{email}</strong>
             </p>
-            <p className="forgot-password-info">
-              Click the link in the email to reset your password. If you don't see the email, check your spam folder.
-            </p>
-            <button type="button" className="btn-primary" onClick={handleBackToLogin}>
-              Back to Login
+            <p className="forgot-password-info">{t('forgotPassword.didntReceiveEmail')}</p>
+            <button type="button" className="btn-primary" onClick={() => navigate('/signin')}>
+              {t('forgotPassword.backToSignIn')}
             </button>
-            <div className="resend-info">Didn't receive the email? Check your spam folder or try again.</div>
+            <div className="resend-info">{t('forgotPassword.resendEmail')}</div>
           </div>
         </div>
       </div>
@@ -59,28 +55,20 @@ function ForgotPassword() {
               />
             </svg>
           </div>
-          <h2 className="forgot-password-title">Forgot Password?</h2>
-          <p className="forgot-password-subtitle">No worries, we'll send you reset instructions</p>
-
+          <h2 className="forgot-password-title">{t('forgotPassword.title')}</h2>
+          <p className="forgot-password-subtitle">{t('forgotPassword.subtitle')}</p>
           <form onSubmit={handleSubmit} className="forgot-password-form">
             <div className="form-group">
               <label htmlFor="email" className="form-label">
-                Email Address
+                {t('forgotPassword.emailAddress')}
               </label>
               <div className="input-wrapper">
-                <svg className="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                  />
-                </svg>
+                <MessageIcon className="input-icon" />
                 <input
                   type="email"
                   id="email"
                   className="form-input"
-                  placeholder="you@example.com"
+                  placeholder={t('forgotPassword.emailAddressPlaceholder')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -88,15 +76,15 @@ function ForgotPassword() {
               </div>
             </div>
 
-            {isError && error && <div className="error-message">{error.message}</div>}
+            {isError && error && <div className="error-message">{t('errors.somethingWentWrong')}</div>}
 
             <button type="submit" className="btn-primary" disabled={isLoading || !email}>
-              {isLoading ? 'Sending...' : 'Send Reset Link'}
+              {isLoading ? t('forgotPassword.sendingResetLink') : t('forgotPassword.sendResetLink')}
             </button>
 
             <div className="back-to-login">
-              <button type="button" onClick={handleBackToLogin} className="link-button">
-                ← Back to Login
+              <button type="button" onClick={() => navigate('/signin')} className="link-button">
+                ← {t('forgotPassword.backToSignIn')}
               </button>
             </div>
           </form>

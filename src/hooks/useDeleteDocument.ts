@@ -1,8 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteDocument } from '../api/hooks/documents';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 export function useDeleteDocument() {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -10,10 +12,10 @@ export function useDeleteDocument() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['documents'] });
       queryClient.invalidateQueries({ queryKey: ['documentStats'] });
-      toast.success('Document deleted successfully.');
+      toast.success(t('dashboard.documentDeletedSuccessfully'));
     },
-    onError: (error: unknown) => {
-      toast.error(error instanceof Error ? error.message : 'An error occurred while deleting the document.');
+    onError: () => {
+      toast.error(t('errors.SomethingWentWrong'));
     },
   });
 }

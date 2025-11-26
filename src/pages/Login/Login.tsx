@@ -40,8 +40,8 @@ function Login() {
         <div className="auth-logo">
           <LogoIcon />
         </div>
-        <h1 className="auth-app-name">{t('common:app.title')}</h1>
-        <p className="auth-tagline">{t('common:signIn.signInTitle')}</p>
+        <h1 className="auth-app-name">{t('common:app.name')}</h1>
+        <p className="auth-tagline">{t('common:app.title')}</p>
       </div>
       <div className="login-card">
         <div className="login-form-container">

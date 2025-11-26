@@ -2,26 +2,27 @@
  * Format date as relative time (e.g., "Today", "Yesterday", "3 days ago")
  * For use in cards and lists
  */
-export const formatRelativeDate = (date: Date): string => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const formatRelativeDate = (date: Date, t: (key: string, options?: any) => string): string => {
   const now = new Date();
   const diffTime = now.getTime() - date.getTime();
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
   if (diffDays === 0) {
-    return 'Today';
+    return t('date.today');
   } else if (diffDays === 1) {
-    return 'Yesterday';
+    return t('date.yesterday');
   } else if (diffDays < 7) {
-    return `${diffDays} days ago`;
+    return diffDays === 1 ? t('date.oneDayAgo') : t('date.daysAgo', { count: diffDays });
   } else if (diffDays < 30) {
     const weeks = Math.floor(diffDays / 7);
-    return weeks === 1 ? '1 week ago' : `${weeks} weeks ago`;
+    return weeks === 1 ? t('date.oneWeekAgo') : t('date.weeksAgo', { count: weeks });
   } else if (diffDays < 365) {
     const months = Math.floor(diffDays / 30);
-    return months === 1 ? '1 month ago' : `${months} months ago`;
+    return months === 1 ? t('date.oneMonthAgo') : t('date.monthsAgo', { count: months });
   } else {
     const years = Math.floor(diffDays / 365);
-    return years === 1 ? '1 year ago' : `${years} years ago`;
+    return years === 1 ? t('date.oneYearAgo') : t('date.yearsAgo', { count: years });
   }
 };
 

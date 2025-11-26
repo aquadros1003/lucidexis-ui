@@ -17,25 +17,29 @@ import {
 import { useDeleteDocument } from '../../hooks/useDeleteDocument';
 import type { DocumentCardProps } from '../../components/DocumentCard/DocumentCard';
 import './Archived.scss';
+import { useTranslation } from 'react-i18next';
+
+const DEFAULT_ITEMS_PER_PAGE = 10;
 
 export function Archived() {
-  const [searchParams] = useSearchParams();
+  const { t } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = parseInt(searchParams.get('page') || '1', 10);
+  const itemsPerPage = parseInt(searchParams.get('perPage') || String(DEFAULT_ITEMS_PER_PAGE), 10);
   const searchQuery = searchParams.get('search') || '';
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(10);
   const [selectedDocument, setSelectedDocument] = useState<DocumentCardProps | null>(null);
   const [documentToDelete, setDocumentToDelete] = useState<{
     id: string;
     title: string;
   } | null>(null);
 
-  const offset = (currentPage - 1) * perPage;
+  const offset = (currentPage - 1) * itemsPerPage;
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['archivedDocuments', currentPage, perPage, searchQuery],
+    queryKey: ['archivedDocuments', currentPage, itemsPerPage, searchQuery],
     queryFn: () =>
       getDocuments({
-        limit: perPage,
+        limit: itemsPerPage,
         offset,
         search: searchQuery,
         isArchived: true,
@@ -110,13 +114,29 @@ export function Archived() {
     }
   };
 
-  const totalPages = data ? Math.ceil(data.count / perPage) : 0;
+  const totalPages = data ? Math.ceil(data.count / itemsPerPage) : 0;
+
+  const handlePageChange = (page: number) => {
+    const params: Record<string, string> = { page: page.toString() };
+    if (itemsPerPage !== DEFAULT_ITEMS_PER_PAGE) {
+      params.perPage = itemsPerPage.toString();
+    }
+    setSearchParams(params);
+  };
+
+  const handlePerPageChange = (perPage: number) => {
+    const params: Record<string, string> = { page: '1' };
+    if (perPage !== DEFAULT_ITEMS_PER_PAGE) {
+      params.perPage = perPage.toString();
+    }
+    setSearchParams(params);
+  };
 
   if (error) {
     return (
       <div className="archived">
         <div className="archived__error">
-          <p>Failed to load archived documents. Please try again.</p>
+          <p>{t('errors.somethingWentWrong')}</p>
         </div>
       </div>
     );
@@ -132,17 +152,16 @@ export function Archived() {
         )}
         {data?.data.length === 0 && !isLoading ? (
           <div className="archived__empty">
-            <p>No archived documents yet.</p>
-            <p className="archived__empty-hint">Archive documents to keep your workspace organized.</p>
+            <h2>{t('dashboard.noDocumentsTitle')}</h2>
+            <p>{t('dashboard.uploadFirstDocument')}</p>
           </div>
         ) : (
           <>
             <div className="archived__controls">
               <div className="archived__controls-info">
-                Showing {data?.data.length} document
-                {data?.data.length !== 1 ? 's' : ''}
+                {t('dashboard.showingDocuments', { count: data?.data.length || 0 })}
               </div>
-              <PerPageSelect value={perPage} onChange={setPerPage} />
+              <PerPageSelect value={itemsPerPage} onChange={handlePerPageChange} />
             </div>
             <div className="archived__grid">
               {data?.data.map((doc) => (
@@ -153,8 +172,8 @@ export function Archived() {
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
-              onPageChange={setCurrentPage}
-              itemsPerPage={perPage}
+              onPageChange={handlePageChange}
+              itemsPerPage={itemsPerPage}
               totalItems={data?.count}
             />
           </>
@@ -174,14 +193,14 @@ export function Archived() {
 
       <ConfirmModal
         isOpen={!!documentToDelete}
-        title="Delete Document"
+        title={t('dashboard.deleteDocument')}
         message={
-          <>
-            Are you sure you want to delete <strong>{documentToDelete?.title}</strong>? This action cannot be undone.
-          </>
+          <p>
+            {t('dashboard.deleteDocumentConfirmation')} <strong>{selectedDocument?.title}</strong>?
+          </p>
         }
-        confirmText="Delete"
-        cancelText="Cancel"
+        confirmText={t('dashboard.delete')}
+        cancelText={t('dashboard.cancel')}
         onConfirm={handleConfirmDelete}
         onCancel={() => setDocumentToDelete(null)}
         isLoading={deleteMutation.isPending}

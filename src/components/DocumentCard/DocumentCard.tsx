@@ -5,6 +5,7 @@ import { downloadFile } from '../../utils/downloadFile';
 import { formatRelativeDate } from '../../utils/dateFormatter';
 import { useArchiveDocument, useUnarchiveDocument } from '../../hooks';
 import { ArchiveIcon, UnarchiveIcon } from '../../assets/icons';
+import { useTranslation } from 'react-i18next';
 import {
   DownloadIcon,
   MenuDotsIcon,
@@ -60,27 +61,18 @@ export interface DocumentCardProps {
 }
 
 const getFileIcon = (type: DocumentType): React.ReactElement => {
-  // PDF files
   if (type === 'pdf') {
     return <FilePdfIcon />;
   }
-
-  // Document files
   if (['doc', 'docx', 'txt'].includes(type)) {
     return <FileDocIcon />;
   }
-
-  // Spreadsheet files
   if (['sheet', 'xlsx', 'csv'].includes(type)) {
     return <FileSheetIcon />;
   }
-
-  // Image files
   if (['image', 'jpg', 'jpeg', 'png', 'gif'].includes(type)) {
     return <FileImageIcon />;
   }
-
-  // Other files
   return <FileOtherIcon />;
 };
 
@@ -99,6 +91,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
   onMenuClick,
 }) => {
   const { token } = useAuthContext();
+  const { t } = useTranslation();
   const archiveMutation = useArchiveDocument();
   const unarchiveMutation = useUnarchiveDocument();
 
@@ -194,9 +187,9 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
         <h3 className="document-card__title">{title}</h3>
         <p className="document-card__description">{description}</p>
 
-        {tags.length > 0 && (
+        {tags?.length > 0 && (
           <div className="document-card__tags">
-            {tags.map((tag) => (
+            {tags?.map((tag) => (
               <span key={tag.id} className="document-card__tag">
                 <TagIcon width="14" height="14" />
                 {tag.label}
@@ -213,7 +206,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
         </div>
         <div className="document-card__date">
           <CalendarIcon width="16" height="16" />
-          <span>{formatRelativeDate(date)}</span>
+          <span>{formatRelativeDate(date, t)}</span>
         </div>
       </div>
     </div>
