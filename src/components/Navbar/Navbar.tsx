@@ -34,7 +34,7 @@ export function Navbar() {
       <nav className="navbar">
         <div className="navbar__content">
           <div className="navbar__row navbar__row--top">
-            <SearchBar onSearch={handleSearch} />
+            <SearchBar onSearch={handleSearch} placeholder={t('navbar.searchPlaceholder')} />
             <button
               className="navbar__upload-btn"
               onClick={() => setIsUploadModalOpen(true)}

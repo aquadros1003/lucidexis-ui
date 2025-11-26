@@ -122,25 +122,27 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
   };
 
   const handleOpenDetails = () => {
-    // Implement opening document details logic here
+    if (onCardClick) {
+      onCardClick(id);
+    }
   };
 
   const dropdownItems: DropdownItem[] = [
     {
       id: 'details',
-      label: 'View Details',
+      label: t('documentCard.viewDetails'),
       icon: <OpenInNewIcon />,
       onClick: handleOpenDetails,
     },
     {
-      id: isArchived ? 'unarchive' : 'archive',
-      label: isArchived ? 'Unarchive' : 'Archive',
+      id: isArchived ? t('documentCard.unarchive') : t('documentCard.archive'),
+      label: isArchived ? t('documentCard.unarchive') : t('documentCard.archive'),
       icon: isArchived ? <UnarchiveIcon /> : <ArchiveIcon />,
       onClick: handleArchive,
     },
     {
       id: 'download',
-      label: 'Download',
+      label: t('documentCard.download'),
       icon: <DownloadIcon />,
       onClick: handleDownload,
     },

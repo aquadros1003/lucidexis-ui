@@ -19,7 +19,27 @@
     "documents": "dokumentów"
   },
   "navbar": {
-    "newDocument": "Nowy dokument"
+    "newDocument": "Nowy dokument",
+    "searchPlaceholder": "Szukaj według tytułu, opisu lub tagów..."
+  },
+  "documentPreview": {
+    "download": "Pobierz",
+    "archive": "Archiwizuj",
+    "unarchive": "Przywróć",
+    "delete": "Usuń",
+    "details": "Szczegóły",
+    "description": "Opis",
+    "noDescription": "Brak opisu. Kliknij dwukrotnie, aby dodać.",
+    "editDescriptionTooltip": "Kliknij dwukrotnie, aby edytować",
+    "preview": "Podgląd",
+    "author": "Autor",
+    "createdDate": "Data utworzenia",
+    "fileType": "Typ pliku",
+    "fileSize": "Rozmiar pliku",
+    "category": "Kategoria",
+    "lastModified": "Ostatnia modyfikacja",
+    "tags": "Tagi",
+    "loadingPreview": "Ładowanie podglądu..."
   },
   "sidebar": {
     "navigation": "Nawigacja",
@@ -35,6 +55,18 @@
     "finance": "Finanse",
     "sales": "Sprzedaż",
     "product": "Produkt"
+  },
+  "userMenu": {
+    "logout": "Wyloguj się"
+  },
+  "perPageSelect": {
+    "option": "{{count}} na stronę"
+  },
+  "documentCard": {
+    "viewDetails": "Szczegóły",
+    "archive": "Archiwizuj",
+    "unarchive": "Przywróć",
+    "download": "Pobierz"
   },
   "signIn": {
     "welcomeBack": "Witaj z powrotem",

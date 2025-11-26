@@ -6,6 +6,8 @@ import { downloadFile } from '../../utils/downloadFile';
 import { updateDocument, getDocumentMarkdownPreview } from '../../api/hooks/documents';
 import { formatFullDate } from '../../utils/dateFormatter';
 import type { DocumentCardProps } from '../DocumentCard/DocumentCard';
+import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
 import {
   DocumentIcon,
   CloseIcon,
@@ -41,6 +43,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   onDescriptionUpdate,
 }) => {
   const { token } = useAuthContext();
+  const { t } = useTranslation();
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [editedDescription, setEditedDescription] = useState(document.description);
   const [isSaving, setIsSaving] = useState(false);
@@ -102,7 +105,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
       setMarkdownContent(content);
     } catch (error) {
       console.error('Failed to load markdown preview:', error);
-      setPreviewError(error instanceof Error ? error.message : 'Failed to load preview');
+      setPreviewError('t(errors.SomethingWentWrong)');
     } finally {
       setIsLoadingPreview(false);
     }
@@ -212,8 +215,8 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   const fileSize = document.fileSize;
   const author = document.authorName || 'Unknown Author';
   const category = 'Technical';
-  const createdDate = formatFullDate(document.date);
-  const lastModified = formatFullDate(document.date);
+  const createdDate = formatFullDate(document.date, i18n.language);
+  const lastModified = formatFullDate(document.date, typeof navigator !== 'undefined' ? navigator.language : 'en');
 
   return (
     <div
@@ -252,24 +255,24 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
         </button>
         <button className="document-preview__action-btn" onClick={handleDownload}>
           <DownloadIcon width="16" height="16" />
-          Download
+          {t('documentPreview.download')}
         </button>
         <button className="document-preview__action-btn" onClick={handleArchive}>
           {document.isArchived ? (
             <>
               <UnarchiveIcon width="16" height="16" />
-              Unarchive
+              {t('documentPreview.unarchive')}
             </>
           ) : (
             <>
               <ArchiveIcon width="16" height="16" />
-              Archive
+              {t('documentPreview.archive')}
             </>
           )}
         </button>
         <button className="document-preview__action-btn document-preview__action-btn--danger" onClick={handleDelete}>
           <TrashIcon width="16" height="16" />
-          Delete
+          {t('documentPreview.delete')}
         </button>
       </div>
       <div className="document-preview__content">
@@ -278,20 +281,20 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
             className={`document-preview__tab ${activeTab === 'details' ? 'document-preview__tab--active' : ''}`}
             onClick={() => setActiveTab('details')}
           >
-            Details
+            {t('documentPreview.details')}
           </button>
           <button
             className={`document-preview__tab ${activeTab === 'preview' ? 'document-preview__tab--active' : ''}`}
             onClick={() => setActiveTab('preview')}
           >
-            Preview
+            {t('documentPreview.preview')}
           </button>
         </div>
 
         {activeTab === 'details' && (
           <>
             <section className="document-preview__section">
-              <h3 className="document-preview__section-title">Description</h3>
+              <h3 className="document-preview__section-title">{t('documentPreview.description')}</h3>
               {isEditingDescription ? (
                 <textarea
                   ref={textareaRef}
@@ -306,9 +309,9 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                 <p
                   className="document-preview__description document-preview__description--editable"
                   onDoubleClick={handleDescriptionDoubleClick}
-                  title="Double-click to edit"
+                  title={t('documentPreview.editDescriptionTooltip')}
                 >
-                  {document.description || 'No description. Double-click to add one.'}
+                  {document.description || t('documentPreview.noDescription')}
                 </p>
               )}
             </section>
@@ -319,7 +322,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                   <div className="document-preview__info-item">
                     <FileTypeIcon width="16" height="16" />
                     <div>
-                      <div className="document-preview__info-label">File Type</div>
+                      <div className="document-preview__info-label">{t('documentPreview.fileType')}</div>
                       <div className="document-preview__info-value">{fileType}</div>
                     </div>
                   </div>
@@ -327,7 +330,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                   <div className="document-preview__info-item">
                     <UserIcon width="16" height="16" />
                     <div>
-                      <div className="document-preview__info-label">Author</div>
+                      <div className="document-preview__info-label">{t('documentPreview.author')}</div>
                       <div className="document-preview__info-value">{author}</div>
                     </div>
                   </div>
@@ -335,7 +338,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                   <div className="document-preview__info-item">
                     <CalendarIcon width="16" height="16" />
                     <div>
-                      <div className="document-preview__info-label">Created Date</div>
+                      <div className="document-preview__info-label">{t('documentPreview.createdDate')}</div>
                       <div className="document-preview__info-value">{createdDate}</div>
                     </div>
                   </div>
@@ -345,7 +348,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                   <div className="document-preview__info-item">
                     <FileSizeIcon width="16" height="16" />
                     <div>
-                      <div className="document-preview__info-label">File Size</div>
+                      <div className="document-preview__info-label">{t('documentPreview.fileSize')}</div>
                       <div className="document-preview__info-value">{fileSize}</div>
                     </div>
                   </div>
@@ -353,7 +356,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                   <div className="document-preview__info-item">
                     <TagIcon width="16" height="16" />
                     <div>
-                      <div className="document-preview__info-label">Category</div>
+                      <div className="document-preview__info-label">{t('documentPreview.category')}</div>
                       <div className="document-preview__info-value">
                         <span className="category-badge">{category}</span>
                       </div>
@@ -363,7 +366,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                   <div className="document-preview__info-item">
                     <ClockIcon width="16" height="16" />
                     <div>
-                      <div className="document-preview__info-label">Last Modified</div>
+                      <div className="document-preview__info-label">{t('documentPreview.lastModified')}</div>
                       <div className="document-preview__info-value">{lastModified}</div>
                     </div>
                   </div>
@@ -373,7 +376,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
 
             {document.tags.length > 0 && (
               <section className="document-preview__section">
-                <h3 className="document-preview__section-title">Tags</h3>
+                <h3 className="document-preview__section-title">{t('documentPreview.tags')}</h3>
                 <div className="document-preview__tags">
                   {document.tags.map((tag) => (
                     <span key={tag.id} className="document-preview__tag">
@@ -389,7 +392,7 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
 
         {activeTab === 'preview' && (
           <section className="document-preview__section document-preview__markdown-preview">
-            {isLoadingPreview && <div className="document-preview__loading">Loading preview...</div>}
+            {isLoadingPreview && <div className="document-preview__loading">{t('documentPreview.loadingPreview')}</div>}
             {previewError && <div className="document-preview__error">{previewError}</div>}
             {!isLoadingPreview && !previewError && markdownContent && (
               <div className="document-preview__markdown-content">

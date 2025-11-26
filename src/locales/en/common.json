@@ -20,7 +20,33 @@
     "documents": "documents"
   },
   "navbar": {
-    "newDocument": "New Document"
+    "newDocument": "New Document",
+    "searchPlaceholder": "Search by title, description, or tags..."
+  },
+  "documentCard": {
+    "viewDetails": "View Details",
+    "archive": "Archive",
+    "unarchive": "Unarchive",
+    "download": "Download"
+  },
+  "documentPreview": {
+    "download": "Download",
+    "archive": "Archive",
+    "unarchive": "Unarchive",
+    "delete": "Delete",
+    "details": "Details",
+    "description": "Description",
+    "noDescription": "No description. Double-click to add one.",
+    "editDescriptionTooltip": "Double-click to edit",
+    "preview": "Preview",
+    "author": "Author",
+    "createdDate": "Created Date",
+    "fileType": "File Type",
+    "fileSize": "File Size",
+    "category": "Category",
+    "lastModified": "Last Modified",
+    "tags": "Tags",
+    "loadingPreview": "Loading preview..."
   },
   "sidebar": {
     "navigation": "Navigation",
@@ -36,6 +62,12 @@
     "finance": "Finance",
     "sales": "Sales",
     "product": "Product"
+  },
+  "userMenu": {
+    "logout": "Logout"
+  },
+  "perPageSelect": {
+    "option": "{{count}} per page"
   },
   "signIn": {
     "welcomeBack": "Welcome back",

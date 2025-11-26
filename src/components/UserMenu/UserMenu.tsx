@@ -1,9 +1,11 @@
 import { useAuthContext } from '../../contexts';
 import { Dropdown, type DropdownItem } from '../Dropdown';
 import { LogoutIcon } from '../../assets/icons';
+import { useTranslation } from 'react-i18next';
 import './UserMenu.scss';
 
 export function UserMenu() {
+  const { t } = useTranslation();
   const { user, logout } = useAuthContext();
 
   const getUserInitial = () => {
@@ -19,7 +21,7 @@ export function UserMenu() {
   const dropdownItems: DropdownItem[] = [
     {
       id: 'logout',
-      label: 'Logout',
+      label: t('userMenu.logout'),
       icon: <LogoutIcon />,
       onClick: logout,
       variant: 'danger',

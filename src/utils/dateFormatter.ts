@@ -30,18 +30,18 @@ export const formatRelativeDate = (date: Date, t: (key: string, options?: any) =
  * Format date as full date with time (e.g., "Nov 15, 2025 at 14:30")
  * For use in details/preview views
  */
-export const formatFullDate = (date: Date): string => {
-  const dateStr = date.toLocaleDateString('en-US', {
+export const formatFullDate = (date: Date, locale: string = 'en-US'): string => {
+  const dateStr = date.toLocaleDateString(locale, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
   });
 
-  const timeStr = date.toLocaleTimeString('en-US', {
+  const timeStr = date.toLocaleTimeString(locale, {
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
   });
 
-  return `${dateStr} at ${timeStr}`;
+  return `${dateStr} ${timeStr}`;
 };
