@@ -1,4 +1,5 @@
 import './Pagination.scss';
+import { useTranslation } from 'react-i18next';
 
 interface PaginationProps {
   currentPage: number;
@@ -9,6 +10,7 @@ interface PaginationProps {
 }
 
 const Pagination = ({ currentPage, totalPages, onPageChange, itemsPerPage = 10, totalItems }: PaginationProps) => {
+  const { t } = useTranslation();
   const handleFirst = () => {
     if (currentPage > 1) {
       onPageChange(1);
@@ -39,8 +41,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange, itemsPerPage = 10, 
   return (
     <div className="pagination">
       <div className="pagination-info">
-        Showing <strong>{startItem}</strong> to <strong>{endItem}</strong> of <strong>{totalItems || endItem}</strong>{' '}
-        documents
+        {t('pagination.showing')} <strong>{startItem}</strong> {t('pagination.to')} <strong>{endItem}</strong>{' '}
+        {t('pagination.of')} <strong>{totalItems || endItem}</strong> {t('pagination.documents')}{' '}
       </div>
       <div className="pagination-controls">
         <button

@@ -4,9 +4,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { DocumentUpload } from '../DocumentUpload/DocumentUpload';
 import { SearchBar } from '../SearchBar';
 import { PlusIcon } from '../../assets/icons';
+import { useTranslation } from 'react-i18next';
 import './Navbar.scss';
 
 export function Navbar() {
+  const { t } = useTranslation();
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const queryClient = useQueryClient();
   const location = useLocation();
@@ -33,9 +35,13 @@ export function Navbar() {
         <div className="navbar__content">
           <div className="navbar__row navbar__row--top">
             <SearchBar onSearch={handleSearch} />
-            <button className="navbar__upload-btn" onClick={() => setIsUploadModalOpen(true)} title="Upload Document">
+            <button
+              className="navbar__upload-btn"
+              onClick={() => setIsUploadModalOpen(true)}
+              title={t('navbar.newDocument')}
+            >
               <PlusIcon className="navbar__upload-icon" />
-              <span>New Document</span>
+              <span>{t('navbar.newDocument')}</span>
             </button>
           </div>
         </div>

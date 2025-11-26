@@ -1,5 +1,5 @@
 {
-  "app": { "name": "Lucidexis", "title": "Document Management & Knowledge Search" },
+  "app": { "name": "Lucidexis", "title": "Document Management & Knowledge Search", "subtitle": "Knowledge Hub" },
   "errors": {"somethingWentWrong": "Something went wrong. Please try again."},
   "date": {
     "today": "Today",
@@ -12,6 +12,30 @@
     "monthsAgo": "{{count}} months ago",
     "oneYearAgo": "1 year ago",
     "yearsAgo": "{{count}} years ago"
+  },
+  "pagination": {
+    "showing": "Showing",
+    "to": "to",
+    "of": "of",
+    "documents": "documents"
+  },
+  "navbar": {
+    "newDocument": "New Document"
+  },
+  "sidebar": {
+    "navigation": "Navigation",
+    "categories": "Categories",
+    "allDocuments": "All Documents",
+    "favorites": "Favorites",
+    "recent": "Recent",
+    "archived": "Archived",
+    "technical": "Technical",
+    "legal": "Legal",
+    "hr": "HR",
+    "marketing": "Marketing",
+    "finance": "Finance",
+    "sales": "Sales",
+    "product": "Product"
   },
   "signIn": {
     "welcomeBack": "Welcome back",
