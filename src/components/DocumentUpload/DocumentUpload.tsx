@@ -3,6 +3,7 @@ import type { FormEvent, ChangeEvent } from 'react';
 import { uploadDocument } from '../../api/hooks/documents';
 import { Loader } from '../Loader';
 import { CloseIcon, DocumentIcon, UploadIcon } from '../../assets/icons';
+import { useTranslation } from 'react-i18next';
 import './DocumentUpload.scss';
 
 interface DocumentUploadProps {
@@ -12,8 +13,9 @@ interface DocumentUploadProps {
 }
 
 export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUploadProps) {
+  const { t } = useTranslation();
   const [file, setFile] = useState<File | null>(null);
-  const [description, setDescription] = useState<string>('Invoice for services rendered');
+  const [description, setDescription] = useState<string>('');
   const [chunkSize, setChunkSize] = useState<number>(1024);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -60,7 +62,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
     e.preventDefault();
 
     if (!file) {
-      setError('Please select a file to upload');
+      setError(t('documentUpload.errorNoFile'));
       return;
     }
 
@@ -90,7 +92,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
       }, 500);
     } catch (err) {
       console.error('Upload failed:', err);
-      setError(err instanceof Error ? err.message : 'Upload failed. Please try again.');
+      setError(err instanceof Error ? err.message : t('documentUpload.errorUploadFailed'));
     } finally {
       setIsUploading(false);
     }
@@ -99,7 +101,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
   const handleClose = () => {
     if (!isUploading) {
       setFile(null);
-      setDescription('Invoice for services rendered');
+      setDescription('');
       setError(null);
       setUploadProgress(0);
       if (fileInputRef.current) {
@@ -115,7 +117,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
     <div className="document-upload-overlay" onClick={handleClose}>
       <div className="document-upload-modal" onClick={(e) => e.stopPropagation()}>
         <div className="document-upload-modal__header">
-          <h2>Upload Document</h2>
+          <h2>{t('uploadDocument.title')}</h2>
           <button
             className="document-upload-modal__close"
             onClick={handleClose}
@@ -157,21 +159,21 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
               <div className="document-upload-modal__dropzone-content">
                 <UploadIcon className="document-upload-modal__upload-icon" />
                 <p className="document-upload-modal__dropzone-text">
-                  <strong>Click to upload</strong> or drag and drop
+                  <strong>{t('uploadDocument.clickToUpload')}</strong> {t('uploadDocument.dragAndDrop')}
                 </p>
-                <p className="document-upload-modal__dropzone-hint">PDF, DOC, DOCX, TXT or any document file</p>
+                <p className="document-upload-modal__dropzone-hint">{t('uploadDocument.supportedFormats')}</p>
               </div>
             )}
           </div>
 
           <div className="document-upload-modal__description">
             <label className="document-upload-modal__label">
-              <span>Description</span>
+              <span>{t('uploadDocument.description')}</span>
               <textarea
                 ref={textareaRef}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Add description for this document..."
+                placeholder={t('uploadDocument.descriptionPlaceholder')}
                 className="document-upload-modal__textarea"
                 disabled={isUploading}
               />
@@ -183,15 +185,19 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
               <div className="document-upload-modal__progress-bar">
                 <div className="document-upload-modal__progress-fill" style={{ width: `${uploadProgress}%` }} />
               </div>
-              <p className="document-upload-modal__progress-text">Uploading... {uploadProgress}%</p>
+              <p className="document-upload-modal__progress-text">
+                {t('uploadDocument.uploading')} {uploadProgress}%
+              </p>
             </div>
           )}
 
           <div className="document-upload-modal__settings">
             <label className="document-upload-modal__label">
               <div className="document-upload-modal__label-header">
-                <span>Chunk Size</span>
-                <span className="document-upload-modal__value">{chunkSize} bytes</span>
+                <span>{t('uploadDocument.chunkSize')}</span>
+                <span className="document-upload-modal__value">
+                  {chunkSize} {t('uploadDocument.bytes')}
+                </span>
               </div>
               <input
                 type="range"
@@ -215,7 +221,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
               className="document-upload-modal__button document-upload-modal__button--secondary"
               disabled={isUploading}
             >
-              Cancel
+              {t('uploadDocument.cancel')}
             </button>
             <button
               type="submit"
@@ -225,10 +231,10 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
               {isUploading ? (
                 <>
                   <Loader size="small" />
-                  <span>Uploading...</span>
+                  <span>{t('uploadDocument.uploading')}...</span>
                 </>
               ) : (
-                'Upload'
+                t('uploadDocument.upload')
               )}
             </button>
           </div>

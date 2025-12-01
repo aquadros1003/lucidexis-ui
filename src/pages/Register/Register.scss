@@ -49,6 +49,13 @@
   padding: $spacing-xl $spacing-xl $spacing-lg;
 }
 
+.auth-header__top-right {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+  z-index: 10;
+}
+
 .auth-logo {
   width: 80px;
   height: 80px;
@@ -278,12 +285,11 @@
 
 @include mobile {
   .register-container {
-    padding: 0;
+    padding: $spacing-lg 0;
   }
 
   .register-card {
-    border-radius: 0;
-    box-shadow: none;
+    width: 90%;
   }
 
   .register-form-container {

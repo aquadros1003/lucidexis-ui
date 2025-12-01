@@ -13,15 +13,18 @@ export interface SidebarItemType {
 interface SidebarItemProps {
   item: SidebarItemType;
   loading: boolean;
+  collapsed?: boolean;
 }
 
-export function SidebarItem({ item, loading }: SidebarItemProps) {
+export function SidebarItem({ item, loading, collapsed }: SidebarItemProps) {
   const location = useLocation();
   return (
     <Link to={item.path} className={`sidebar-item ${location.pathname === item.path ? 'sidebar-item--active' : ''}`}>
       {item.icon && <div className="sidebar-item__icon">{item.icon}</div>}
-      <div className="sidebar-item__name">{item.name}</div>
-      {item.count !== undefined && <div className="sidebar-item__count">{loading ? '...' : item.count}</div>}
+      {!collapsed && <div className="sidebar-item__name">{item.name}</div>}
+      {!collapsed && item.count !== undefined && (
+        <div className="sidebar-item__count">{loading ? '...' : item.count}</div>
+      )}
     </Link>
   );
 }

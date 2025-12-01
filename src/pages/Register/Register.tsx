@@ -3,6 +3,7 @@ import { useRegister } from '../../hooks/useRegister';
 import { useNavigate } from 'react-router-dom';
 import { LogoIcon, LockIcon, MessageIcon, EyeOnIcon, EyeOffIcon, UserIcon } from '../../assets/icons';
 import { useTranslation } from 'react-i18next';
+import { LanguageSelect } from '../../components/LanguageSelect';
 import './Register.scss';
 
 function Register() {
@@ -45,6 +46,9 @@ function Register() {
   return (
     <div className="register-container">
       <div className="auth-header">
+        <div className="auth-header__top-right">
+          <LanguageSelect />
+        </div>
         <div className="auth-logo">
           <LogoIcon />
         </div>

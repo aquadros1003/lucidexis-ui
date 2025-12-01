@@ -1,0 +1,13 @@
+.language-select__dropdown-btn {
+  background: rgba(240, 240, 240, 1);
+  font-size: 1.3rem;
+  color: #333;
+  cursor: pointer;
+  padding: 4px 10px;
+  transition: background 0.2s;
+  min-width: 32px;
+  &:hover, &:focus {
+    background: rgba(240, 240, 240, 1);
+    outline: none;
+  }
+}

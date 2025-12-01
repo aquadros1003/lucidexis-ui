@@ -66,8 +66,27 @@
   "userMenu": {
     "logout": "Logout"
   },
+  "languageSelect": {
+    "polish": "Polski",
+    "english": "English"
+  },
   "perPageSelect": {
     "option": "{{count}} per page"
+  },
+  "uploadDocument": {
+    "title": "Upload Document",
+    "clickToUpload": "Click to upload",
+    "dragAndDrop": "or drag and drop here",
+    "supportedFormats": "Supported file types: PDF, DOCX, TXT, CSV",
+    "description": "Description",
+    "descriptionPlaceholder": "Add description for this document...",
+    "chunkSize": "Chunk Size",
+    "bytes": "bytes",
+    "upload": "Upload",
+    "uploading": "Uploading...",
+    "cancel": "Cancel",
+    "errorNoFile": "Please select a file to upload",
+    "errorUploadFailed": "Upload failed. Please try again."
   },
   "signIn": {
     "welcomeBack": "Welcome back",

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import './UserMenu.scss';
 
 export function UserMenu() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user, logout } = useAuthContext();
 
   const getUserInitial = () => {
@@ -18,7 +18,18 @@ export function UserMenu() {
     return 'U';
   };
 
+  const currentLang = i18n.language;
+  const nextLang = currentLang === 'pl' ? 'en' : 'pl';
+  const nextLabel = nextLang === 'pl' ? t('languageSelect.polish') : t('languageSelect.english');
+
   const dropdownItems: DropdownItem[] = [
+    {
+      id: 'language',
+      label: nextLabel,
+      icon: { pl: '🇵🇱', en: '🇬🇧' }[nextLang],
+      onClick: () => i18n.changeLanguage(nextLang),
+      variant: 'default',
+    },
     {
       id: 'logout',
       label: t('userMenu.logout'),

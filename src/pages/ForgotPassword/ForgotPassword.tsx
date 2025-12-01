@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { MessageIcon } from '../../assets/icons';
 import { useTranslation } from 'react-i18next';
 import './ForgotPassword.scss';
+import { LanguageSelect } from '../../components/LanguageSelect';
 
 function ForgotPassword() {
   const navigate = useNavigate();
@@ -23,6 +24,9 @@ function ForgotPassword() {
   if (isSuccess) {
     return (
       <div className="forgot-password-container">
+        <div className="auth-header__top-right">
+          <LanguageSelect />
+        </div>
         <div className="forgot-password-card">
           <div className="forgot-password-form-container">
             <div className="success-icon">✓</div>
@@ -43,6 +47,9 @@ function ForgotPassword() {
 
   return (
     <div className="forgot-password-container">
+      <div className="auth-header__top-right">
+        <LanguageSelect />
+      </div>
       <div className="forgot-password-card">
         <div className="forgot-password-form-container">
           <div className="icon-wrapper">

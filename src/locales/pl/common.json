@@ -59,8 +59,27 @@
   "userMenu": {
     "logout": "Wyloguj się"
   },
+  "languageSelect": {
+    "polish": "Polski",
+    "english": "English"
+  },
   "perPageSelect": {
     "option": "{{count}} na stronę"
+  },
+  "uploadDocument": {
+    "title": "Prześlij dokument",
+    "clickToUpload": "Kliknij, aby przesłać",
+    "dragAndDrop": "lub przeciągnij i upuść tutaj",
+    "supportedFormats": "Obsługiwane formaty: PDF, DOCX, TXT, CSV",
+    "description": "Opis",
+    "descriptionPlaceholder": "Dodaj opis dokumentu (opcjonalnie)",
+    "chunkSize": "Maksymalna długość fragmentu",
+    "bytes": "bytes",
+    "upload": "Prześlij",
+    "uploading": "Przesyłanie...",
+    "cancel": "Anuluj",
+    "errorNoFile": "Proszę wybrać plik do przesłania",
+    "errorUploadFailed": "Przesyłanie nie powiodło się. Spróbuj ponownie."
   },
   "documentCard": {
     "viewDetails": "Szczegóły",

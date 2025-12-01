@@ -5,6 +5,7 @@ import { LogoIcon } from '../../assets/icons';
 import { useTranslation } from 'react-i18next';
 import { EyeOffIcon, EyeOnIcon, LockIcon, MessageIcon } from '../../assets/icons';
 import './Login.scss';
+import { LanguageSelect } from '../../components/LanguageSelect';
 
 function Login() {
   const navigate = useNavigate();
@@ -37,6 +38,9 @@ function Login() {
   return (
     <div className="login-container">
       <div className="auth-header">
+        <div className="auth-header__top-right">
+          <LanguageSelect />
+        </div>
         <div className="auth-logo">
           <LogoIcon />
         </div>
