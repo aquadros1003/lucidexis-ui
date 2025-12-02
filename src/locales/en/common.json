@@ -26,7 +26,8 @@
   "semanticSearch": {
     "viewDocument": "View Document",
     "searchResults": "Search Results",
-    "semanticSearchResultsFor": "Semantic Search Results for"
+    "semanticSearchResultsFor": "Semantic search results for ",
+    "searching": "Searching..."
   },
   "documentCard": {
     "viewDetails": "View Details",

@@ -32,3 +32,4 @@ export { ReactComponent as EyeOffIcon } from './eye_off.svg';
 export { ReactComponent as LockIcon } from './lock.svg';
 export { ReactComponent as MessageIcon } from './message.svg';
 export { ReactComponent as ArrowLeftToLineIcon } from './arrow-left-to-line.svg';
+export { ReactComponent as SparkleIcon } from './sparkle.svg';

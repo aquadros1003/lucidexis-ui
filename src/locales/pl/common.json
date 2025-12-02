@@ -25,7 +25,8 @@
   "semanticSearch": {
     "viewDocument": "Zobacz dokument",
     "searchResults": "Wyniki wyszukiwania",
-    "semanticSearchResultsFor": "Wyniki wyszukiwania semantycznego dla"
+    "semanticSearchResultsFor": "Wyniki wyszukiwania semantycznego dla ",
+    "searching": "Wyszukiwanie..."
   },
   "documentPreview": {
     "download": "Pobierz",

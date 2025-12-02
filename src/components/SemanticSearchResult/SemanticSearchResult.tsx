@@ -4,7 +4,26 @@ import { DocumentPreview } from '../DocumentPreview';
 import type { DocumentCardProps } from '../DocumentCard/DocumentCard';
 import type { DocumentPrediction } from '../../api/schema/documents';
 import { formatRelativeDate } from '../../utils/dateFormatter';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import './SemanticSearchResult.scss';
+import { FilePdfIcon, FileDocIcon, FileSheetIcon, FileImageIcon, FileOtherIcon } from '../../assets/icons';
+
+const getFileIcon = (type: DocumentCardProps['type']): React.ReactElement => {
+  if (type === 'pdf') {
+    return <FilePdfIcon />;
+  }
+  if (['doc', 'docx', 'txt'].includes(type)) {
+    return <FileDocIcon />;
+  }
+  if (['sheet', 'xlsx', 'csv'].includes(type)) {
+    return <FileSheetIcon />;
+  }
+  if (['image', 'jpg', 'jpeg', 'png', 'gif'].includes(type)) {
+    return <FileImageIcon />;
+  }
+  return <FileOtherIcon />;
+};
 
 interface SemanticSearchResultProps extends DocumentPrediction {
   onArchive: (id: string, isArchived: boolean) => Promise<void>;
@@ -52,17 +71,12 @@ export function SemanticSearchResult({
     setSelectedDocument(null);
   };
 
-  const getFileExtension = (filename: string) => {
-    const parts = filename.split('.');
-    return parts.length > 1 ? parts[parts.length - 1].toUpperCase() : 'FILE';
-  };
-
   return (
     <>
       <div className="semantic-search-result">
         <div className="semantic-search-result__header">
           <div className="semantic-search-result__file-icon">
-            <span className="semantic-search-result__file-type">{getFileExtension(document.filename)}</span>
+            {getFileIcon(document.content_type.includes('pdf') ? 'pdf' : 'other')}
           </div>
           <div className="semantic-search-result__info">
             <h3 className="semantic-search-result__title">{document.filename}</h3>
@@ -76,18 +90,15 @@ export function SemanticSearchResult({
               <span className="semantic-search-result__size">{formatFileSize(document.file_size)}</span>
             </div>
           </div>
+        </div>
+        <div className="semantic-search-result__content">
+          ...<ReactMarkdown remarkPlugins={[remarkGfm]}>{chunk_content}</ReactMarkdown>...
+        </div>
+        <div className="semantic-search-result__footer">
           <button className="semantic-search-result__view-button" onClick={handleViewDocument}>
             {t('semanticSearch.viewDocument')}
           </button>
         </div>
-        <div className="semantic-search-result__content">
-          <p className="semantic-search-result__chunk">{chunk_content}</p>
-        </div>
-        {document.description && (
-          <div className="semantic-search-result__description">
-            <strong>{t('documentPreview.description')}:</strong> {document.description}
-          </div>
-        )}
       </div>
       {selectedDocument && (
         <DocumentPreview

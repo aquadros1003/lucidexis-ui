@@ -1,4 +1,5 @@
-@use '../../styles/variables';
+@use '../../styles/variables' as *;
+@use 'sass:color';
 
 .semantic-search-result {
   background: white;
@@ -7,27 +8,32 @@
   padding: 20px;
   margin-bottom: 16px;
   transition: box-shadow 0.2s ease;
+  border-left: 3px solid #9A9AA0;
+  cursor: pointer;
+  text-align: left;
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-left-color: #05040F;
   }
 
   &__header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 16px;
     margin-bottom: 12px;
   }
 
   &__file-icon {
-    width: 48px;
-    height: 48px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 8px;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
+    background-color: $bg-color;
+    border-radius: $radius-md;
+    color: $text-secondary;
   }
 
   &__file-type {
@@ -64,10 +70,14 @@
     color: #d1d5db;
   }
 
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+
   &__view-button {
     padding: 8px 16px;
-    background: #667eea;
-    color: white;
+    color: #000000;
     border: none;
     border-radius: 6px;
     font-size: 14px;
@@ -75,9 +85,10 @@
     cursor: pointer;
     transition: background 0.2s ease;
     flex-shrink: 0;
+    margin-top: 12px;
 
     &:hover {
-      background: #5568d3;
+      background: #f3f4f6;
     }
   }
 
@@ -86,7 +97,33 @@
     padding: 12px;
     background: #f9fafb;
     border-radius: 8px;
-    border-left: 3px solid #667eea;
+    font-size: 8px;
+    
+    p {
+      margin: 0 0 8px 0;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-size: 14px;
+      margin: 8px 0 4px 0;
+    }
+    
+    ul, ol {
+      margin: 4px 0;
+      padding-left: 20px;
+      font-size: 13px;
+    }
+    
+    code {
+      font-size: 12px;
+    }
+    
+    pre {
+      font-size: 12px;
+      margin: 4px 0;
+    }
   }
 
   &__chunk {
