@@ -6,6 +6,7 @@ import type {
   DocumentStats,
   UpdateDocumentRequest,
   DocumentPublic,
+  DocumentPredictionResponse,
 } from '../schema/documents';
 
 export interface uploadDocumentParams {
@@ -159,5 +160,16 @@ export const getDocumentMarkdownPreview = async (documentId: string): Promise<st
     return text.replace(/^['"]|['"]$/g, '').replace(/\\n/g, '\n');
   } catch (err) {
     throw new Error(err instanceof Error ? err.message : 'Failed to fetch document preview.');
+  }
+};
+
+export const semanticSearch = async (searchQuery: string): Promise<DocumentPredictionResponse> => {
+  try {
+    return (await fetchWithHeaders('/documents/predict', {
+      method: 'POST',
+      body: JSON.stringify({ search_query: searchQuery }),
+    })) as DocumentPredictionResponse;
+  } catch (err) {
+    throw new Error(err instanceof Error ? err.message : 'Failed to perform semantic search.');
   }
 };

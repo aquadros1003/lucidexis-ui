@@ -22,6 +22,11 @@
     "newDocument": "Nowy dokument",
     "searchPlaceholder": "Szukaj według tytułu, opisu lub tagów..."
   },
+  "semanticSearch": {
+    "viewDocument": "Zobacz dokument",
+    "searchResults": "Wyniki wyszukiwania",
+    "semanticSearchResultsFor": "Wyniki wyszukiwania semantycznego dla"
+  },
   "documentPreview": {
     "download": "Pobierz",
     "archive": "Archiwizuj",

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { DocumentUpload } from '../DocumentUpload/DocumentUpload';
 import { SearchBar } from '../SearchBar';
 import { PlusIcon } from '../../assets/icons';
@@ -11,7 +11,6 @@ export function Navbar() {
   const { t } = useTranslation();
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const queryClient = useQueryClient();
-  const location = useLocation();
   const navigate = useNavigate();
 
   const handleUploadSuccess = () => {
@@ -19,14 +18,11 @@ export function Navbar() {
   };
 
   const handleSearch = (query: string) => {
-    const params = new URLSearchParams(location.search);
     if (query) {
-      params.set('search', query);
-      params.set('page', '1');
+      navigate(`/search?search=${encodeURIComponent(query)}`);
     } else {
-      params.delete('search');
+      navigate('/');
     }
-    navigate(`${location.pathname}?${params.toString()}`);
   };
 
   return (

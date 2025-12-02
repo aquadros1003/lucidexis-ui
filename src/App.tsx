@@ -4,6 +4,7 @@ import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Dashboard from './pages/Dashboard';
+import Search from './pages/Search';
 import { Favorites } from './pages/Favorites';
 import { Archived } from './pages/Archived';
 import NotFound from './pages/NotFound';
@@ -50,6 +51,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route index element={<Dashboard />} />
           <Route path="/" element={<Dashboard />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/archived" element={<Archived />} />
         </Route>

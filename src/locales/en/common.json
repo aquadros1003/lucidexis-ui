@@ -23,6 +23,11 @@
     "newDocument": "New Document",
     "searchPlaceholder": "Search by title, description, or tags..."
   },
+  "semanticSearch": {
+    "viewDocument": "View Document",
+    "searchResults": "Search Results",
+    "semanticSearchResultsFor": "Semantic Search Results for"
+  },
   "documentCard": {
     "viewDetails": "View Details",
     "archive": "Archive",

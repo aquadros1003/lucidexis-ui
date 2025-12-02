@@ -42,3 +42,12 @@ export interface UpdateDocumentRequest {
   is_archived?: boolean;
   is_favorite?: boolean;
 }
+
+export interface DocumentPrediction {
+  document: DocumentPublic;
+  chunk_content: string;
+}
+
+export interface DocumentPredictionResponse {
+  predictions: DocumentPrediction[];
+}

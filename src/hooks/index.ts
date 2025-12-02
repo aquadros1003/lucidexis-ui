@@ -12,3 +12,4 @@ export {
   useUnfavoriteDocument,
 } from './useArchiveDocument';
 export { useDeleteDocument } from './useDeleteDocument';
+export { useSemanticSearch } from './useSemanticSearch';
