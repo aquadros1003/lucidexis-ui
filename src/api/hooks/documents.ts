@@ -12,7 +12,7 @@ import type {
 export interface uploadDocumentParams {
   file: File;
   chunkSize?: number;
-  description?: string;
+  description: string;
   onProgress?: (progress: number) => void;
 }
 

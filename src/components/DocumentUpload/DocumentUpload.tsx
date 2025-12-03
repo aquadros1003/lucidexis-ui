@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import type { FormEvent, ChangeEvent } from 'react';
 import { uploadDocument } from '../../api/hooks/documents';
-import { Loader } from '../Loader';
 import { CloseIcon, DocumentIcon, UploadIcon } from '../../assets/icons';
 import { useTranslation } from 'react-i18next';
 import './DocumentUpload.scss';
@@ -11,6 +10,9 @@ interface DocumentUploadProps {
   onClose: () => void;
   onUploadSuccess?: () => void;
 }
+
+const ALLOWED_FILE_TYPES = ['.csv', '.pdf', '.md', '.markdown'];
+const ALLOWED_MIME_TYPES = ['text/csv', 'application/pdf', 'text/markdown', 'text/x-markdown'];
 
 export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUploadProps) {
   const { t } = useTranslation();
@@ -34,11 +36,26 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
     adjustTextareaHeight();
   }, [description]);
 
+  const validateFile = (file: File): boolean => {
+    const fileName = file.name.toLowerCase();
+    const fileExtension = fileName.substring(fileName.lastIndexOf('.'));
+    const isValidExtension = ALLOWED_FILE_TYPES.includes(fileExtension);
+    const isValidMimeType = ALLOWED_MIME_TYPES.includes(file.type);
+    return isValidExtension || isValidMimeType;
+  };
+
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
-      setFile(selectedFile);
-      setError(null);
+      if (validateFile(selectedFile)) {
+        setFile(selectedFile);
+        setError(null);
+      } else {
+        setError(t('documentUpload.errorInvalidFileType'));
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
+      }
     }
   };
 
@@ -53,8 +70,12 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
 
     const droppedFile = e.dataTransfer.files?.[0];
     if (droppedFile) {
-      setFile(droppedFile);
-      setError(null);
+      if (validateFile(droppedFile)) {
+        setFile(droppedFile);
+        setError(null);
+      } else {
+        setError(t('documentUpload.errorInvalidFileType'));
+      }
     }
   };
 
@@ -138,6 +159,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
             <input
               ref={fileInputRef}
               type="file"
+              accept=".csv,.pdf,.md,.markdown,text/csv,application/pdf,text/markdown"
               onChange={handleFileChange}
               className="document-upload-modal__file-input"
               disabled={isUploading}
@@ -230,7 +252,6 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
             >
               {isUploading ? (
                 <>
-                  <Loader size="small" />
                   <span>{t('uploadDocument.uploading')}...</span>
                 </>
               ) : (

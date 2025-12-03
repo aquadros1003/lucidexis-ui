@@ -27,7 +27,9 @@
     "viewDocument": "View Document",
     "searchResults": "Search Results",
     "semanticSearchResultsFor": "Semantic search results for ",
-    "searching": "Searching..."
+    "searching": "Searching...",
+    "noResults": "No results found.",
+    "noResultsDescription": "We couldn't find any documents matching your search. Please try using different keywords or check your spelling."
   },
   "documentCard": {
     "viewDetails": "View Details",
@@ -83,7 +85,7 @@
     "title": "Upload Document",
     "clickToUpload": "Click to upload",
     "dragAndDrop": "or drag and drop here",
-    "supportedFormats": "Supported file types: PDF, DOCX, TXT, CSV",
+    "supportedFormats": "Supported file types: PDF, CSV, MD",
     "description": "Description",
     "descriptionPlaceholder": "Add description for this document...",
     "chunkSize": "Chunk Size",

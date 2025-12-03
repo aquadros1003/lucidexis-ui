@@ -26,7 +26,9 @@
     "viewDocument": "Zobacz dokument",
     "searchResults": "Wyniki wyszukiwania",
     "semanticSearchResultsFor": "Wyniki wyszukiwania semantycznego dla ",
-    "searching": "Wyszukiwanie..."
+    "searching": "Wyszukiwanie...",
+    "noResults": "Nie znaleziono wyników.",
+    "noResultsDescription": "Nie znaleźliśmy żadnych dokumentów pasujących do Twojego wyszukiwania. Spróbuj użyć innych słów kluczowych lub sprawdź pisownię."
   },
   "documentPreview": {
     "download": "Pobierz",
@@ -76,7 +78,7 @@
     "title": "Prześlij dokument",
     "clickToUpload": "Kliknij, aby przesłać",
     "dragAndDrop": "lub przeciągnij i upuść tutaj",
-    "supportedFormats": "Obsługiwane formaty: PDF, DOCX, TXT, CSV",
+    "supportedFormats": "Obsługiwane formaty: PDF, CSV, MD",
     "description": "Opis",
     "descriptionPlaceholder": "Dodaj opis dokumentu (opcjonalnie)",
     "chunkSize": "Maksymalna długość fragmentu",
