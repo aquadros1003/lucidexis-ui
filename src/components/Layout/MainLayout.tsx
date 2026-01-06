@@ -4,12 +4,16 @@ import { Navbar } from '../Navbar';
 import { Toaster } from 'sonner';
 import './MainLayout.scss';
 
-export function MainLayout() {
+interface MainLayoutProps {
+  navbarVisible?: boolean;
+}
+
+export function MainLayout({ navbarVisible = true }: MainLayoutProps) {
   return (
     <div className="main-layout">
       <Sidebar />
       <div className="main-layout__main">
-        <Navbar />
+        {navbarVisible && <Navbar />}
         <div className="main-layout__content">
           <Toaster position="top-right" richColors />
           <Outlet />

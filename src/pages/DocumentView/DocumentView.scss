@@ -1,0 +1,365 @@
+@use '../../styles/variables' as *;
+@use 'sass:color';
+
+.document-view {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: $card-bg;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    text-align: left;
+    justify-content: space-between;
+    padding: $spacing-lg $spacing-xl;
+    background-color: $bg-color;
+    border-bottom: 1px solid $border-color;
+    flex-shrink: 0;
+  }
+
+  &__header-content {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $card-bg;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    flex-shrink: 0;
+
+    svg {
+      color: $link-color;
+    }
+  }
+
+  &__header-left {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    min-width: 0;
+  }
+
+  &__header-info {
+    min-width: 0;
+    flex: 1;
+  }
+
+  &__title {
+    font-size: $font-sm;
+    font-weight: 400;
+    color: $text-primary;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+    font-size: $font-sm;
+    color: $text-secondary;
+  }
+
+  &__meta-separator {
+    color: $text-secondary;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    flex-shrink: 0;
+  }
+
+  &__back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    color: currentColor;
+    transition: opacity 0.2s;
+
+    &:hover {
+        background-color: color.adjust($border-color, $lightness: -5%);
+    }
+
+    svg {
+        display: block;
+    }
+    }
+
+  &__action-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: $spacing-sm $spacing-md;
+    background: transparent;
+    border-radius: $radius-sm;
+    cursor: pointer;
+    color: $text-primary;
+    font-size: $font-sm;
+    font-weight: 500;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: color.adjust($border-color, $lightness: -5%);
+    }
+
+    &--icon {
+      padding: $spacing-xs;
+      flex: 0;
+    }
+
+    &--favorite {
+      
+      svg {
+        fill: var(--star-fill);
+        stroke: var(--star-stroke);
+      }
+      
+      &:hover {
+        background-color: rgba(255, 215, 0, 0.1);
+      }
+    }
+
+    svg {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__close {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    border-radius: $radius-sm;
+    cursor: pointer;
+    color: $text-secondary;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+
+    &:hover {
+      background-color: $btn-primary-hover-bg;
+      color: $text-primary;
+    }
+  }
+
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: $spacing-xl;
+  }
+
+  &__loading,
+  &__error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  &__spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid $border-color;
+    border-top-color: $link-color;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  &__preview-loading,
+  &__preview-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-md;
+    padding: $spacing-2xl;
+    text-align: center;
+  }
+
+  &__preview-error {
+    p {
+      color: $text-secondary;
+      margin: 0;
+    }
+  }
+
+  &__preview {
+    max-width: 900px;
+    margin: 0 auto;
+    line-height: 1.6;
+    color: $text-primary;
+    text-align: left;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin-top: $spacing-lg;
+      margin-bottom: $spacing-md;
+      color: $text-primary;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+    }
+
+    p {
+      margin-bottom: $spacing-md;
+    }
+
+    ul,
+    ol {
+      margin-bottom: $spacing-md;
+      padding-left: $spacing-lg;
+    }
+
+    li {
+      margin-bottom: $spacing-xs;
+    }
+
+    code {
+      background-color: $btn-primary-hover-bg;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background-color: $btn-primary-hover-bg;
+      padding: $spacing-md;
+      border-radius: $radius-sm;
+      overflow-x: auto;
+      margin-bottom: $spacing-md;
+
+      code {
+        background-color: transparent;
+        padding: 0;
+      }
+    }
+
+    blockquote {
+      border-left: 4px solid $link-color;
+      padding-left: $spacing-md;
+      margin: $spacing-md 0;
+      color: $text-secondary;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: $spacing-md;
+
+      th,
+      td {
+        border: 1px solid $border-color;
+        padding: $spacing-sm $spacing-md;
+        text-align: left;
+      }
+
+      th {
+        font-weight: 600;
+      }
+    }
+
+    a {
+      color: $link-color;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: $radius-sm;
+      margin: $spacing-md 0;
+    }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .document-view {
+    &__header {
+      padding: $spacing-md;
+      flex-wrap: wrap;
+    }
+
+    &__actions {
+      width: 100%;
+      justify-content: flex-end;
+      order: 3;
+    }
+
+    &__action-btn {
+      &:not(&--icon) {
+        span {
+          display: none;
+        }
+      }
+    }
+
+    &__content {
+      padding: $spacing-md;
+    }
+
+    &__title {
+      font-size: $font-lg;
+    }
+
+    &__preview {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.25rem;
+      }
+
+      h3 {
+        font-size: 1.1rem;
+      }
+    }
+  }
+}

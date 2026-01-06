@@ -121,6 +121,14 @@ export const getDocuments = async ({
   }
 };
 
+export const getDocument = async (documentId: string): Promise<DocumentPublic> => {
+  try {
+    return (await fetchWithHeaders(`/documents/${documentId}`)) as DocumentPublic;
+  } catch (err) {
+    throw new Error(err instanceof Error ? err.message : 'Failed to fetch document.');
+  }
+};
+
 export const getDocumentStats = async (): Promise<DocumentStats> => {
   try {
     return (await fetchWithHeaders('/documents/stats')) as DocumentStats;

@@ -3,7 +3,11 @@ import { useAuthContext } from '../../contexts';
 import { Loader } from '../Loader';
 import { MainLayout } from '../Layout';
 
-export function ProtectedRoute() {
+interface ProtectedRouteProps {
+  navbarVisible?: boolean;
+}
+
+export function ProtectedRoute({ navbarVisible = true }: ProtectedRouteProps) {
   const { isAuthenticated, isLoading } = useAuthContext();
 
   if (isLoading) {
@@ -25,5 +29,5 @@ export function ProtectedRoute() {
     return <Navigate to="/signin" replace />;
   }
 
-  return <MainLayout />;
+  return <MainLayout navbarVisible={navbarVisible} />;
 }
