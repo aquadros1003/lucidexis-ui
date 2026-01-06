@@ -1,4 +1,18 @@
-import { LogoIcon, StarIcon, ArchiveIcon, ClockIcon, FileOtherIcon, ArrowLeftToLineIcon } from '../../assets/icons';
+import {
+  LogoIcon,
+  StarIcon,
+  ArchiveIcon,
+  ClockIcon,
+  FileOtherIcon,
+  ArrowLeftToLineIcon,
+  CodeIcon,
+  MegaphoneIcon,
+  TrendingUpIcon,
+  UsersIcon,
+  CurrencyIcon,
+  ScaleIcon,
+  PackageIcon,
+} from '../../assets/icons';
 import './Sidebar.scss';
 import { UserMenu } from '../UserMenu';
 import { useDocumentStats } from '../../hooks';
@@ -30,13 +44,13 @@ const navItems: SidebarItemType[] = [
 ];
 
 const categories: SidebarItemType[] = [
-  { name: 'technical', path: 'technical', countKey: 'technical_documents' },
-  { name: 'marketing', path: 'marketing', countKey: 'marketing_documents' },
-  { name: 'sales', path: 'sales', countKey: 'sales_documents' },
-  { name: 'hr', path: 'hr', countKey: 'hr_documents' },
-  { name: 'finance', path: 'finance', countKey: 'finance_documents' },
-  { name: 'legal', path: 'legal', countKey: 'legal_documents' },
-  { name: 'product', path: 'product', countKey: 'product_documents' },
+  { name: 'technical', path: '/category/technical', icon: <CodeIcon />, countKey: 'technical_documents' },
+  { name: 'marketing', path: '/category/marketing', icon: <MegaphoneIcon />, countKey: 'marketing_documents' },
+  { name: 'sales', path: '/category/sales', icon: <TrendingUpIcon />, countKey: 'sales_documents' },
+  { name: 'hr', path: '/category/hr', icon: <UsersIcon />, countKey: 'hr_documents' },
+  { name: 'finance', path: '/category/finance', icon: <CurrencyIcon />, countKey: 'finance_documents' },
+  { name: 'legal', path: '/category/legal', icon: <ScaleIcon />, countKey: 'legal_documents' },
+  { name: 'product', path: '/category/product', icon: <PackageIcon />, countKey: 'product_documents' },
 ];
 
 export function Sidebar() {

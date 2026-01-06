@@ -6,6 +6,8 @@ import { DocumentPreview } from '../../components/DocumentPreview';
 import { ConfirmModal } from '../../components/ConfirmModal';
 import { SemanticSearchResult } from '../../components/SemanticSearchResult';
 import { SearchResultsHeader } from '../../components/SearchResultsHeader';
+import { EmptyState } from '../../components/EmptyState';
+import { SearchXIcon } from '../../assets/icons';
 import {
   useArchiveDocument,
   useUnarchiveDocument,
@@ -131,10 +133,11 @@ function Search() {
                     searchQuery={searchQuery}
                   />
                   {semanticSearchMutation.data.predictions.length === 0 ? (
-                    <div className="search-empty">
-                      <h2>{t('semanticSearch.noResults')}</h2>
-                      <p>{t('semanticSearch.noResultsDescription')}</p>
-                    </div>
+                    <EmptyState
+                      title={t('semanticSearch.noResults')}
+                      description={t('semanticSearch.noResultsDescription')}
+                      icon={<SearchXIcon className="empty-state__illustration" />}
+                    />
                   ) : (
                     <div className="semantic-search-results__list">
                       {semanticSearchMutation.data.predictions.map((prediction, index) => (

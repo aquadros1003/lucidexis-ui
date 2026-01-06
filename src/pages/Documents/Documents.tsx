@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useSearchParams, useLocation } from 'react-router-dom';
+import { useSearchParams, useLocation, useParams } from 'react-router-dom';
 import { getDocuments } from '../../api/hooks/documents';
 import DocumentCard from '../../components/DocumentCard/DocumentCard';
 import { DocumentPreview } from '../../components/DocumentPreview';
 import { ConfirmModal } from '../../components/ConfirmModal';
 import { Pagination } from '../../components/Pagination';
 import { PerPageSelect } from '../../components/PerPageSelect';
+import { EmptyState } from '../../components/EmptyState';
 import { mapDocumentsToCards, mapDocumentToCard } from '../../utils/documentMapper';
 import {
   useArchiveDocument,
@@ -19,7 +20,7 @@ import type { DocumentCardProps } from '../../components/DocumentCard/DocumentCa
 import './Documents.scss';
 import { useTranslation } from 'react-i18next';
 
-const DEFAULT_ITEMS_PER_PAGE = 10;
+const DEFAULT_ITEMS_PER_PAGE = 20;
 
 type DocumentFilter = 'all' | 'favorites' | 'archived';
 
@@ -32,6 +33,7 @@ function getFilterFromPath(pathname: string): DocumentFilter {
 export function Documents() {
   const { t } = useTranslation();
   const location = useLocation();
+  const { category } = useParams<{ category?: string }>();
   const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
@@ -53,7 +55,7 @@ export function Documents() {
   const deleteMutation = useDeleteDocument();
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['documents', filter, currentPage, itemsPerPage, searchQuery],
+    queryKey: ['documents', filter, currentPage, itemsPerPage, searchQuery, category],
     queryFn: async () => {
       const params: {
         limit: number;
@@ -61,6 +63,7 @@ export function Documents() {
         search: string;
         isFavorite?: boolean;
         isArchived?: boolean;
+        categories?: string[];
       } = {
         limit: itemsPerPage,
         offset,
@@ -71,6 +74,10 @@ export function Documents() {
         params.isFavorite = true;
       } else if (filter === 'archived') {
         params.isArchived = true;
+      }
+
+      if (category) {
+        params.categories = [category];
       }
 
       const response = await getDocuments(params);
@@ -193,30 +200,31 @@ export function Documents() {
           </div>
         )}
         {documents.length === 0 && !isLoading ? (
-          <div className="documents__empty">
-            <h2>{t('dashboard.noDocumentsTitle')}</h2>
-            <p>{t('dashboard.uploadFirstDocument')}</p>
-          </div>
+          <EmptyState title={t('dashboard.noDocumentsTitle')} description={t('dashboard.uploadFirstDocument')} />
         ) : (
           <>
-            <div className="documents__controls">
-              <div className="documents__controls-info">
-                {t('dashboard.showingDocuments', { count: documents.length })}
+            <div className="documents__main">
+              <div className="documents__controls">
+                <div className="documents__controls-info">
+                  {t('dashboard.showingDocuments', { count: documents.length })}
+                </div>
+                <PerPageSelect value={itemsPerPage} onChange={handlePerPageChange} />
               </div>
-              <PerPageSelect value={itemsPerPage} onChange={handlePerPageChange} />
+              <div className="documents__grid">
+                {documents.map((doc) => (
+                  <DocumentCard key={doc.id} {...doc} onCardClick={handleCardClick} onArchive={handleArchive} />
+                ))}
+              </div>
             </div>
-            <div className="documents__grid">
-              {documents.map((doc) => (
-                <DocumentCard key={doc.id} {...doc} onCardClick={handleCardClick} onArchive={handleArchive} />
-              ))}
+            <div className="documents__pagination-wrapper">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+                itemsPerPage={itemsPerPage}
+                totalItems={data?.totalCount}
+              />
             </div>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-              itemsPerPage={itemsPerPage}
-              totalItems={data?.totalCount}
-            />
           </>
         )}
       </div>

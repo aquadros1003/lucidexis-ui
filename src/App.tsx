@@ -52,6 +52,7 @@ function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/favorites" element={<Documents />} />
           <Route path="/archived" element={<Documents />} />
+          <Route path="/category/:category" element={<Documents />} />
         </Route>
         <Route path="/404" element={<NotFound />} />
         <Route path="*" element={<Navigate to="/404" replace />} />
