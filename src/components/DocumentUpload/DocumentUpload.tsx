@@ -3,6 +3,7 @@ import type { FormEvent, ChangeEvent } from 'react';
 import { uploadDocument } from '../../api/hooks/documents';
 import { CloseIcon, DocumentIcon, UploadIcon } from '../../assets/icons';
 import { useTranslation } from 'react-i18next';
+import { CATEGORIES } from '../../constants/categories';
 import './DocumentUpload.scss';
 
 interface DocumentUploadProps {
@@ -18,6 +19,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
   const { t } = useTranslation();
   const [file, setFile] = useState<File | null>(null);
   const [description, setDescription] = useState<string>('');
+  const [category, setCategory] = useState<string>('');
   const [chunkSize, setChunkSize] = useState<number>(1024);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -81,33 +83,35 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
+    setCategory(category.toUpperCase());
     if (!file) {
       setError(t('documentUpload.errorNoFile'));
       return;
     }
-
     setIsUploading(true);
     setError(null);
     setUploadProgress(0);
-
     try {
       await uploadDocument({
         file,
         chunkSize,
         description,
+        category,
         onProgress: (progress) => {
           setUploadProgress(progress);
         },
       });
       setFile(null);
       setDescription('');
+      setCategory('');
       setChunkSize(1024);
       setUploadProgress(0);
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
-      onUploadSuccess?.();
+      if (onUploadSuccess) {
+        onUploadSuccess();
+      }
       setTimeout(() => {
         onClose();
       }, 500);
@@ -123,6 +127,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
     if (!isUploading) {
       setFile(null);
       setDescription('');
+      setCategory('');
       setError(null);
       setUploadProgress(0);
       if (fileInputRef.current) {
@@ -202,6 +207,27 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
             </label>
           </div>
 
+          <div className="document-upload-modal__description">
+            <label className="document-upload-modal__label">
+              <span>{t('uploadDocument.category')}</span>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="document-upload-modal__select"
+                disabled={isUploading}
+                name="category"
+                id="category-select"
+              >
+                <option value="">{t('uploadDocument.selectCategory')}</option>
+                {CATEGORIES.map((cat) => (
+                  <option key={cat.value} value={cat.value}>
+                    {t(`categories.${cat.name}`)}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
           {isUploading && (
             <div className="document-upload-modal__progress">
               <div className="document-upload-modal__progress-bar">
@@ -248,7 +274,7 @@ export function DocumentUpload({ isOpen, onClose, onUploadSuccess }: DocumentUpl
             <button
               type="submit"
               className="document-upload-modal__button document-upload-modal__button--primary"
-              disabled={!file || isUploading}
+              disabled={!file || !category || isUploading}
             >
               {isUploading ? (
                 <>

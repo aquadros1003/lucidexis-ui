@@ -8,13 +8,11 @@
   top: 0;
   right: 0;
   bottom: 0;
-  min-width: 500px;
-  max-width: 100%;
+  width: 500px;
   display: flex;
   flex-direction: column;
   background-color: $card-bg;
   border-left: 1px solid $border-color;
-  animation: slideInRight 0.3s ease-out;
   overflow-y: auto;
   z-index: 999;
 
@@ -524,6 +522,43 @@
   background-color: $bg-color;
   color: $text-primary;
   border-radius: 4px;
+
+  &--editable {
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background-color: rgba($link-color, 0.1);
+      color: $link-color;
+    }
+  }
+}
+
+.document-preview__category-select {
+  padding: 4px 8px;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  font-size: $font-xs;
+  font-weight: $font-medium;
+  color: $text-primary;
+  background-color: $input-bg;
+  transition: all 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $link-color;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $link-color;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: $bg-color;
+  }
 }
 
 @keyframes slideInRight {

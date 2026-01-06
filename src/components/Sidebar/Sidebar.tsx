@@ -30,13 +30,13 @@ const navItems: SidebarItemType[] = [
 ];
 
 const categories: SidebarItemType[] = [
-  { name: 'technical', count: 23, path: '' },
-  { name: 'marketing', count: 34, path: '' },
-  { name: 'sales', count: 18, path: '' },
-  { name: 'hr', count: 15, path: '' },
-  { name: 'finance', count: 9, path: '' },
-  { name: 'legal', count: 12, path: '' },
-  { name: 'product', count: 26, path: '' },
+  { name: 'technical', path: 'technical', countKey: 'technical_documents' },
+  { name: 'marketing', path: 'marketing', countKey: 'marketing_documents' },
+  { name: 'sales', path: 'sales', countKey: 'sales_documents' },
+  { name: 'hr', path: 'hr', countKey: 'hr_documents' },
+  { name: 'finance', path: 'finance', countKey: 'finance_documents' },
+  { name: 'legal', path: 'legal', countKey: 'legal_documents' },
+  { name: 'product', path: 'product', countKey: 'product_documents' },
 ];
 
 export function Sidebar() {
@@ -79,6 +79,7 @@ export function Sidebar() {
                   item={{ ...item, name: t(`sidebar.${item.name}`), count }}
                   loading={loading}
                   collapsed={collapsed}
+                  key={item.path}
                 />
               </li>
             );
@@ -88,15 +89,19 @@ export function Sidebar() {
       <div className="sidebar__nav">
         {!collapsed && <h3 className="sidebar__section-title">{t('sidebar.categories')}</h3>}
         <ul className="sidebar__nav-list">
-          {categories.map((category) => (
-            <li key={category.name}>
-              <SidebarItem
-                item={{ ...category, name: t(`sidebar.${category.name}`) }}
-                loading={false}
-                collapsed={collapsed}
-              />
-            </li>
-          ))}
+          {categories.map((item) => {
+            const count = item.countKey && stats ? stats[item.countKey] : undefined;
+            return (
+              <li key={item.path}>
+                <SidebarItem
+                  item={{ ...item, name: t(`sidebar.${item.name}`), count }}
+                  loading={loading}
+                  collapsed={collapsed}
+                  key={item.path}
+                />
+              </li>
+            );
+          })}
         </ul>
       </div>
       <div className="sidebar__footer">{!collapsed && <UserMenu />}</div>

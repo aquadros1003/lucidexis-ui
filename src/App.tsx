@@ -3,10 +3,8 @@ import Login from './pages/Login/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
-import Dashboard from './pages/Dashboard';
+import { Documents } from './pages/Documents';
 import Search from './pages/Search';
-import { Favorites } from './pages/Favorites';
-import { Archived } from './pages/Archived';
 import NotFound from './pages/NotFound';
 import { ProtectedRoute } from './components/Routes/ProtectedRoute';
 import { PublicRoute } from './components/Routes/PublicRoute';
@@ -49,11 +47,11 @@ function App() {
           }
         />
         <Route element={<ProtectedRoute />}>
-          <Route index element={<Dashboard />} />
-          <Route path="/" element={<Dashboard />} />
+          <Route index element={<Documents />} />
+          <Route path="/" element={<Documents />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/favorites" element={<Favorites />} />
-          <Route path="/archived" element={<Archived />} />
+          <Route path="/favorites" element={<Documents />} />
+          <Route path="/archived" element={<Documents />} />
         </Route>
         <Route path="/404" element={<NotFound />} />
         <Route path="*" element={<Navigate to="/404" replace />} />

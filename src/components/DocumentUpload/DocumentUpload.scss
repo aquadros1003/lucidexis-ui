@@ -334,6 +334,38 @@
     }
   }
 
+  &__select {
+    width: 100%;
+    padding: $spacing-sm $spacing-xl $spacing-sm $spacing-md;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    font-size: $font-sm;
+    color: $text-primary;
+    background-color: $input-bg;
+    transition: all 0.2s;
+    font-family: inherit;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right $spacing-md center;
+
+    &:hover {
+      border-color: $link-color;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $link-color;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background-color: $bg-color;
+    }
+  }
+
   &__error {
     margin-top: $spacing-lg;
     padding: $spacing-md;

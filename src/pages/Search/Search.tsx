@@ -1,5 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import type { DocumentCardProps } from '../../components/DocumentCard/DocumentCard';
 import { DocumentPreview } from '../../components/DocumentPreview';
 import { ConfirmModal } from '../../components/ConfirmModal';
@@ -18,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 
 function Search() {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get('search') || '';
   const [selectedDocument, setSelectedDocument] = useState<DocumentCardProps | null>(null);
@@ -73,14 +75,14 @@ function Search() {
     }
   };
 
-  const handleDescriptionUpdate = (id: string, description: string) => {
+  const handleDocumentUpdate = (id: string, updates: { description?: string; category?: string }) => {
     if (selectedDocument && selectedDocument.id === id) {
       setSelectedDocument({
         ...selectedDocument,
-        description,
+        ...updates,
       });
     }
-    // Refresh semantic search results
+    queryClient.invalidateQueries({ queryKey: ['documentStats'] });
     if (searchQuery) {
       semanticSearchMutation.mutate(searchQuery);
     }
@@ -142,7 +144,7 @@ function Search() {
                           chunk_content={prediction.chunk_content}
                           onArchive={handleArchive}
                           onFavorite={handleFavorite}
-                          onDescriptionUpdate={handleDescriptionUpdate}
+                          onDocumentUpdate={handleDocumentUpdate}
                           onDelete={handleDelete}
                         />
                       ))}
@@ -170,7 +172,7 @@ function Search() {
           onClose={handleClosePreview}
           onArchive={handleArchive}
           onFavorite={handleFavorite}
-          onDescriptionUpdate={handleDescriptionUpdate}
+          onDocumentUpdate={handleDocumentUpdate}
           onDelete={handleDelete}
         />
       )}

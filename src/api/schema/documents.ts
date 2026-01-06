@@ -23,6 +23,7 @@ export interface DocumentPublic {
   is_favorite: boolean;
   description: string;
   download_url: string;
+  category?: string;
   owner?: DocumentOwner;
 }
 
@@ -35,12 +36,20 @@ export interface DocumentStats {
   total_documents: number;
   archived_documents: number;
   favorite_documents: number;
+  technical_documents: number;
+  marketing_documents: number;
+  sales_documents: number;
+  hr_documents: number;
+  finance_documents: number;
+  legal_documents: number;
+  product_documents: number;
 }
 
 export interface UpdateDocumentRequest {
   description?: string;
   is_archived?: boolean;
   is_favorite?: boolean;
+  category?: string;
 }
 
 export interface DocumentPrediction {

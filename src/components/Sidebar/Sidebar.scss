@@ -15,17 +15,16 @@
 
   &--collapsed {
     width: 64px;
+    .sidebar__section-title {
+      visibility: hidden;
+    }
     .sidebar__logo-text,
     .sidebar__section-title,
     .sidebar__footer {
       display: none !important;
     }
     .sidebar__nav-list {
-      padding: 0 2px;
-    }
-    .sidebar__logo-icon {
-      width: 40px;
-      height: 40px;
+      padding-left: $spacing-md;
     }
   }
 

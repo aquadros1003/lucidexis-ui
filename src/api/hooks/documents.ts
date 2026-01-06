@@ -13,12 +13,14 @@ export interface uploadDocumentParams {
   file: File;
   chunkSize?: number;
   description: string;
+  category?: string;
   onProgress?: (progress: number) => void;
 }
 
 export const uploadDocument = async ({
   file,
   chunkSize = 1024,
+  category = 'TECHNICAL',
   description,
   onProgress,
 }: uploadDocumentParams): Promise<DocumentUploadResponse> => {
@@ -28,6 +30,7 @@ export const uploadDocument = async ({
   formData.append('file', file);
   formData.append('chunk_size', chunkSize.toString());
   formData.append('description', description || '');
+  formData.append('category', category || '');
 
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();

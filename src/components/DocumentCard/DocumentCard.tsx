@@ -54,10 +54,13 @@ export interface DocumentCardProps {
   tags: DocumentTag[];
   date: Date;
   authorName?: string;
+  category?: string;
   isArchived?: boolean;
   isFavorite?: boolean;
   onCardClick?: (id: string) => void;
   onMenuClick?: (id: string) => void;
+  onArchive?: (id: string, isArchived: boolean) => void;
+  onFavorite?: (id: string, isFavorite: boolean) => void;
 }
 
 const getFileIcon = (type: DocumentType): React.ReactElement => {
@@ -89,6 +92,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
   isFavorite,
   onCardClick,
   onMenuClick,
+  onArchive,
 }) => {
   const { token } = useAuthContext();
   const { t } = useTranslation();
@@ -107,6 +111,9 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
         await unarchiveMutation.mutateAsync(id);
       } else {
         await archiveMutation.mutateAsync(id);
+      }
+      if (onArchive) {
+        onArchive(id, isArchived ?? false);
       }
     } catch (error) {
       console.error('Failed to update document:', error);

@@ -28,7 +28,7 @@ const getFileIcon = (type: DocumentCardProps['type']): React.ReactElement => {
 interface SemanticSearchResultProps extends DocumentPrediction {
   onArchive: (id: string, isArchived: boolean) => Promise<void>;
   onFavorite: (id: string, isFavorite: boolean) => Promise<void>;
-  onDescriptionUpdate: (id: string, description: string) => void;
+  onDocumentUpdate: (id: string, updates: { description?: string; category?: string }) => void;
   onDelete: (id: string) => void;
 }
 
@@ -37,7 +37,7 @@ export function SemanticSearchResult({
   chunk_content,
   onArchive,
   onFavorite,
-  onDescriptionUpdate,
+  onDocumentUpdate,
   onDelete,
 }: SemanticSearchResultProps) {
   const { t } = useTranslation();
@@ -61,6 +61,7 @@ export function SemanticSearchResult({
       tags: [],
       date: new Date(document.created_at),
       authorName: document.owner?.full_name || 'Unknown',
+      category: document.category,
       isFavorite: document.is_favorite,
       isArchived: document.is_archived,
     };
@@ -106,7 +107,7 @@ export function SemanticSearchResult({
           onClose={handleClosePreview}
           onArchive={onArchive}
           onFavorite={onFavorite}
-          onDescriptionUpdate={onDescriptionUpdate}
+          onDocumentUpdate={onDocumentUpdate}
           onDelete={onDelete}
         />
       )}

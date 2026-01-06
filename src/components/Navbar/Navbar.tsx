@@ -17,6 +17,7 @@ export function Navbar() {
 
   const handleUploadSuccess = () => {
     queryClient.invalidateQueries({ queryKey: ['documents'] });
+    queryClient.invalidateQueries({ queryKey: ['documentStats'] });
   };
 
   const handleSearch = (query: string) => {

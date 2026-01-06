@@ -26,6 +26,7 @@ export function useUnarchiveDocument() {
     mutationFn: (documentId: string) => unarchiveDocument(documentId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['documents'] });
+      queryClient.invalidateQueries({ queryKey: ['archivedDocuments'] });
       queryClient.invalidateQueries({ queryKey: ['documentStats'] });
     },
     onError: (error: unknown) => {

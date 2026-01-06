@@ -1,31 +1,41 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { useSearchParams } from 'react-router-dom';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import { getDocuments } from '../../api/hooks/documents';
 import DocumentCard from '../../components/DocumentCard/DocumentCard';
 import { DocumentPreview } from '../../components/DocumentPreview';
 import { ConfirmModal } from '../../components/ConfirmModal';
 import { Pagination } from '../../components/Pagination';
 import { PerPageSelect } from '../../components/PerPageSelect';
-import { mapDocumentToCard } from '../../utils/documentMapper';
+import { mapDocumentsToCards, mapDocumentToCard } from '../../utils/documentMapper';
 import {
   useArchiveDocument,
   useUnarchiveDocument,
   useFavoriteDocument,
   useUnfavoriteDocument,
-} from '../../hooks/useArchiveDocument';
-import { useDeleteDocument } from '../../hooks/useDeleteDocument';
+  useDeleteDocument,
+} from '../../hooks';
 import type { DocumentCardProps } from '../../components/DocumentCard/DocumentCard';
-import './Favorites.scss';
+import './Documents.scss';
 import { useTranslation } from 'react-i18next';
 
 const DEFAULT_ITEMS_PER_PAGE = 10;
 
-export function Favorites() {
+type DocumentFilter = 'all' | 'favorites' | 'archived';
+
+function getFilterFromPath(pathname: string): DocumentFilter {
+  if (pathname === '/favorites') return 'favorites';
+  if (pathname === '/archived') return 'archived';
+  return 'all';
+}
+
+export function Documents() {
   const { t } = useTranslation();
+  const location = useLocation();
+  const queryClient = useQueryClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
-  const perPage = parseInt(searchParams.get('perPage') || String(DEFAULT_ITEMS_PER_PAGE), 10);
+  const itemsPerPage = parseInt(searchParams.get('perPage') || String(DEFAULT_ITEMS_PER_PAGE), 10);
   const searchQuery = searchParams.get('search') || '';
   const [selectedDocument, setSelectedDocument] = useState<DocumentCardProps | null>(null);
   const [documentToDelete, setDocumentToDelete] = useState<{
@@ -33,18 +43,8 @@ export function Favorites() {
     title: string;
   } | null>(null);
 
-  const offset = (currentPage - 1) * perPage;
-
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['documents', 'favorites', perPage, offset, searchQuery],
-    queryFn: () =>
-      getDocuments({
-        limit: perPage,
-        offset,
-        search: searchQuery,
-        isFavorite: true,
-      }),
-  });
+  const filter = getFilterFromPath(location.pathname);
+  const offset = (currentPage - 1) * itemsPerPage;
 
   const archiveMutation = useArchiveDocument();
   const unarchiveMutation = useUnarchiveDocument();
@@ -52,10 +52,42 @@ export function Favorites() {
   const unfavoriteMutation = useUnfavoriteDocument();
   const deleteMutation = useDeleteDocument();
 
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['documents', filter, currentPage, itemsPerPage, searchQuery],
+    queryFn: async () => {
+      const params: {
+        limit: number;
+        offset: number;
+        search: string;
+        isFavorite?: boolean;
+        isArchived?: boolean;
+      } = {
+        limit: itemsPerPage,
+        offset,
+        search: searchQuery,
+      };
+
+      if (filter === 'favorites') {
+        params.isFavorite = true;
+      } else if (filter === 'archived') {
+        params.isArchived = true;
+      }
+
+      const response = await getDocuments(params);
+      return {
+        documents: filter === 'all' ? mapDocumentsToCards(response.data) : response.data.map(mapDocumentToCard),
+        totalCount: response.count,
+      };
+    },
+  });
+
+  const documents: DocumentCardProps[] = data?.documents || [];
+  const totalPages = data ? Math.ceil(data.totalCount / itemsPerPage) : 0;
+
   const handleCardClick = (id: string) => {
-    const document = data?.data.find((doc) => doc.id === id);
-    if (document) {
-      setSelectedDocument(mapDocumentToCard(document));
+    const doc = documents.find((d) => d.id === id);
+    if (doc) {
+      setSelectedDocument(doc);
     }
   };
 
@@ -63,32 +95,39 @@ export function Favorites() {
     setSelectedDocument(null);
   };
 
-  const handleArchive = (id: string, isArchived: boolean) => {
+  const handleArchive = async (id: string, isArchived: boolean) => {
     const mutation = isArchived ? unarchiveMutation : archiveMutation;
     mutation.mutate(id, {
       onSuccess: (updatedDoc) => {
         if (selectedDocument?.id === id) {
           setSelectedDocument(mapDocumentToCard(updatedDoc));
         }
+        if (isArchived || filter === 'archived') {
+          queryClient.invalidateQueries({ queryKey: ['documents'] });
+        }
+        queryClient.invalidateQueries({ queryKey: ['documentStats'] });
+        refetch();
       },
     });
   };
 
-  const handleFavorite = (id: string, isFavorite: boolean) => {
+  const handleFavorite = async (id: string, isFavorite: boolean) => {
     const mutation = isFavorite ? unfavoriteMutation : favoriteMutation;
     mutation.mutate(id, {
       onSuccess: (updatedDoc) => {
         if (selectedDocument?.id === id) {
           setSelectedDocument(mapDocumentToCard(updatedDoc));
         }
+        queryClient.invalidateQueries({ queryKey: ['documentStats'] });
+        refetch();
       },
     });
   };
 
   const handleDelete = (id: string) => {
-    const document = data?.data.find((doc) => doc.id === id);
+    const document = documents.find((doc) => doc.id === id);
     if (document) {
-      setDocumentToDelete({ id: document.id, title: document.filename });
+      setDocumentToDelete({ id: document.id, title: document.title });
     }
   };
 
@@ -100,25 +139,27 @@ export function Favorites() {
           if (selectedDocument?.id === documentToDelete.id) {
             setSelectedDocument(null);
           }
+          refetch();
         },
       });
     }
   };
 
-  const handleDescriptionUpdate = (id: string, description: string) => {
+  const handleDocumentUpdate = (id: string, updates: { description?: string; category?: string }) => {
     if (selectedDocument?.id === id) {
       setSelectedDocument({
         ...selectedDocument,
-        description,
+        ...updates,
       });
     }
+    queryClient.invalidateQueries({ queryKey: ['documentStats'] });
+    refetch();
   };
-  const totalPages = data ? Math.ceil(data.count / perPage) : 0;
 
   const handlePageChange = (page: number) => {
     const params: Record<string, string> = { page: page.toString() };
-    if (perPage !== DEFAULT_ITEMS_PER_PAGE) {
-      params.perPage = perPage.toString();
+    if (itemsPerPage !== DEFAULT_ITEMS_PER_PAGE) {
+      params.perPage = itemsPerPage.toString();
     }
     setSearchParams(params);
   };
@@ -133,47 +174,48 @@ export function Favorites() {
 
   if (error) {
     return (
-      <div className="favorites">
-        <div className="favorites__error">
-          <p>{t('errors.somethingWentWrong')}</p>
+      <div className="documents">
+        <div className="documents__content">
+          <div className="documents__error">
+            <p>{t('errors.somethingWentWrong')}</p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="favorites">
-      <div className="favorites-content">
+    <div className="documents">
+      <div className="documents__content">
         {isLoading && (
-          <div className="favorites__loading-overlay">
-            <div className="favorites__spinner" />
+          <div className="documents__loading-overlay">
+            <div className="documents__spinner" />
           </div>
         )}
-        {data?.data.length === 0 && !isLoading ? (
-          <div className="favorites__empty">
+        {documents.length === 0 && !isLoading ? (
+          <div className="documents__empty">
             <h2>{t('dashboard.noDocumentsTitle')}</h2>
             <p>{t('dashboard.uploadFirstDocument')}</p>
           </div>
         ) : (
           <>
-            <div className="favorites__controls">
-              <div className="favorites__controls-info">
-                {t('dashboard.showingDocuments', { count: data?.data.length || 0 })}
+            <div className="documents__controls">
+              <div className="documents__controls-info">
+                {t('dashboard.showingDocuments', { count: documents.length })}
               </div>
-              <PerPageSelect value={perPage} onChange={handlePerPageChange} />
+              <PerPageSelect value={itemsPerPage} onChange={handlePerPageChange} />
             </div>
-            <div className="favorites__grid">
-              {data?.data.map((doc) => (
-                <DocumentCard key={doc.id} {...mapDocumentToCard(doc)} onCardClick={handleCardClick} />
+            <div className="documents__grid">
+              {documents.map((doc) => (
+                <DocumentCard key={doc.id} {...doc} onCardClick={handleCardClick} onArchive={handleArchive} />
               ))}
             </div>
-
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={handlePageChange}
-              itemsPerPage={perPage}
-              totalItems={data?.count}
+              itemsPerPage={itemsPerPage}
+              totalItems={data?.totalCount}
             />
           </>
         )}
@@ -186,7 +228,7 @@ export function Favorites() {
           onArchive={handleArchive}
           onFavorite={handleFavorite}
           onDelete={handleDelete}
-          onDescriptionUpdate={handleDescriptionUpdate}
+          onDocumentUpdate={handleDocumentUpdate}
         />
       )}
 
@@ -195,7 +237,7 @@ export function Favorites() {
         title={t('dashboard.deleteDocument')}
         message={
           <p>
-            {t('dashboard.deleteDocumentConfirmation')} <strong>{selectedDocument?.title}</strong>?
+            {t('dashboard.deleteDocumentConfirmation')} <strong>{documentToDelete?.title}</strong>?
           </p>
         }
         confirmText={t('dashboard.delete')}

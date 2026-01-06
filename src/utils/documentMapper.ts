@@ -80,6 +80,7 @@ export const mapDocumentToCard = (doc: DocumentPublic): DocumentCardProps => {
     tags: generateMockTags(doc?.filename),
     date: new Date(doc?.created_at),
     authorName: doc?.owner ? doc?.owner.full_name : 'Unknown',
+    category: doc?.category,
     isArchived: doc?.is_archived,
     isFavorite: doc?.is_favorite,
   };
