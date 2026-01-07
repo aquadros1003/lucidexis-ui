@@ -80,6 +80,7 @@ export interface GetDocumentsParams {
   search?: string;
   isFavorite?: boolean;
   isArchived?: boolean;
+  recentlyVisited?: boolean;
   categories?: string[];
 }
 
@@ -89,6 +90,7 @@ export const getDocuments = async ({
   search,
   isFavorite,
   isArchived,
+  recentlyVisited,
   categories,
 }: GetDocumentsParams = {}): Promise<DocumentsPublic> => {
   const url = new URL(`${API_V1}/documents/`);
@@ -101,6 +103,10 @@ export const getDocuments = async ({
 
   if (isArchived !== undefined) {
     url.searchParams.append('is_archived', isArchived.toString());
+  }
+
+  if (recentlyVisited !== undefined) {
+    url.searchParams.append('recently_visited', recentlyVisited.toString());
   }
 
   if (search) {

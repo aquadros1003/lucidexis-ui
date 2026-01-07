@@ -22,11 +22,12 @@ import { useTranslation } from 'react-i18next';
 
 const DEFAULT_ITEMS_PER_PAGE = 20;
 
-type DocumentFilter = 'all' | 'favorites' | 'archived';
+type DocumentFilter = 'all' | 'favorites' | 'archived' | 'recently_visited';
 
 function getFilterFromPath(pathname: string): DocumentFilter {
   if (pathname === '/favorites') return 'favorites';
   if (pathname === '/archived') return 'archived';
+  if (pathname === '/recent') return 'recently_visited';
   return 'all';
 }
 
@@ -63,6 +64,7 @@ export function Documents() {
         search: string;
         isFavorite?: boolean;
         isArchived?: boolean;
+        recentlyVisited?: boolean;
         categories?: string[];
       } = {
         limit: itemsPerPage,
@@ -74,6 +76,8 @@ export function Documents() {
         params.isFavorite = true;
       } else if (filter === 'archived') {
         params.isArchived = true;
+      } else if (filter === 'recently_visited') {
+        params.recentlyVisited = true;
       }
 
       if (category) {

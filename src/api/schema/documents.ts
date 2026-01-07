@@ -23,7 +23,7 @@ export interface DocumentPublic {
   is_favorite: boolean;
   description: string;
   download_url: string;
-  category?: string;
+  category: string;
   owner?: DocumentOwner;
 }
 

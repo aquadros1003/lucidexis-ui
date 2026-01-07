@@ -6,6 +6,7 @@ import { formatRelativeDate } from '../../utils/dateFormatter';
 import { useArchiveDocument, useUnarchiveDocument } from '../../hooks';
 import { ArchiveIcon, UnarchiveIcon } from '../../assets/icons';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import {
   DownloadIcon,
   MenuDotsIcon,
@@ -95,6 +96,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
   onArchive,
 }) => {
   const { token } = useAuthContext();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const archiveMutation = useArchiveDocument();
   const unarchiveMutation = useUnarchiveDocument();
@@ -129,9 +131,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
   };
 
   const handleOpenDetails = () => {
-    if (onCardClick) {
-      onCardClick(id);
-    }
+    navigate(`/document/${id}`);
   };
 
   const dropdownItems: DropdownItem[] = [

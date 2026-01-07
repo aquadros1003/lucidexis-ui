@@ -52,6 +52,7 @@ function App() {
           <Route path="/" element={<Documents />} />
           <Route path="/search" element={<Search />} />
           <Route path="/favorites" element={<Documents />} />
+          <Route path="/recent" element={<Documents />} />
           <Route path="/archived" element={<Documents />} />
           <Route path="/category/:category" element={<Documents />} />
         </Route>
