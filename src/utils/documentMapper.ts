@@ -83,6 +83,7 @@ export const mapDocumentToCard = (doc: DocumentPublic): DocumentCardProps => {
     category: doc?.category,
     isArchived: doc?.is_archived,
     isFavorite: doc?.is_favorite,
+    isProcessed: doc?.is_processed,
   };
 };
 

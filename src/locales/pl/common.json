@@ -20,7 +20,7 @@
   },
   "navbar": {
     "newDocument": "Nowy dokument",
-    "searchPlaceholder": "Szukaj według tytułu, opisu lub tagów..."
+    "searchPlaceholder": "Szukaj według czegokolwiek, co przyjdzie Ci do głowy..."
   },
   "semanticSearch": {
     "viewDocument": "Zobacz dokument",
@@ -50,7 +50,13 @@
     "editCategoryTooltip": "Kliknij dwukrotnie, aby edytować",
     "lastModified": "Ostatnia modyfikacja",
     "tags": "Tagi",
-    "loadingPreview": "Ładowanie podglądu..."
+    "loadingPreview": "Ładowanie podglądu...",
+    "limitedPreview": "To jest ograniczony podgląd dokumentu",
+    "viewFullDocument": "Przejdź do pełnego podglądu",
+    "notProcessedTitle": "Dokument jest w trakcie przetwarzania",
+    "notProcessedMessage": "Dokument jest obecnie przetwarzany. Podgląd będzie dostępny po zakończeniu przetwarzania.",
+    "refresh": "Odśwież",
+    "refreshing": "Odświeżanie..."
   },
   "categories": {
     "technical": "Techniczne",

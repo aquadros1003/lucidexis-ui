@@ -55,6 +55,7 @@ export interface UpdateDocumentRequest {
 export interface DocumentPrediction {
   document: DocumentPublic;
   chunk_content: string;
+  accuracy: number;
 }
 
 export interface DocumentPredictionResponse {

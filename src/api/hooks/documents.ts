@@ -178,9 +178,12 @@ export const deleteDocument = async (documentId: string): Promise<void> => {
   }
 };
 
-export const getDocumentMarkdownPreview = async (documentId: string): Promise<string> => {
+export const getDocumentMarkdownPreview = async (documentId: string, chunkLimit?: number): Promise<string> => {
   try {
-    const content = await fetchWithHeaders(`/documents/${documentId}/preview/markdown`);
+    const url = chunkLimit
+      ? `/documents/${documentId}/preview/markdown?chunk_limit=${chunkLimit}`
+      : `/documents/${documentId}/preview/markdown`;
+    const content = await fetchWithHeaders(url);
     const text = content as string;
     return text.replace(/^['"]|['"]$/g, '').replace(/\\n/g, '\n');
   } catch (err) {

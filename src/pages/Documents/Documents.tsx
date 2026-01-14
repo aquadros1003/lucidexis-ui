@@ -156,7 +156,10 @@ export function Documents() {
     }
   };
 
-  const handleDocumentUpdate = (id: string, updates: { description?: string; category?: string }) => {
+  const handleDocumentUpdate = (
+    id: string,
+    updates: { description?: string; category?: string; isProcessed?: boolean },
+  ) => {
     if (selectedDocument?.id === id) {
       setSelectedDocument({
         ...selectedDocument,
@@ -241,6 +244,7 @@ export function Documents() {
           onFavorite={handleFavorite}
           onDelete={handleDelete}
           onDocumentUpdate={handleDocumentUpdate}
+          onRefresh={refetch}
         />
       )}
 

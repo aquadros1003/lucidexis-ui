@@ -14,7 +14,6 @@ function ResetPassword() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { resetPasswordAsync, isLoading, isError, isSuccess, error } = useResetPassword();
 
-  // Redirect to 404 if no token
   useEffect(() => {
     if (!token) {
       navigate('/404', { replace: true });
@@ -42,7 +41,6 @@ function ResetPassword() {
     navigate('/signin');
   };
 
-  // Don't render anything while redirecting
   if (!token) {
     return null;
   }

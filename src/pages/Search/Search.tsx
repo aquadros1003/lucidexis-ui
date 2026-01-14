@@ -77,7 +77,10 @@ function Search() {
     }
   };
 
-  const handleDocumentUpdate = (id: string, updates: { description?: string; category?: string }) => {
+  const handleDocumentUpdate = (
+    id: string,
+    updates: { description?: string; category?: string; isProcessed?: boolean },
+  ) => {
     if (selectedDocument && selectedDocument.id === id) {
       setSelectedDocument({
         ...selectedDocument,
@@ -145,10 +148,7 @@ function Search() {
                           key={`${prediction.document.id}-${index}`}
                           document={prediction.document}
                           chunk_content={prediction.chunk_content}
-                          onArchive={handleArchive}
-                          onFavorite={handleFavorite}
-                          onDocumentUpdate={handleDocumentUpdate}
-                          onDelete={handleDelete}
+                          accuracy={prediction.accuracy}
                         />
                       ))}
                     </div>
@@ -177,6 +177,7 @@ function Search() {
           onFavorite={handleFavorite}
           onDocumentUpdate={handleDocumentUpdate}
           onDelete={handleDelete}
+          onRefresh={() => semanticSearchMutation.mutate(searchQuery)}
         />
       )}
       <ConfirmModal

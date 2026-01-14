@@ -7,14 +7,12 @@
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 16px;
-  transition: box-shadow 0.2s ease;
   border-left: 3px solid #9A9AA0;
   cursor: pointer;
   text-align: left;
 
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    border-left-color: #05040F;
   }
 
   &__header {
@@ -46,6 +44,31 @@
   &__info {
     flex: 1;
     min-width: 0;
+  }
+
+  &__accuracy {
+    padding: 4px 6px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    
+    &--high {
+      background-color: rgba(34, 197, 94, 0.1);
+      color: #16a34a;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    
+    &--medium {
+      background-color: rgba(245, 158, 11, 0.1);
+      color: #d97706;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    
+    &--low {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: #dc2626;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
   }
 
   &__title {

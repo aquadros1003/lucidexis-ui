@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../contexts';
 import { downloadFile } from '../../utils/downloadFile';
-import { updateDocument, getDocumentMarkdownPreview } from '../../api/hooks/documents';
+import { updateDocument, getDocumentMarkdownPreview, getDocument } from '../../api/hooks/documents';
 import { formatFullDate } from '../../utils/dateFormatter';
 import type { DocumentCardProps } from '../DocumentCard/DocumentCard';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +33,8 @@ interface DocumentPreviewProps {
   onArchive?: (id: string, isArchived: boolean) => void;
   onFavorite?: (id: string, isFavorite: boolean) => void;
   onDelete?: (id: string) => void;
-  onDocumentUpdate?: (id: string, updates: { description?: string; category?: string }) => void;
+  onDocumentUpdate?: (id: string, updates: { description?: string; category?: string; isProcessed?: boolean }) => void;
+  onRefresh?: () => void;
 }
 
 const DocumentPreview: React.FC<DocumentPreviewProps> = ({
@@ -42,9 +44,11 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   onFavorite,
   onDelete,
   onDocumentUpdate,
+  onRefresh,
 }) => {
   const { token } = useAuthContext();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [editedDescription, setEditedDescription] = useState(document.description);
   const [isEditingCategory, setIsEditingCategory] = useState(false);
@@ -54,13 +58,13 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   const [markdownContent, setMarkdownContent] = useState<string>('');
   const [isLoadingPreview, setIsLoadingPreview] = useState(false);
   const [previewError, setPreviewError] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setEditedDescription(document.description);
     setEditedCategory(document.category || '');
-    // Reset markdown content when document changes
     setMarkdownContent('');
     setPreviewError(null);
     if (activeTab === 'preview') {
@@ -73,13 +77,35 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
     setIsLoadingPreview(true);
     setPreviewError(null);
     try {
-      const content = await getDocumentMarkdownPreview(document.id);
-      setMarkdownContent(content);
+      const content = await getDocumentMarkdownPreview(document.id, 1);
+      setMarkdownContent(content.trim().slice(0, 300));
     } catch (error) {
       console.error('Failed to load markdown preview:', error);
       setPreviewError('t(errors.SomethingWentWrong)');
     } finally {
       setIsLoadingPreview(false);
+    }
+  };
+
+  const handleRefreshDocument = async () => {
+    setIsRefreshing(true);
+    try {
+      const updatedDoc = await getDocument(document.id);
+      if (updatedDoc.is_processed) {
+        if (onRefresh) {
+          onRefresh();
+        }
+        if (onDocumentUpdate) {
+          onDocumentUpdate(document.id, { isProcessed: true });
+        }
+        if (activeTab === 'preview') {
+          await loadMarkdownPreview();
+        }
+      }
+    } catch (error) {
+      console.error('Failed to refresh document:', error);
+    } finally {
+      setIsRefreshing(false);
     }
   };
 
@@ -423,14 +449,46 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
 
           {activeTab === 'preview' && (
             <section className="document-preview__section document-preview__markdown-preview">
-              {isLoadingPreview && (
-                <div className="document-preview__loading">{t('documentPreview.loadingPreview')}</div>
-              )}
-              {previewError && <div className="document-preview__error">{previewError}</div>}
-              {!isLoadingPreview && !previewError && markdownContent && (
-                <div className="document-preview__markdown-content">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdownContent}</ReactMarkdown>
+              {!document.isProcessed ? (
+                <div className="document-preview__not-processed">
+                  <div className="document-preview__not-processed-content">
+                    <h3>{t('documentPreview.notProcessedTitle')}</h3>
+                    <p>{t('documentPreview.notProcessedMessage')}</p>
+                    <button
+                      className="document-preview__refresh-btn"
+                      onClick={handleRefreshDocument}
+                      disabled={isRefreshing}
+                    >
+                      {t('documentPreview.refresh')}
+                    </button>
+                  </div>
                 </div>
+              ) : (
+                <>
+                  {isLoadingPreview && (
+                    <div className="document-preview__loading">{t('documentPreview.loadingPreview')}</div>
+                  )}
+                  {previewError && <div className="document-preview__error">{previewError}</div>}
+                  {!isLoadingPreview && !previewError && markdownContent && (
+                    <div className="document-preview__preview-container">
+                      <div className="document-preview__preview-notice">
+                        <p>{t('documentPreview.limitedPreview')}</p>
+                        <button
+                          className="document-preview__full-view-btn"
+                          onClick={() => navigate(`/document/${document.id}`)}
+                        >
+                          {t('documentPreview.viewFullDocument')}
+                        </button>
+                      </div>
+                      <div className="document-preview__markdown-content">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdownContent}</ReactMarkdown>
+                      </div>
+                      <div className="document-preview__markdown-content document-preview__markdown-content--blurred">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdownContent}</ReactMarkdown>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </section>
           )}

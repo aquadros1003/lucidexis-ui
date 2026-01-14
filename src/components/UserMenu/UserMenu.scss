@@ -4,6 +4,12 @@
   position: relative;
   width: 100%;
 
+  &__--collapsed {
+    .user-menu__info {
+      display: none;
+    }
+  }
+
   &__trigger {
     width: 100%;
     display: flex;

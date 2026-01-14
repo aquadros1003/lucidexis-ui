@@ -118,7 +118,7 @@ export function Sidebar() {
           })}
         </ul>
       </div>
-      <div className="sidebar__footer">{!collapsed && <UserMenu />}</div>
+      <div className="sidebar__footer">{<UserMenu collapsed={collapsed} />}</div>
     </aside>
   );
 }

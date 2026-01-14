@@ -1,12 +1,11 @@
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DocumentPreview } from '../DocumentPreview';
 import type { DocumentCardProps } from '../DocumentCard/DocumentCard';
 import type { DocumentPrediction } from '../../api/schema/documents';
 import { formatRelativeDate } from '../../utils/dateFormatter';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import './SemanticSearchResult.scss';
+import { useNavigate } from 'react-router-dom';
 import { FilePdfIcon, FileDocIcon, FileSheetIcon, FileImageIcon, FileOtherIcon } from '../../assets/icons';
 
 const getFileIcon = (type: DocumentCardProps['type']): React.ReactElement => {
@@ -25,23 +24,17 @@ const getFileIcon = (type: DocumentCardProps['type']): React.ReactElement => {
   return <FileOtherIcon />;
 };
 
-interface SemanticSearchResultProps extends DocumentPrediction {
-  onArchive: (id: string, isArchived: boolean) => Promise<void>;
-  onFavorite: (id: string, isFavorite: boolean) => Promise<void>;
-  onDocumentUpdate: (id: string, updates: { description?: string; category?: string }) => void;
-  onDelete: (id: string) => void;
-}
-
 export function SemanticSearchResult({
   document,
   chunk_content,
-  onArchive,
-  onFavorite,
-  onDocumentUpdate,
-  onDelete,
-}: SemanticSearchResultProps) {
+  accuracy,
+}: {
+  document: DocumentPrediction['document'];
+  chunk_content: string;
+  accuracy: number;
+}) {
   const { t } = useTranslation();
-  const [selectedDocument, setSelectedDocument] = useState<DocumentCardProps | null>(null);
+  const navigate = useNavigate();
 
   const formatFileSize = (bytes: number): string => {
     if (bytes < 1024) return `${bytes} B`;
@@ -49,27 +42,17 @@ export function SemanticSearchResult({
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
 
-  const handleViewDocument = () => {
-    const docProps: DocumentCardProps = {
-      id: document.id,
-      title: document.filename,
-      downloadUrl: document.download_url,
-      description: document.description,
-      fileSize: formatFileSize(document.file_size),
-      status: document.is_archived ? 'archived' : 'active',
-      type: document.content_type.includes('pdf') ? 'pdf' : 'other',
-      tags: [],
-      date: new Date(document.created_at),
-      authorName: document.owner?.full_name || 'Unknown',
-      category: document.category,
-      isFavorite: document.is_favorite,
-      isArchived: document.is_archived,
-    };
-    setSelectedDocument(docProps);
+  const getAccuracyColor = (acc: number): string => {
+    if (acc >= 0.8) return 'high';
+    if (acc >= 0.6) return 'medium';
+    return 'low';
   };
 
-  const handleClosePreview = () => {
-    setSelectedDocument(null);
+  const accuracyPercentage = Math.round(accuracy * 100);
+  const accuracyColor = getAccuracyColor(accuracy);
+
+  const handleViewDocument = () => {
+    navigate(`/document/${document.id}`);
   };
 
   return (
@@ -91,6 +74,9 @@ export function SemanticSearchResult({
               <span className="semantic-search-result__size">{formatFileSize(document.file_size)}</span>
             </div>
           </div>
+          <div className={`semantic-search-result__accuracy semantic-search-result__accuracy--${accuracyColor}`}>
+            {accuracyPercentage}%
+          </div>
         </div>
         <div className="semantic-search-result__content">
           ...<ReactMarkdown remarkPlugins={[remarkGfm]}>{chunk_content}</ReactMarkdown>...
@@ -101,16 +87,6 @@ export function SemanticSearchResult({
           </button>
         </div>
       </div>
-      {selectedDocument && (
-        <DocumentPreview
-          document={selectedDocument}
-          onClose={handleClosePreview}
-          onArchive={onArchive}
-          onFavorite={onFavorite}
-          onDocumentUpdate={onDocumentUpdate}
-          onDelete={onDelete}
-        />
-      )}
     </>
   );
 }

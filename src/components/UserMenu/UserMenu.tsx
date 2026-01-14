@@ -4,7 +4,7 @@ import { LogoutIcon } from '../../assets/icons';
 import { useTranslation } from 'react-i18next';
 import './UserMenu.scss';
 
-export function UserMenu() {
+export function UserMenu({ collapsed }: { collapsed?: boolean }) {
   const { t, i18n } = useTranslation();
   const { user, logout } = useAuthContext();
 
@@ -50,8 +50,8 @@ export function UserMenu() {
   );
 
   return (
-    <div className="user-menu">
-      <Dropdown trigger={trigger} items={dropdownItems} position="top-right" />
+    <div className={`user-menu${collapsed ? ' user-menu--collapsed' : ''}`}>
+      <Dropdown trigger={trigger} items={dropdownItems} position="top-left" />
     </div>
   );
 }

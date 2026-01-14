@@ -21,7 +21,7 @@
   },
   "navbar": {
     "newDocument": "New Document",
-    "searchPlaceholder": "Search by title, description, or tags..."
+    "searchPlaceholder": "Search by anything that comes to your mind..."
   },
   "semanticSearch": {
     "viewDocument": "View Document",
@@ -57,7 +57,13 @@
     "editCategoryTooltip": "Double-click to edit",
     "lastModified": "Last Modified",
     "tags": "Tags",
-    "loadingPreview": "Loading preview..."
+    "loadingPreview": "Loading preview...",
+    "limitedPreview": "This is a limited preview of the document",
+    "viewFullDocument": "Go to full view",
+    "notProcessedTitle": "Document is being processed",
+    "notProcessedMessage": "The document is currently being processed. Preview will be available after processing is complete.",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing..."
   },
   "categories": {
     "technical": "Technical",

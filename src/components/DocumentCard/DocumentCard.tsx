@@ -58,6 +58,7 @@ export interface DocumentCardProps {
   category?: string;
   isArchived?: boolean;
   isFavorite?: boolean;
+  isProcessed?: boolean;
   onCardClick?: (id: string) => void;
   onMenuClick?: (id: string) => void;
   onArchive?: (id: string, isArchived: boolean) => void;
