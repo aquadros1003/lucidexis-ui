@@ -127,6 +127,9 @@ function Login() {
             </button>
           </form>
         </div>
+        <footer className="login-footer">
+          <p>© {new Date().getFullYear()} Jankowski Łukasz. All rights reserved.</p>
+        </footer>
       </div>
     </div>
   );
