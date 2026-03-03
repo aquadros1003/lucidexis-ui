@@ -24,7 +24,6 @@ export default defineConfig([
       globals: globals.browser,
     },
     rules: {
-      // Prettier jako linter (konflikty stylu tylko przez Prettiera)
       'prettier/prettier': 'error',
     },
   },

@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { Sidebar } from '../Sidebar';
 import { Navbar } from '../Navbar';
+import { AssistantModal } from '../AssistantModal';
 import { Toaster } from 'sonner';
 import './MainLayout.scss';
 
@@ -19,6 +20,7 @@ export function MainLayout({ navbarVisible = true }: MainLayoutProps) {
           <Outlet />
         </div>
       </div>
+      <AssistantModal />
     </div>
   );
 }

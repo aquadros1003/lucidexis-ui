@@ -3,9 +3,10 @@
 
 .pagination {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: $spacing-md;
+  position: relative;
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -13,12 +14,18 @@
   }
 
   &-info {
+    position: absolute;
+    left: $spacing-md;
     color: $text-secondary;
     font-size: $font-sm;
     
     strong {
       color: $text-primary;
       font-weight: $font-semibold;
+    }
+
+    @media (max-width: 768px) {
+      position: static;
     }
   }
 
