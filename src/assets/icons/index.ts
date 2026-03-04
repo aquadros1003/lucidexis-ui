@@ -43,3 +43,4 @@ export { ReactComponent as ScaleIcon } from './scale.svg';
 export { ReactComponent as PackageIcon } from './package.svg';
 export { ReactComponent as SearchXIcon } from './search-x.svg';
 export { ReactComponent as ThreadIcon } from './thread.svg';
+export { ReactComponent as SettingsIcon } from './settings.svg';

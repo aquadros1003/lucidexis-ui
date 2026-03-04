@@ -5,6 +5,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import { Documents } from './pages/Documents';
 import { DocumentView } from './pages/DocumentView';
+import ProfileSettings from './pages/ProfileSettings';
 import Search from './pages/Search';
 import NotFound from './pages/NotFound';
 import { ProtectedRoute } from './components/Routes/ProtectedRoute';
@@ -55,6 +56,7 @@ function App() {
           <Route path="/recent" element={<Documents />} />
           <Route path="/archived" element={<Documents />} />
           <Route path="/category/:category" element={<Documents />} />
+          <Route path="/profile/settings" element={<ProfileSettings />} />
         </Route>
         <Route element={<ProtectedRoute navbarVisible={false} />}>
           <Route path="/document/:id" element={<DocumentView />} />

@@ -8,3 +8,12 @@ export const getLatestConversation = async (): Promise<ConversationResponse> => 
 export const getConversationMessages = async (conversationId: string): Promise<MessagesResponse> => {
   return await fetchWithHeaders(`/chat/${conversationId}/messages`);
 };
+
+export const startNewConversation = async (): Promise<ConversationResponse> => {
+  return await fetchWithHeaders('/chat/start', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};

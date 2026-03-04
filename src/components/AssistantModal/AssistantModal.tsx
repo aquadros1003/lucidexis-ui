@@ -1,13 +1,15 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { AssistantRuntimeProvider, useLocalRuntime, type ThreadMessage } from '@assistant-ui/react';
 import { useWebSocketRuntime } from './useWebSocketRuntime';
 import { ThreadView } from './ThreadView';
 import { useAuthContext } from '../../contexts';
-import { getLatestConversation, getConversationMessages } from '../../api/hooks/chat';
+import { getLatestConversation, getConversationMessages, startNewConversation } from '../../api/hooks/chat';
 import type { ChatMessage } from '../../api/schema/chat';
 import './AssistantModal.scss';
-import { ThreadIcon } from '../../assets/icons';
+import { useTranslation } from 'react-i18next';
+import { ThreadIcon, TrashIcon } from '../../assets/icons';
+import { toast } from 'sonner';
 
 interface AssistantModalProps {
   conversationId?: string;
@@ -44,9 +46,11 @@ const mapMessagesToThreadMessages = (messages: ChatMessage[]): ThreadMessage[] =
 
 export const AssistantModal = ({ trigger }: AssistantModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
   const [modalPosition, setModalPosition] = useState({ bottom: 0, right: 0 });
   const triggerRef = useRef<HTMLButtonElement>(null);
   const { token, isAuthenticated } = useAuthContext();
+  const queryClient = useQueryClient();
   const {
     data: conversationData,
     isLoading: isLoadingConversation,
@@ -56,6 +60,16 @@ export const AssistantModal = ({ trigger }: AssistantModalProps) => {
     queryFn: getLatestConversation,
     enabled: !!token && isAuthenticated,
     staleTime: Infinity,
+  });
+  const { mutate: clearConversation, isPending: isClearingConversation } = useMutation({
+    mutationFn: startNewConversation,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['conversation', 'latest'] });
+      queryClient.invalidateQueries({ queryKey: ['conversation-messages'] });
+    },
+    onError: () => {
+      toast.error(t('common:errors.somethingWentWrong'));
+    },
   });
   const conversationId = conversationData?.conversation?.id;
   const { data: messagesData, isLoading: isLoadingMessages } = useQuery({
@@ -111,26 +125,31 @@ export const AssistantModal = ({ trigger }: AssistantModalProps) => {
           >
             <div className="assistant-modal-header">
               <h2>🤖 LuciAI</h2>
-              <button className="assistant-modal-close" onClick={() => setIsOpen(false)} aria-label="Close">
-                <ThreadIcon width="20" height="20" />
+              <button
+                className="assistant-modal-clear"
+                onClick={() => clearConversation()}
+                aria-label="Clear conversation"
+                disabled={isClearingConversation}
+              >
+                <TrashIcon width="20" height="20" />
               </button>
             </div>
             <div className="assistant-modal-body">
               {isLoading ? (
                 <div className="thread-empty">
-                  <p>Ładowanie...</p>
+                  <p>{t('assistantModal.loading')}</p>
                 </div>
               ) : isConversationError ? (
                 <div className="thread-empty">
-                  <p>Błąd podczas ładowania konwersacji. Spróbuj ponownie później.</p>
+                  <p>{t('assistantModal.error')}</p>
                 </div>
               ) : !conversationId ? (
                 <div className="thread-empty">
-                  <p>Rozpocznij rozmowę, aby utworzyć nową konwersację.</p>
+                  <p>{t('assistantModal.noConversation')}</p>
                 </div>
               ) : !adapter ? (
                 <div className="thread-empty">
-                  <p>Łączenie z asystentem...</p>
+                  <p>{t('assistantModal.noConnection')}</p>
                 </div>
               ) : (
                 <AssistantRuntimeProvider runtime={runtime}>

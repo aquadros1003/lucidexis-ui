@@ -8,6 +8,7 @@ import {
 } from '@assistant-ui/react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 const TypingLoader = () => (
@@ -178,6 +179,7 @@ const AssistantMessage = () => {
 };
 
 const Composer = () => {
+  const { t } = useTranslation();
   const runtime = useThreadRuntime();
   const [threadState, setThreadState] = useState(runtime.getState());
   useEffect(() => {
@@ -196,7 +198,7 @@ const Composer = () => {
       <div className="thread-composer-wrapper">
         <ComposerPrimitive.Input
           className="thread-composer-input"
-          placeholder="Wpisz wiadomość..."
+          placeholder={t('assistantModal.inputPlaceholder')}
           autoFocus
           rows={1}
           disabled={isRunning}
@@ -221,6 +223,7 @@ const Composer = () => {
 };
 
 export const ThreadView = () => {
+  const { t } = useTranslation();
   const viewportRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const viewport = viewportRef.current;
@@ -259,8 +262,8 @@ export const ThreadView = () => {
         </ThreadPrimitive.If>
         <ThreadPrimitive.If empty={true}>
           <div className="thread-empty">
-            <span className="thread-empty-text">Witaj!</span>
-            <span className="thread-empty-subtext">Jak mogę Ci dzisiaj pomóc?</span>
+            <span className="thread-empty-text">{t('assistantModal.welcomeMessage')}</span>
+            <span className="thread-empty-subtext">{t('assistantModal.welcomeSubMessage')}</span>
           </div>
         </ThreadPrimitive.If>
       </ThreadPrimitive.Viewport>

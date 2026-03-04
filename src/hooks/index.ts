@@ -13,3 +13,4 @@ export {
 } from './useArchiveDocument';
 export { useDeleteDocument } from './useDeleteDocument';
 export { useSemanticSearch } from './useSemanticSearch';
+export { useUpdateUserProfile, useModelPreferences, useUpdateModelPreferences } from './useUpdateProfile';

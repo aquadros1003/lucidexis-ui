@@ -90,7 +90,8 @@
     "product": "Product"
   },
   "userMenu": {
-    "logout": "Logout"
+    "logout": "Logout",
+    "settings": "Profile Settings"
   },
   "languageSelect": {
     "polish": "Polski",
@@ -162,6 +163,42 @@
     "emailAddressPlaceholder": "you@example.com",
     "sendResetLink": "Send Reset Link",
     "sendingResetLink": "Sending..."
+  },
+  "assistantModal": {
+    "welcomeMessage": "Hello!",
+    "welcomeSubMessage": "How can I help you today?",
+    "inputPlaceholder": "Type your message here...",
+    "loading": "Loading...",
+    "error": "An error occurred while fetching the conversation. Please try again.",
+    "noConversation": "Start a conversation to create a new thread.",
+    "noConnection": "Connecting with LuciAI...",
+    "conversationCleared": "Conversation cleared successfully"
+  },
+  "profileSettings": {
+    "title": "Profile Settings",
+    "subtitle": "Manage your account and AI preferences",
+    "back": "Back",
+    "saveChanges": "Save Changes",
+    "personalInformation": "Personal Information",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "email": "Email",
+    "emailCannotBeChanged": "Email cannot be changed",
+    "languageAndLocale": "Language & Locale",
+    "aiLlmPreferences": "AI & LLM Preferences",
+    "openaiApiKey": "OpenAI API Key",
+    "openaiApiKeyPlaceholder": "sk-...",
+    "apiKeyHelperText": "Your API key is stored locally and never sent to our servers.",
+    "openaiBaseUrl": "OpenAI Base URL",
+    "openaiBaseUrlPlaceholder": "https://api.openai.com/v1",
+    "baseUrlHelperText": "Change this to use a custom endpoint or a compatible API proxy (e.g. Azure OpenAI, Ollama).",
+    "llmModel": "LLM Model",
+    "llmModelPlaceholder": "GPT-4o",
+    "systemPrompt": "System Prompt",
+    "systemPromptPlaceholder": "You are a helpful document assistant that helps users find and understand their documents. Be concise, accurate, and cite relevant document sections when answering questions.",
+    "systemPromptHelperText": "This system prompt will be sent to the LLM to define its behavior in the AI assistant.",
+    "profileUpdated": "Profile updated successfully",
+    "preferencesUpdated": "Preferences updated successfully"
   },
   "dashboard": {
     "noDocumentsTitle": "No documents yet.",

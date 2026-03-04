@@ -1,12 +1,14 @@
 import { useAuthContext } from '../../contexts';
 import { Dropdown, type DropdownItem } from '../Dropdown';
-import { LogoutIcon } from '../../assets/icons';
+import { LogoutIcon, SettingsIcon } from '../../assets/icons';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import './UserMenu.scss';
 
 export function UserMenu({ collapsed }: { collapsed?: boolean }) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { user, logout } = useAuthContext();
+  const navigate = useNavigate();
 
   const getUserInitial = () => {
     if (user?.full_name) {
@@ -17,17 +19,12 @@ export function UserMenu({ collapsed }: { collapsed?: boolean }) {
     }
     return 'U';
   };
-
-  const currentLang = i18n.language;
-  const nextLang = currentLang === 'pl' ? 'en' : 'pl';
-  const nextLabel = nextLang === 'pl' ? t('languageSelect.polish') : t('languageSelect.english');
-
   const dropdownItems: DropdownItem[] = [
     {
-      id: 'language',
-      label: nextLabel,
-      icon: { pl: '🇵🇱', en: '🇬🇧' }[nextLang],
-      onClick: () => i18n.changeLanguage(nextLang),
+      id: 'settings',
+      label: t('userMenu.settings'),
+      icon: <SettingsIcon />,
+      onClick: () => navigate('/profile/settings'),
       variant: 'default',
     },
     {

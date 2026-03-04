@@ -1,8 +1,9 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { getCurrentUser } from '../api/hooks/auth';
 import { AuthContext, type AuthContextType, type User } from './authContextDefinition';
+import i18n from '../i18n';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -22,6 +23,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
         try {
           const userData = await getCurrentUser(authToken);
           setUser(userData);
+          // Update i18n language based on user locale
+          if (userData.locale) {
+            const lang = userData.locale.startsWith('pl') ? 'pl' : 'en';
+            if (i18n.language !== lang) {
+              i18n.changeLanguage(lang);
+            }
+          }
         } catch {
           setTokenStorage(null);
           setUser(null);
@@ -59,6 +67,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
     removeTokenStorage();
     setUser(null);
   }, [removeTokenStorage]);
+
+  // Sync i18n language when user locale changes
+  useEffect(() => {
+    if (user?.locale) {
+      const lang = user.locale.startsWith('pl') ? 'pl' : 'en';
+      if (i18n.language !== lang) {
+        i18n.changeLanguage(lang);
+      }
+    }
+  }, [user?.locale]);
 
   const value: AuthContextType = {
     user,

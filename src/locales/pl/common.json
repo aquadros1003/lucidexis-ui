@@ -83,7 +83,8 @@
     "product": "Produkt"
   },
   "userMenu": {
-    "logout": "Wyloguj się"
+    "logout": "Wyloguj się",
+    "settings": "Ustawienia profilu"
   },
   "languageSelect": {
     "polish": "Polski",
@@ -160,6 +161,42 @@
     "emailAddressPlaceholder": "you@example.com",
     "sendResetLink": "Wyślij link do resetowania",
     "sendingResetLink": "Wysyłanie..."
+  },
+  "assistantModal": {
+    "welcomeMessage": "Cześć!",
+    "welcomeSubMessage": "Jak mogę Ci dzisiaj pomóc?",
+    "inputPlaceholder": "Wpisz swoją wiadomość tutaj...",
+    "loading": "Ładowanie...",
+    "error": "Wystąpił błąd podczas pobierania konwersacji. Spróbuj ponownie.",
+    "noConversation": "Rozpocznij rozmowę, aby utworzyć nową konwersację.",
+    "noConnection": "Łączenie z LuciAI...",
+    "conversationCleared": "Konwersacja została wyczyszczona"
+  },
+  "profileSettings": {
+    "title": "Ustawienia profilu",
+    "subtitle": "Zarządzaj swoim kontem i preferencjami AI",
+    "back": "Wstecz",
+    "saveChanges": "Zapisz zmiany",
+    "personalInformation": "Informacje osobiste",
+    "fullName": "Imię i nazwisko",
+    "fullNamePlaceholder": "Wprowadź swoje imię i nazwisko",
+    "email": "E-mail",
+    "emailCannotBeChanged": "E-mail nie może być zmieniony",
+    "languageAndLocale": "Język i lokalizacja",
+    "aiLlmPreferences": "Preferencje AI i LLM",
+    "openaiApiKey": "Klucz API OpenAI",
+    "openaiApiKeyPlaceholder": "sk-...",
+    "apiKeyHelperText": "Twój klucz API jest przechowywany lokalnie i nigdy nie jest wysyłany na nasze serwery.",
+    "openaiBaseUrl": "Bazowy URL OpenAI",
+    "openaiBaseUrlPlaceholder": "https://api.openai.com/v1",
+    "baseUrlHelperText": "Zmień to, aby użyć niestandardowego endpointu lub kompatybilnego proxy API (np. Azure OpenAI, Ollama).",
+    "llmModel": "Model LLM",
+    "llmModelPlaceholder": "GPT-4o",
+    "systemPrompt": "Prompt systemowy",
+    "systemPromptPlaceholder": "Jesteś pomocnym asystentem dokumentów, który pomaga użytkownikom znaleźć i zrozumieć ich dokumenty. Bądź zwięzły, dokładny i cytuj odpowiednie sekcje dokumentów podczas odpowiadania na pytania.",
+    "systemPromptHelperText": "Ten prompt systemowy zostanie wysłany do LLM w celu zdefiniowania jego zachowania w asystencie AI.",
+    "profileUpdated": "Profil zaktualizowany pomyślnie",
+    "preferencesUpdated": "Preferencje zaktualizowane pomyślnie"
   },
   "dashboard": {
     "noDocumentsTitle": "Brak dokumentów.",

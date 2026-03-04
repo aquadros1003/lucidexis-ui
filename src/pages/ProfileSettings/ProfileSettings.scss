@@ -1,0 +1,303 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.profile-settings-container {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #faf9fc 0%, #f3f1f7 100%);
+  padding: $spacing-xl $spacing-xl;
+  
+  @media (max-width: 768px) {
+    padding: $spacing-lg $spacing-md;
+  }
+}
+
+.profile-settings-header {
+  max-width: 900px;
+  margin: 0 auto $spacing-lg;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  background: none;
+  border: none;
+  color: $text-secondary;
+  font-size: $font-base;
+  font-weight: $font-medium;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-md;
+
+  &:hover {
+    color: $text-primary;
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.profile-settings-card {
+  margin: 0 auto;
+  background: white;
+  border-radius: $radius-xl;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  border: 1px solid $border-color;
+  overflow: hidden;
+}
+
+.profile-settings-title-section {
+  padding: $spacing-xl;
+  border-bottom: 1px solid $border-color;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: $spacing-lg;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.profile-settings-title {
+  font-size: $font-2xl;
+  font-weight: $font-bold;
+  color: $text-primary;
+  margin: 0 0 $spacing-xs;
+}
+
+.profile-settings-subtitle {
+  font-size: $font-sm;
+  color: $text-secondary;
+  margin: 0;
+}
+
+.btn-save-changes {
+    background-color: $btn-primary-bg;
+    color: $btn-primary-text;
+    padding: $spacing-lg 0;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    padding: $spacing-sm $spacing-md;
+    border: none;
+    border-radius: $radius-md;
+    font-size: $font-sm;
+    font-weight: $font-semibold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    &:hover {
+      box-shadow: $shadow-md;
+      background-color: $btn-primary-hover-bg;
+    }
+
+    &:active {
+      box-shadow: $shadow-sm;
+    }
+}
+
+.profile-settings-form {
+  padding: $spacing-xl;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2xl;
+}
+
+.settings-section {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  padding-bottom: $spacing-xl;
+  border-bottom: 1px solid $border-color;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    background-color: $card-bg;
+  }
+}
+
+.section-title {
+  font-size: $font-lg;
+  font-weight: $font-semibold;
+  color: $text-primary;
+  margin: 0;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: $spacing-lg;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.profile-settings {
+  &-form__label {
+    font-size: $font-sm;
+    font-weight: $font-semibold;
+    color: $text-primary;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+
+    svg {
+      width: 16px;
+      height: 16px;
+      color: $text-secondary;
+    }
+  }
+  &-form__input,
+  &-form__select,
+  &-form__textarea {
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-base;
+    color: $text-primary;
+    background-color: $input-bg;
+    border: 1px solid $input-border;
+    border-radius: $radius-lg;
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+    }
+
+    &::placeholder {
+      color: $text-muted;
+    }
+
+    &:disabled {
+      background-color: #f5f5f5;
+      color: $text-secondary;
+      cursor: not-allowed;
+      
+      &:focus {
+        border-color: $input-border;
+        box-shadow: none;
+      }
+    }
+  }
+
+  &-form__select {
+    cursor: pointer;
+    appearance: none;
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+
+  &-form__textarea {
+    min-height: 120px;
+    resize: vertical;
+    font-family: $font-family;
+    line-height: 1.6;
+  }
+
+  &-form__group {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+
+  &-form__input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .profile-settings-form__input {
+      width: 100%;
+    }
+  }
+
+  &-form__icon-button {
+    position: absolute;
+    right: $spacing-sm;
+    background: none;
+    border: none;
+    color: $text-secondary;
+    cursor: pointer;
+    padding: $spacing-xs;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $radius-md;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: $text-primary;
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+.form-helper-text {
+  font-size: $font-xs;
+  color: $text-secondary;
+  margin: 0;
+  line-height: 1.5;
+  text-align: left;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .profile-settings-container {
+    padding: $spacing-md;
+  }
+
+  .profile-settings-card {
+    border-radius: $radius-lg;
+  }
+
+  .profile-settings-title-section {
+    padding: $spacing-lg;
+  }
+
+  .profile-settings-form {
+    padding: $spacing-lg;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-save-changes {
+    width: 100%;
+    justify-content: center;
+  }
+}

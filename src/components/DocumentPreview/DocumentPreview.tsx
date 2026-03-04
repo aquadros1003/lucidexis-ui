@@ -264,7 +264,9 @@ const DocumentPreview: React.FC<DocumentPreviewProps> = ({
               <DocumentIcon width="24" height="24" />
             </div>
             <div className="document-preview__header-info">
-              <h2 className="document-preview__title">{document.title}</h2>
+              <h2 className="document-preview__title">
+                {document.title.length > 40 ? document.title.slice(0, 40) + '...' : document.title}
+              </h2>
             </div>
           </div>
           <button className="document-preview__close" onClick={onClose} aria-label="Close preview">

@@ -88,7 +88,7 @@
   flex-direction: column;
 }
 
-.assistant-modal-close {
+.assistant-modal-clear {
   background: transparent;
   border: none;
   cursor: pointer;
@@ -100,10 +100,17 @@
   transition: background 0.2s ease;
 
   &:hover {
-    background: #f0f0f0;
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   svg {
+    width: 20px;
+    height: 20px;
     color: #666;
   }
 }
