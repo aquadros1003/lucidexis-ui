@@ -153,7 +153,7 @@ const AssistantMessage = () => {
       </div>
       <div className="message-attachments">
         {displayContent.map((part, i) => {
-          const files = (part as unknown).additionalData?.files;
+          const files = (part as any).additionalData?.files;
           return Array.isArray(files)
             ? files.map(
                 (
