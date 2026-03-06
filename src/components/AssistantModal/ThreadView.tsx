@@ -11,6 +11,22 @@ import remarkGfm from 'remark-gfm';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+interface FileAttachment {
+  id: string;
+  filename: string;
+  file_size: number;
+  content_type: string;
+  downloadUrl: string;
+}
+
+interface ContentPartWithFiles {
+  type?: string;
+  text?: string;
+  additionalData?: {
+    files?: FileAttachment[];
+  };
+}
+
 const TypingLoader = () => (
   <div className="typing-loader">
     <span className="typing-dot" />
@@ -153,24 +169,19 @@ const AssistantMessage = () => {
       </div>
       <div className="message-attachments">
         {displayContent.map((part, i) => {
-          const files = (part as any).additionalData?.files;
+          const files = (part as ContentPartWithFiles).additionalData?.files;
           return Array.isArray(files)
-            ? files.map(
-                (
-                  file: { id: string; filename: string; file_size: number; content_type: string; downloadUrl: string },
-                  j: number,
-                ) => (
-                  <Attachment
-                    key={`${i}-${j}`}
-                    id={file.id}
-                    name={file.filename}
-                    size={`${(file.file_size / 1024).toFixed(1)} KB`}
-                    type={file.content_type.startsWith('image/') ? 'image' : 'pdf'}
-                    downloadUrl={file.downloadUrl}
-                    onAttachmentClick={handleAttachmentClick}
-                  />
-                ),
-              )
+            ? files.map((file: FileAttachment, j: number) => (
+                <Attachment
+                  key={`${i}-${j}`}
+                  id={file.id}
+                  name={file.filename}
+                  size={`${(file.file_size / 1024).toFixed(1)} KB`}
+                  type={file.content_type.startsWith('image/') ? 'image' : 'pdf'}
+                  downloadUrl={file.downloadUrl}
+                  onAttachmentClick={handleAttachmentClick}
+                />
+              ))
             : null;
         })}
       </div>
