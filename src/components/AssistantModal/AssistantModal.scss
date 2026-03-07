@@ -494,6 +494,7 @@
     padding: 12px;
     border-radius: 8px;
     overflow-x: auto;
+    white-space: pre-wrap; /* Zachowuje spacje, ale pozwala wrap */
     margin: 12px 0;
     
     code {

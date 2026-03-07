@@ -8,7 +8,7 @@ import { getLatestConversation, getConversationMessages, startNewConversation } 
 import type { ChatMessage } from '../../api/schema/chat';
 import './AssistantModal.scss';
 import { useTranslation } from 'react-i18next';
-import { ThreadIcon, TrashIcon } from '../../assets/icons';
+import { ThreadIcon, TrashIcon, CloseIcon } from '../../assets/icons';
 import { toast } from 'sonner';
 
 interface AssistantModalProps {
@@ -124,7 +124,6 @@ export const AssistantModal = ({ trigger }: AssistantModalProps) => {
             }}
           >
             <div className="assistant-modal-header">
-              <h2>🤖 LuciAI</h2>
               <button
                 className="assistant-modal-clear"
                 onClick={() => clearConversation()}
@@ -132,6 +131,14 @@ export const AssistantModal = ({ trigger }: AssistantModalProps) => {
                 disabled={isClearingConversation}
               >
                 <TrashIcon width="20" height="20" />
+              </button>
+              <h2>LuciAI</h2>
+              <button
+                className="assistant-modal-clear"
+                onClick={() => setIsOpen(false)}
+                aria-label="Close assistant modal"
+              >
+                <CloseIcon width="20" height="20" />
               </button>
             </div>
             <div className="assistant-modal-body">
